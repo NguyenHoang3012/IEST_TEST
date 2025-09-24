@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            font-size: 12px;
+        }
+        .container {
+            display: flex; /* Sử dụng Flexbox để chia bố cục */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+        .left-panel, .right-panel {
+            flex: 1; /* Mỗi cột chiếm một nửa chiều rộng */
+            padding: 20px;
+            overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+        }
+        .left-panel {
+            background-color: #fffbe6; /* Màu nền cho cột bên trái */
+        }
+        .right-panel {
+            background-color: #ffffff; /* Màu nền cho cột bên phải */
+            border-left: 2px solid #ccc; /* Đường viền giữa hai cột */
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .passage {
+            margin-top: 20px;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .content-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column; /* Thêm dòng này */
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .column {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-items: center; 
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        } 
+        .nav-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+                /* ...existing styles... */
+                #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        .btn-container {
+            text-align: center; /* Căn giữa nút Register */
+            margin-top: 20px;
+        }
+        .left-panel, .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .left-panel {
+        background-color: #fffbe6;
+        flex: 1;
+        }
+
+        .right-panel {
+        background-color: #ffffff;
+        flex: 1;
+        border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+        <!-- Form đăng nhập -->
+        <div class="container form-container">
+            <h2 style="text-align: center;">Insert your information</h2>
+            <form onsubmit="handleInfoSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="class">Class:</label>
+                    <input type="text" id="class" name="class" required>
+                </div style="text-align: center; margin-top: 20px;">
+                <div class="btn-container">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+        </div>
+    <div class="container welcome-container hidden">
+        <div class="container">
+            <!-- Cột bên trái -->
+            <div class="left-panel">  
+                 <!-- Nội dung Message 1 -->
+                <div id="message1">
+                    <h2 id="welcome-message" style="text-align: center;"></h2>
+                    <div class="subtitle">READING PASSAGE 1</div>
+                    <p>You should spend about 20 minutes on <strong>Questions 1-13</strong>, which are based on Reading Passage 1 below.</p>
+                    <div class="content-box">
+                        <h2 style="text-align:center;">THE OLD BUT GOLD “CINDERELLA”</h2>
+                        <p><em>Hard rock band Cinderella gained success in the mid-’80s, turning out a series of million-selling albums and hit singles. By the mid-’90s, the group’s mass popularity had subsided due to professional setbacks and perceived changes in taste. But they continued to tour regularly well into the 21st century.</em></p>
+                        <p>
+                            Cinderella was founded in Philadelphia, PA, in 1983 by Tom Keifer and bassist Eric Brittingham, who quickly added lead guitarist Jeff LaBar. Guitarist Michael Kelly Smith and drummer Tony Destra were also early members of the band, but they left in 1985 to form Britny Fox. Cinderella then added drummer Jody Cortez and continued as a four-piece. Insisting on playing original material, they performed in clubs and bars in Pennsylvania and New Jersey, and in 1985 Jon Bon Jovi caught one of their shows. He was sufficiently impressed to alert his record company, Mercury, which signed the band. Their debut album, Night Songs, was released in June 1986. Shortly after its completion, Cortez left the band and was replaced by Fred Coury. The LP was not an immediate success, but it gained momentum gradually while the band toured extensively as an opening act to promote it. It broke into the Billboard chart in July, and the track "Shake Me," although it failed to chart as a single, got enough radio attention to turn up on Billboard’s Album Rock Tracks chart in August. On October 1, the album was certified gold. That month, Mercury released a second single, "Nobody’s Fool," accompanied by a music video that earned play on MTV; it broke into the charts in November and peaked at number 13 in February 1987.
+                        </p>
+                        <p>
+                            Having broken through to popular success with Night Songs, Cinderella returned with their second album, Long Cold Winter, in July 1988. The album reached number ten in September, and the same month it was certified gold and platinum simultaneously. As the group continued to tour relentlessly through 1988 and 1989, Mercury broke more singles from the LP. "The Last Mile," released in December, peaked at number 36 in March 1989;
+                            "Coming Home," released in March, hit number 20 in June; and "Gypsy Road," finally put on 45 a year after the release of Long Cold Winter.
+                        </p>
+                        <p>
+                            Again, Cinderella came off the road and spent a year crafting its third album, Heartbreak Station, which appeared in November 1990. Although it was a hit out of the box, going gold in January 1991 and platinum in February, the album encountered more resistance than the band’s previous efforts, peaking at number 19, with no multi-platinum certifications forthcoming. More disturbing than this mild commercial disappointment, however, were problems within the band. Coury departed, and Cinderella initially replaced him with Kevin Valentine, then hired noted session drummer Kenny Aronoff temporarily before bringing in Kevin Conway. Then, after the Heartbreak Station tour had ended and the band was gearing up to go to Japan in 1991, Keifer woke up one morning and found he couldn’t sing. Doctors initially were unable to figure out what was wrong, but a specialist finally diagnosed paresis of the laryngeal nerve controlling the left vocal cord. Keifer was forced to undergo two throat operations, followed by extensive therapy. Cinderella managed to put a track, "Hot and Bothered," on the chart-topping Wayne’s World soundtrack, released in February 1992, but otherwise the band was out of commission for an extended period of time.
+                        </p>
+                        <p>
+                            In the meanwhile, fashions changed. Cinderella had been part of a "pop-metal" movement including Bon Jovi, Great White, and Ratt, who preceded them. But when "grunge" rockers Nirvana, boasting a neo-punk style, broke through to success in the fall of 1991 with their album Nevermind, the record suddenly became enamored of their stripped-down approach. Suddenly, instead of teased and blown-dry coiffures and skin-tight stage costumes of the pop-metal bands, it was the dirty-hair-falling-in-the-face, flannel-shirt-and-jeans look of Nirvana. Soon, the pop-metal groups were written off with a new epithet, dismissed as "hair metal" bands. By the time Keifer & Co. finally emerged with the fourth Cinderella album, Still Climbing, in November 1994, it could only manage to sneak onto the chart under 178 before disappearing. Mercury promptly dropped the band.
+                        </p>
+                        <p>
+                            Cinderella’s touring opportunities also dried up, and while the group did not formally disband in 1995, it became inactive for lack of offers. By 1998, there was enough interest by promoters for Cinderella to reunite for a tour. On October 2 and 3, they appeared at the Key Club in Hollywood, CA, and recorded the show for an album in July 1999. But the releases were not successful, and Cinderella’s contract was canceled. Nevertheless, as faithful fan base supported continuing road work by the band, which reunited in the summer of 2000 for a tour with Poison, followed by a second outing by the two groups in 2002. In 2005, VH1 sponsored the Rock Never Stops package tour, which Cinderella headlined, supported by Ratt, Quiet Riot, and Firehouse, with dates extending through the summer.
+                        </p>
+                    </div>
+                </div>
+                  <!-- Nội dung Message 2 -->
+                <div id="message2" class="content-box hidden">
+                <div class="content-box">
+                    <div class="subtitle">READING PASSAGE 2</div>
+                    <h2>Your brain activity can be used to measure how well you understand a concept</h2>
+                    <p><strong>A.</strong> As students learn a new concept, measuring how well they grasp it has often depended on traditional paper and pencil tests. Dartmouth researchers have developed a machine learning algorithm, which can be used to measure how well a student understands a concept based on his or her brain activity patterns. The findings are published in <em>Nature Communications</em>.</p>
+                    <p><strong>B.</strong> The study is one of the first to look at how knowledge learned in school is represented in the brain. To test knowledge of concepts in STEM, Dartmouth researchers examined how novices and intermediate learners’ knowledge and brain activity compared when testing mechanical engineering and physics concepts, and then developed a new method to assess their conceptual understanding.</p>
+                    <p><strong>C.</strong> "Learning about STEM topics is exciting but it can also be quite challenging. Yet, through the course of learning, students develop a rich understanding of many complex concepts. Presumably, this acquired knowledge must be reflected in new patterns of brain activity. However, we currently don’t have a detailed understanding of how the brain supports this kind of complex and abstract knowledge, so that’s what we set out to study," said senior author David Kraemer, an assistant professor of education at Dartmouth College.</p>
+                    <p><strong>D.</strong> Twenty-eight Dartmouth students participated in the study, broken into two equal groups: engineering students and novices. Engineering students had taken at least one mechanical engineering course and an advanced physics course, whereas novices had not taken any college-level engineering or physics classes. The study was comprised of three tests, which focused on how structures are built and assessed participants’ understanding of Newton’s third law -- for every action there is an equal and opposite reaction. Newton’s third law is often used to describe the interactions of objects in motion, but it also applies to objects that are static, or nonmoving: all of the forces in a static structure need to be in equilibrium, a principle fundamental to understanding whether a structure will collapse under its own weight or whether it can support more weight.</p>
+                    <p><strong>E.</strong> At the start of the study, participants were provided with a brief overview of the different types of forces in mechanical engineering. In an fMRI scanner, they were presented with images of real-world structures (bridges, lampposts, buildings, and more) and were asked to think about how the forces in a given structure balanced out to keep the structure in equilibrium. Then, participants were prompted with a subsequent image of the same structure, where arrows representing forces were overlaid onto the structure. Participants were asked to identify if the Newtonian forces had been labeled correctly in this diagram. Engineering students (intermediate learners) answered 75 percent of the diagrams correctly and outperformed the novices, who answered 53.6 percent correctly.</p>
+                    <p><strong>F.</strong> Before the fMRI session, participants were also asked to complete two standardized, multiple-choice tests that measured other mechanical engineering and physics knowledge. For both tests, the engineering students had significantly higher scores than the novices with 50.2 percent versus 16.9 percent, and 79.3 percent versus 35.9 percent.</p>
+                    <p><strong>G.</strong> In cognitive neuroscience, studies on how information is stored in the brain often rely on averaging data across participants within a group, and then comparing their results to those from another group (such as experts versus novices). For this study, the Dartmouth researchers wanted to devise a data-driven method, which could generate an individual "neural score" based on the brain activity alone, without having to specify which group the participant was a part of. The team created a new method called an informational network analysis, a machine learning algorithm which "produced neural scores that significantly predicted individual differences in performance" testing knowledge of specific STEM concepts. To validate the neural score method, the researchers compared each student's neural score with his/her performance on the three tests. The results demonstrated that the higher the neural score, the higher the student scored on the concept knowledge tests.</p>
+                    <p><strong>H.</strong> "In the study, we found that when engineering students looked at images of real-world structures, the students would automatically apply their engineering knowledge, and would see the differences between structures such as whether it was a cantilever, truss or vertical load," explained Kraemer. "Based on the similarities in brain activity patterns, our machine learning algorithm method was able to distinguish the differences between these mechanical categories and generate a neural score that reflected this underlying knowledge. The idea here is that an engineer and novice will see something different when they look at a photograph of a structure, and we’re picking up on that difference," he added.</p>
+                    <p><strong>I.</strong> The study found that while both engineering students and novices use the visual cortex similarly when applying concept knowledge about engineering, they use the rest of the brain very differently to process the same visual image. Consistent with prior research, the results demonstrated that the engineering students’ conceptual knowledge was associated with patterns of activity in several brain regions, including the dorsal frontoparietal network that helps enable spatial cognition, and regions of ventral occipitotemporal cortex that are implicated in visual object recognition and category identification.</p>
+                    <p><strong>J.</strong> The informational network analysis could also have broader applications, as it could be used to evaluate the effectiveness of different teaching approaches. The research team is currently testing the comparison between hands-on labs versus virtual labs to determine if either approach leads to better learning and retention of knowledge over time.</p>
+                </div>
+                </div>
+                    <!-- Nội dung Message 3 -->
+                <div id="message3" class="content-box hidden">
+                        <h3>READING PASSAGE 3</h3>
+                        <p>You should spend about 20 minutes on <strong>Questions 27-40</strong>, which are based on Reading Passage 3 below.</p>
+                        <div class="content-box">
+                            <h2 style="text-align:center;">Sir Alexander Fleming</h2>
+                            <p><strong>A.</strong> Sir Alexander Fleming is a Scottish bacteriologist best known for his discovery of penicillin. Fleming had a genius for technical ingenuity and original observation. His work on wound infection and lysozyme, an antibacterial enzyme found in tears and saliva, guaranteed him a place in the history of bacteriology. But it was his discovery of penicillin in 1928, which started the antibiotic revolution that sealed his lasting reputation. Fleming was recognized for that achievement in 1945, when he received the Nobel Prize for Physiology or Medicine, along with Australian pathologist Howard Walter Florey and German-born British biochemist Ernst Boris Chain, both of whom isolated and purified penicillin.</p>
+                            <p><strong>B.</strong> Fleming was the seventh of eight children of a Scottish hill farmer (third of four children from the farmer’s second wife). His country upbringing in southwestern Scotland sharpened his capacities for observation and appreciation of the natural world at an early age. He began his elementary schooling at Loudoun Moor and then moved on to a larger school at Darvel before enrolling in Kilmarnock Academy in 1894. In 1895 he moved to London to live with his elder brother Thomas (who worked as an oculist) and completed his basic education at Regent Street Polytechnic. After working as a London shipping clerk, Fleming began his medical studies at St. Mary’s Hospital Medical School in 1901, funded by a scholarship and a legacy from his uncle. There he won the 1908 gold medal as top medical student at the University of London. At first, he planned to become a surgeon, but a temporary position in the laboratories of the Inoculation Department at St. Mary’s Hospital convinced him that his future lay in the new field of bacteriology. There he came under the influence of bacteriologist and immunologist Sir Almroth Edward Wright, whose ideas of vaccine therapy seemed to offer a revolutionary direction in medical treatment.</p>
+                            <p><strong>C.</strong> In November 1921 Fleming discovered lysozyme, an enzyme present in body fluids such as saliva and tears that has a mild antiseptic effect. That was the first of his major discoveries. It came about when he realized that a cold had a drip of his nasal mucus fell onto a culture plate of bacteria. Realizing that his mucus might have an effect on bacterial growth, he mixed the mucus into the culture and a few weeks later saw signs that bacteria had been dissolved. Fleming's study of lysozyme, which he considered his best.His work as a scientist was a significant contribution to the understanding of how the body fights infection. Unfortunately, lysozyme had no effect on the most pathogenic bacteria.</p>
+                            <p><strong>D.</strong> On September 3, 1928, shortly after his appointment as professor of bacteriology, Fleming noticed that a culture plate of <em>Staphylococcus aureus</em> he had been working on had become contaminated by a fungus. A mold, later identified as <em>Penicillium notatum</em> (now classified as <em>P. chrysogenum</em>), had inhibited the growth of the bacteria. He at first called the substance “mould juice” and then “penicillin,” after the mold that produced it. Fleming decided to investigate further, because he thought that he had found an enzyme more potent than lysozyme. In fact, it was not an enzyme but an antibiotic—one of the first to be discovered. By the time the finding had established that, he was interested in penicillin for itself. Very much the lone researcher with an eye for the unusual, Fleming had the freedom to pursue anything that interested him. Although that approach was ideal for taking advantage of a chance observation, the therapeutic development of penicillin required multidisciplinary teamwork. Fleming, working with two young researchers, failed to stabilize and purify penicillin. However, he did point out that penicillin had clinical potential, both as a topical antiseptic and as an injectable antibiotic, if it could be isolated and purified.</p>
+                            <p><strong>E.</strong> Penicillin eventually came into use during World War II as the result of the work of a team of scientists led by Howard Florey at the University of Oxford. Though Florey, his coworker Ernst Chain, and Fleming shared the 1945 Nobel Prize, their relationship was clouded owing to the issue of who should gain the most credit for penicillin. Fleming’s role was emphasized by the press because of the romance of his chance discovery and his greater willingness to speak to journalists.</p>
+                            <p><strong>F.</strong> In 1953, two years prior to his death, Fleming married Greek microbiologist Amalia Coutsouris-Voureka, who had been involved in the Greek resistance movement during World War II and had been Fleming’s colleague since 1946, when she enrolled at St. Mary’s Hospital on a scholarship. For the last decade of his life, Fleming was feted universally for his discovery of penicillin and acted as a world ambassador for medicine and science. Initially a shy, uncommunicative man and a poor lecturer, he blossomed under the attention he received, becoming one of the world’s best-known scientists.</p>
+                        </div>
+                </div>
+            </div>
+            <!-- Cột bên phải -->
+            <div class="right-panel">
+                <div id="timer" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;"></div>
+                <div class="nav-buttons">
+                    <button onclick="showMessage(1)">READING PASSAGE 1</button>
+                    <button onclick="showMessage(2)">READING PASSAGE 2</button>
+                    <button onclick="showMessage(3)">READING PASSAGE 3</button>
+                </div>
+                 <!-- Cột bên phải message1-->
+                <div id="right-message1" class="content-box active">
+                        <h3>Questions 1–4</h3>
+                        <p>
+                            Complete the sentences below.<br>
+                            <strong>Choose NO MORE THAN TWO WORDS</strong> from the passage for each answer.<br>
+                            Write your answer in boxes 1–4 on your answer sheet.
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                1. Cinderella was founded in Philadelphia, in 1983 and three years later released their first album with <input type="text" class="input-field" id="q1" autocomplete="off" style="width: 120px;"> company.
+                            </div>
+                            <div class="question">
+                                2. The Long Cold Winter <input type="text" class="input-field" id="q2" autocomplete="off" style="width: 120px;"> gained two certifications, gold and platinum, in 1988.
+                            </div>
+                            <div class="question">
+                                3. After the release of the third album, <input type="text" class="input-field" id="q3" autocomplete="off" style="width: 120px;"> became the last official member.
+                            </div>
+                            <div class="question">
+                                4. Their first reunited tour took place at the <input type="text" class="input-field" id="q4" autocomplete="off" style="width: 120px;"> in 1998.
+                            </div>
+                        </div>
+                        <h3>Questions 5–9</h3>
+                        <p>
+                            Do the following statements agree with the information given in Reading Passage 1?<br>
+                            In boxes 5–9 on your answer sheet, write<br>
+                            <div class="content-box" style="background: #fff; border: 1px solid #888; margin-top:0px;">
+                            <ul style="list-style: none; padding-left: 0;">
+                                <strong>TRUE</strong> if the statement agrees with the information<br>
+                                <strong>FALSE</strong> if the statement contradicts the information<br>
+                                <strong>NOT GIVEN</strong> if there is no information on this
+                            </ul>
+                        </div>
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                5. Tony Destra was one of the first members of Cinderella in 1983.<br>
+                                <input type="radio" name="q5" value="TRUE"> TRUE
+                                <input type="radio" name="q5" value="FALSE"> FALSE
+                                <input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN
+                            </div>
+                            <div class="question">
+                                6. Cortez played in the band for only four months.<br>
+                                <input type="radio" name="q6" value="TRUE"> TRUE
+                                <input type="radio" name="q6" value="FALSE"> FALSE
+                                <input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN
+                            </div>
+                            <div class="question">
+                                7. Cinderella saw continuous success with Coming Home and Gypsy Road in 1989, followed by The Last Mile.<br>
+                                <input type="radio" name="q7" value="TRUE"> TRUE
+                                <input type="radio" name="q7" value="FALSE"> FALSE
+                                <input type="radio" name="q7" value="NOT GIVEN"> NOT GIVEN
+                            </div>
+                            <div class="question">
+                                8. It was not until the Heartbreak Station tour ended that Keifer had to have a medical treatment.<br>
+                                <input type="radio" name="q8" value="TRUE"> TRUE
+                                <input type="radio" name="q8" value="FALSE"> FALSE
+                                <input type="radio" name="q8" value="NOT GIVEN"> NOT GIVEN
+                            </div>
+                            <div class="question">
+                                9. The Rock Never Stops tour was funded by VH1, with a number of music bands performing over the last months of the year 2005.<br>
+                                <input type="radio" name="q9" value="TRUE"> TRUE
+                                <input type="radio" name="q9" value="FALSE"> FALSE
+                                <input type="radio" name="q9" value="NOT GIVEN"> NOT GIVEN
+                            </div>
+                        </div>
+                        <h3>Questions 10–13</h3>
+                        <p>
+                            Match each sentence with the correct ending, <strong>A–F</strong>, below.<br>
+                            Write the correct letter, <strong>A–F</strong>, in boxes 10–13 on your answer sheet.
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                10. Night Songs <input type="text" class="input-field" id="q10" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                11. Long Cold Winter <input type="text" class="input-field" id="q11" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                12. Heartbreak Station <input type="text" class="input-field" id="q12" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                13. Still Climbing <input type="text" class="input-field" id="q13" autocomplete="off" style="width: 40px;">
+                            </div>
+                        </div>
+                        <div class="content-box" style="background: #fff; border: 1px solid #888; margin-top: 15px;">
+                            <strong>Endings</strong>
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li><strong>A</strong> was completed by the time a replacement of members took place.</li>
+                                <li><strong>B</strong> none of its singles fell out of the top 50 of the Billboard Chart.</li>
+                                <li><strong>C</strong> received no platinum certifications at all.</li>
+                                <li><strong>D</strong> remained in the chart for one week.</li>
+                                <li><strong>E</strong> was advertised by the extensive tours.</li>
+                                <li><strong>F</strong> released right before the band's period of adversity.</li>
+                            </ul>
+                        </div>
+                </div>
+                <!-- Cột bên phải message2-->
+                <div id="right-message2" class="content-box hidden">
+                    <div class="content-box">
+                        <div class="subtitle">READING PASSAGE 2</div>
+                        <p>
+                            <em>You should spend about 20 minutes on <strong>Questions 14–26</strong>, which are based on Reading Passage 2 below.</em>
+                        </p>
+                        <h3>Questions 14 – 19</h3>
+                        <p>
+                            Reading Passage 2 has ten paragraphs, <strong>A – J</strong>.<br>
+                            Which paragraph contains the following information?<br>
+                            <em>Write the correct letters, A–J, in boxes 14–19 on your answer sheet.</em>
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                14. a reference to the participants’ background information<br>
+                                <input type="text" class="input-field" id="q14" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                15. an explanation of the difference between an engineer and a novice when they looked at images of real-world structures<br>
+                                <input type="text" class="input-field" id="q15" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                16. informational network analysis could be used in the evaluation of different teaching approaches<br>
+                                <input type="text" class="input-field" id="q16" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                17. an explanation of the difference in students’ brain function when looking at a photograph<br>
+                                <input type="text" class="input-field" id="q17" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                18. a test prior to the one that involved the use of an fMRI Scanner<br>
+                                <input type="text" class="input-field" id="q18" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                19. traditional methods to measure how well a student grasps a new concept<br>
+                                <input type="text" class="input-field" id="q19" autocomplete="off" style="width: 40px;">
+                            </div>
+                        </div>
+                        <h3>Questions 20 and 21</h3>
+                        <p>
+                            <strong>Choose TWO letters, A–E.</strong><br>
+                            <em>Write the correct letters in boxes 20 and 21 on your answer sheet.</em>
+                        </p>
+                        <p>
+                            Which TWO of the following statements are made in the text about the “neural score”?
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                <input type="checkbox" name="q20_21" value="A"> A It was an indicator of how well a student performed on the concept knowledge tests.<br>
+                                <input type="checkbox" name="q20_21" value="B"> B Scientists compared students’ performance on three tests to create the neural score.<br>
+                                <input type="checkbox" name="q20_21" value="C"> C The neural score method is the most effective method in cognitive neuroscience.<br>
+                                <input type="checkbox" name="q20_21" value="D"> D It could be created only by using brain activities.<br>
+                                <input type="checkbox" name="q20_21" value="E"> E It reflects how different parts of the brain function.<br>
+                            </div>
+                        </div>
+                        <h3>Questions 22 – 26</h3>
+                        <p>
+                            <strong>Complete the notes below.</strong><br>
+                            <em>Choose ONE WORD ONLY from the passage for each answer.<br>
+                            Write your answer in boxes 22–26 on your answer sheet.</em>
+                        </p>
+                            <strong style="display: block; text-align: center;">Dartmouth Test</strong>
+                            <p>
+                                <strong>Participants:</strong> 28 students divided into 22 <input type="text" class="input-field" id="q22" autocomplete="off" style="width: 80px;"> groups with the same number of members<br>
+                                • Engineering students: had knowledge about mechanical engineering and physics<br>
+                                • Novices: had not done any engineering and physics courses in 23 <input type="text" class="input-field" id="q23" autocomplete="off" style="width: 80px;">
+                            </p>
+                            <p>
+                                <strong>Tests:</strong> the students looked at photographs of buildings, bridges and other similar 24 <input type="text" class="input-field" id="q24" autocomplete="off" style="width: 80px;"> in an fMRI scanner. After that, the participants looked at the subsequent images with arrow showing 25 <input type="text" class="input-field" id="q25" autocomplete="off" style="width: 80px;"> forces. Then they were asked whether the labels were right.
+                            </p>
+                            <p>
+                                <strong>Result:</strong> the intermediate students 26 <input type="text" class="input-field" id="q26" autocomplete="off" style="width: 80px;"> the novices.
+                            </p>
+                    </div>
+                </div>
+                <!-- Cột bên phải message3-->
+                <div id="right-message3" class="content-box hidden">
+                    <h3>Reading Passage 3</h3>
+                        <p>
+                            You should spend about 20 minutes on <strong>Questions 27–40</strong>, which are based on Reading Passage 3.
+                        </p>
+                        <h3>Questions 27–32</h3>
+                        <p>
+                            Reading passage 3 has six paragraphs, A–G<br>
+                            <strong>Choose the correct heading for each paragraph from the list of headings below.</strong><br>
+                            Write the correct number, i–viii, in boxes 27–32 on your answer sheet.
+                        </p>
+                        <div class="content-box" style="background: #fff; border: 1px solid #888;">
+                            <strong>List of Headings</strong>
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li>i. Efforts finally paid off across the world</li>
+                                <li>ii. The first accidental scientific finding</li>
+                                <li>iii. Conflicts about credits</li>
+                                <li>iv. Difficult childhood in the countryside</li>
+                                <li>v. Happy marriage late in life</li>
+                                <li>vi. A range of achievements that provide huge fame for a person</li>
+                                <li>vii. Changes and success in career path</li>
+                                <li>viii. A failure of a person in developing his own discovery</li>
+                            </ul>
+                        </div>
+                        <div class="question-container">
+                            <div class="question">
+                                27. Paragraph A <input type="text" class="input-field" id="q27" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                28. Paragraph B <input type="text" class="input-field" id="q28" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                29. Paragraph C <input type="text" class="input-field" id="q29" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                30. Paragraph D <input type="text" class="input-field" id="q30" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                31. Paragraph E <input type="text" class="input-field" id="q31" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                32. Paragraph F <input type="text" class="input-field" id="q32" autocomplete="off" style="width: 40px;">
+                            </div>
+                        </div>
+                        <h3>Questions 34–36</h3>
+                        <p>
+                            Reading Passage 3 has seven sections, <strong>A–G</strong><br>
+                            Which paragraph contains the following information?<br>
+                            <em>Write the correct letter, A–G, in boxes 34–37 on your answer sheet.</em>
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                33. A brief description of Fleming’s personalities<br>
+                                <input type="text" class="input-field" id="q33" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                34. An anti-bacterial enzyme that was of no use when it comes to getting rid of a certain type of bacteria<br>
+                                <input type="text" class="input-field" id="q34" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                35. A reference to a senior in a scientific field that had potential ideas for a medical revolution<br>
+                                <input type="text" class="input-field" id="q35" autocomplete="off" style="width: 40px;">
+                            </div>
+                            <div class="question">
+                                36. An unsuccessful result despite assistance from other people<br>
+                                <input type="text" class="input-field" id="q36" autocomplete="off" style="width: 40px;">
+                            </div>
+                        </div>
+
+                        <h3>Questions 37–40</h3>
+                        <p>
+                            <strong>Choose NO MORE THAN TWO WORDS</strong> from the passage for each answer.<br>
+                            Write your answers in boxes 37–40 on your answer sheet.
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                37. Which relative financially supported Fleming’s study in a medical school?<br>
+                                <input type="text" class="input-field" id="q37" autocomplete="off" style="width: 120px;">
+                            </div>
+                            <div class="question">
+                                38. What was the initial job that Fleming intended to do after his success at university?<br>
+                                <input type="text" class="input-field" id="q38" autocomplete="off" style="width: 120px;">
+                            </div>
+                            <div class="question">
+                                39. What skill that is necessary for developing penicillin’s healing property?<br>
+                                <input type="text" class="input-field" id="q39" autocomplete="off" style="width: 120px;">
+                            </div>
+                            <div class="question">
+                                40. For how long did Fleming enjoy his marriage before he passed away?<br>
+                                <input type="text" class="input-field" id="q40" autocomplete="off" style="width: 120px;">
+                            </div>
+                        </div>
+                    <div class="btn-container">
+                        <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                    </div>
+                    <div id="results"></div>
+                    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+                  <!-- continue -->  
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+                // Khai báo biến toàn cục
+        let name_user = "";
+        let className_user = "";
+        function handleInfoSubmit(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Lấy giá trị từ các trường nhập liệu
+            const name = document.getElementById("name").value;
+            const className = document.getElementById("class").value;
+            name_user=name;
+            className_user=className;
+            // Kiểm tra nếu các trường nhập liệu không rỗng
+            if (!name || !className) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Ẩn form đăng nhập
+            document.querySelector(".form-container").classList.add("hidden");
+
+            // Hiển thị bài test
+            const welcomeContainer = document.querySelector(".welcome-container");
+            welcomeContainer.classList.remove("hidden");
+
+            // Hiển thị thông báo chào mừng
+            document.getElementById("welcome-message").innerText = `READING 5( TRAINER_2 -T3 )`;
+        }
+        //Handle button 
+        function showMessage(messageNumber) {
+            // Ẩn tất cả các message trong left-panel
+            document.getElementById("message1").classList.add("hidden");
+            document.getElementById("message2").classList.add("hidden");
+            document.getElementById("message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong left-panel
+            document.getElementById(`message${messageNumber}`).classList.remove("hidden");
+
+            // Ẩn tất cả các message trong right-panel
+            document.getElementById("right-message1").classList.add("hidden");
+            document.getElementById("right-message2").classList.add("hidden");
+            document.getElementById("right-message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong right-panel
+            document.getElementById(`right-message${messageNumber}`).classList.remove("hidden");
+
+            // Cuộn về đầu trang
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Cuộn mượt
+            });
+        }
+        <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+		function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+                            let range = getSelectedText();
+                            if (range) {
+                                // Kiểm tra nếu vùng chọn nằm trong cùng một node cha
+                                let startParent = range.startContainer.parentNode;
+                                let endParent = range.endContainer.parentNode;
+                                if (startParent === endParent) {
+                                    let span = document.createElement("span");
+                                    span.className = className;
+                                    span.appendChild(range.extractContents());
+                                    range.insertNode(span);
+                                } else {
+                                    alert("Chỉ có thể bôi đen trong cùng một dòng hoặc đoạn!");
+                                }
+                            }
+                    }
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+			document.addEventListener("mouseup", function() {
+                const selection = window.getSelection();
+                if (selection.rangeCount && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    // Không highlight nếu vùng chọn nằm trong input, textarea
+                    let startNode = range.startContainer.parentNode;
+                    let endNode = range.endContainer.parentNode;
+                    if (
+                        !["INPUT", "TEXTAREA"].includes(startNode.nodeName) &&
+                        !["INPUT", "TEXTAREA"].includes(endNode.nodeName)
+                    ) {
+                        wrapSelection("highlight");
+                        selection.removeAllRanges();
+                    }
+                }
+            });
+            document.addEventListener("keydown", function(e) {
+                // Nếu nhấn Ctrl+R (hoặc Cmd+R trên Mac)
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+                    e.preventDefault(); // Ngăn reload trang
+                    removeFormattingFromSelection();
+                }
+            });
+            document.addEventListener("click", function(e) {
+                // Chỉ xóa highlight nếu click vào vùng đã bôi vàng và KHÔNG có vùng chọn nào đang active
+                const selection = window.getSelection();
+                if (
+                    e.target.classList &&
+                    e.target.classList.contains("highlight") &&
+                    selection.isCollapsed // Không có vùng chọn nào đang active
+                ) {
+                    let parent = e.target.parentNode;
+                    while (e.target.firstChild) {
+                        parent.insertBefore(e.target.firstChild, e.target);
+                    }
+                    parent.removeChild(e.target);
+                }
+            });
+			
+                // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+            console.log("Sending data:", { name, className, answers, correctCount, bandScore }); // Kiểm tra dữ liệu
+            const scriptURL = "https://script.google.com/macros/s/AKfycbyEk5cbZDeT2jx63QlRPEGA7w3JNJkyFlG7IZxZyOd1e0tur2MptVmlHiaTkp5VhxPHaw/exec"; // Thay bằng URL của Google Apps Script
+            // Chuyển các đáp án là mảng thành chuỗi trước khi gửi
+            const answersToSend = {};
+            for (let key in answers) {
+                if (Array.isArray(answers[key])) {
+                    answersToSend[key] = answers[key].join(", ");
+                } else {
+                    answersToSend[key] = answers[key];
+                }
+            }
+
+            const data = {
+                name: name,
+                className: className,
+                answers: answersToSend,
+                correctCount: correctCount,
+                bandScore: bandScore
+            };
+            // Lưu dữ liệu vào localStorage trước khi gửi
+            localStorage.setItem("pendingSubmission", JSON.stringify(data));
+            // Đổi nút thành Waiting...
+            const submitButton = document.querySelector(".btn-submit");
+                if (submitButton) {
+                        submitButton.innerText = "Waiting...";
+                        submitButton.disabled = true;
+                    }
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                    if (submitButton) {
+                    // Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true;
+                    }
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+                // Nếu gửi lỗi, cho phép thử lại  
+                if (submitButton) {
+                    submitButton.innerText = "Submit";
+                    submitButton.disabled = false;
+                    }
+            });
+        }
+        function checkAnswers() {
+            const correctAnswers = {
+                // Reading Passage 1
+                q1: "Mercury",
+                q2: "Simultaneously",
+                q3: "Kevin Conway",
+                q4: "Key Club",
+                q5: "TRUE",
+                q6: "NOT GIVEN",
+                q7: "FALSE",
+                q8: "TRUE",
+                q9: "FALSE",
+                q10: "E",
+                q11: "B",
+                q12: "F",
+                // Reading Passage 2
+                q13: "D",
+                q14: "D",
+                q15: "H",
+                q16: "J",
+                q17: "I",
+                q18: "F",
+                q19: "A",
+                q20_21:["A","D"],
+                q22: "Two",
+                q23: "College",
+                q24: "Structures",
+                q25: "Newtonian",
+                q26: "Outperformed",
+                // Reading Passage 3
+                q27: "vi",
+                q28: "vii",
+                q29: "ii",
+                q30: "viii",
+                q31: "iii",
+                q32: "i",
+                q33: "F",
+                q34: "C",
+                q35: "B",
+                q36: "D",
+                q37: ["uncle", "his uncle"],
+                q38: ["surgeon","a surgeon"],
+                q39: "multidisciplinary teamwork",
+                q40: "two years"
+            };
+
+            let correctCount = 0;
+            let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+            const answers = {};
+            const unansweredQuestions = [];
+
+            // Lấy tất cả các câu hỏi dạng text
+            const textQuestions = Array.from(document.querySelectorAll('.input-field')).sort((a, b) => {
+                const idA = parseInt(a.id.replace("q", ""), 10);
+                const idB = parseInt(b.id.replace("q", ""), 10);
+                return idA - idB;
+            });
+
+            // Lấy tất cả các câu hỏi dạng radio
+            const radioQuestions = Array.from(document.querySelectorAll('input[type="radio"]')).reduce((acc, radio) => {
+                if (!acc.includes(radio.name)) acc.push(radio.name);
+                return acc;
+            }, []);
+
+			// Lấy tất cả các nhóm checkbox (tên duy nhất)
+			const checkboxGroups = Array.from(new Set(
+				Array.from(document.querySelectorAll('input[type="checkbox"]')).map(cb => cb.name)
+			));
+
+			let allFieldsFilled = true;
+            // Xử lý câu hỏi dạng text
+			textQuestions.forEach(question => {
+							const questionId = question.id;
+							const correctAnswer = correctAnswers[questionId];
+
+							let userAnswer = question.value.trim();
+							if (!userAnswer) {
+								allFieldsFilled = false;
+								question.classList.add("incorrect");
+								unansweredQuestions.push(questionId.replace("q", "Question "));
+							} else {
+								question.classList.remove("incorrect");
+								answers[questionId] = userAnswer;
+
+								// Nếu đáp án đúng là mảng, kiểm tra từng phần tử
+								if (Array.isArray(correctAnswer)) {
+									const isCorrect = correctAnswer.some(ans => userAnswer.toLowerCase() === ans.toLowerCase());
+									if (isCorrect) {
+										correctCount++;
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer.join(" / ")}</td>
+											<td>✔</td>
+										</tr>`;
+									} else {
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer.join(" / ")}</td>
+											<td>✘</td>
+										</tr>`;
+									}
+								} else {
+									// So sánh không phân biệt hoa thường và loại bỏ khoảng trắng thừa
+									if (userAnswer.toLowerCase() === (correctAnswer || "").toLowerCase()) {
+										correctCount++;
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer}</td>
+											<td>✔</td>
+										</tr>`;
+									} else {
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer}</td>
+											<td>✘</td>
+										</tr>`;
+									}
+								}
+							}
+						});
+                        // Xử lý câu hỏi dạng radio
+                        radioQuestions.forEach(name => {
+                            const radios = document.getElementsByName(name);
+                            const questionId = name;
+                            const correctAnswer = correctAnswers[questionId];
+
+                            let userAnswer = "";
+                            const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                            if (selectedRadio) {
+                                userAnswer = selectedRadio.value;
+                                answers[questionId] = userAnswer;
+
+                                if ((userAnswer || "").toUpperCase() === (correctAnswer || "").toUpperCase()) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                allFieldsFilled = false;
+                                unansweredQuestions.push(questionId.replace("q", "Question "));
+                            }
+                        });
+                        // Xử lý tất cả các nhóm checkbox tự động
+                        checkboxGroups.forEach(name => {
+                            const checkboxes = document.getElementsByName(name);
+                            const checked = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+                            answers[name] = checked;
+
+                            // Nếu không có đáp án đúng trong correctAnswers thì bỏ qua
+                            if (!correctAnswers[name]) return;
+
+                            if (checked.length === 0) {
+                                allFieldsFilled = false;
+                                unansweredQuestions.push(name.replace("q", "Question "));
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td></td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>✘</td>
+                                </tr>`;
+                            } else if (checked.length > correctAnswers[name].length) {
+                                // Chọn quá số đáp án đúng, không cộng điểm
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td>${checked.join(", ")}</td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>✘</td>
+                                </tr>`;
+                            } else {
+                                // Cộng điểm cho từng đáp án đúng được chọn
+                                const correctSet = new Set(correctAnswers[name].map(x => x.toUpperCase()));
+                                const checkedSet = new Set(checked.map(x => x.toUpperCase()));
+                                let point = 0;
+                                checkedSet.forEach(val => {
+                                    if (correctSet.has(val)) point++;
+                                });
+                                correctCount += point;
+
+                                // Hiển thị kết quả
+                                let resultIcon = point > 0 ? "✔" : "✘";
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td>${checked.join(", ")}</td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>${resultIcon} (+${point})</td>
+                                </tr>`;
+                            }
+                        }); 
+                        // Tính bandScore dựa trên correctCount
+						let bandScore = calculateBandScore(correctCount);
+
+						// Nếu tất cả các câu hỏi đã được trả lời
+						const unansweredContainer = document.getElementById("unanswered-questions");
+						unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+						unansweredContainer.style.display = "block";
+
+						// Hiển thị kết quả
+						//resultHTML += `</table>`;
+						//document.getElementById("results").innerHTML = `<h2>You got ${correctCount} correct answers!</h2>` + resultHTML;
+
+						// Gửi dữ liệu đã sắp xếp lên Google Sheets
+						sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+					}
+				
+    
+                // Hàm tính bandScore
+                function calculateBandScore(correctCount) {
+                    if (correctCount >= 39) return 9.0;
+                    if (correctCount >= 37) return 8.5;
+                    if (correctCount >= 35) return 8.0;
+                    if (correctCount >= 33) return 7.5;
+                    if (correctCount >= 30) return 7.0;
+                    if (correctCount >= 27) return 6.5;
+                    if (correctCount >= 23) return 6.0;
+                    if (correctCount >= 20) return 5.5;
+                    if (correctCount >= 16) return 5.0;
+                    if (correctCount >= 13) return 4.5;
+                    if (correctCount >= 10) return 4.0;
+                    if (correctCount >= 7) return 3.5;
+                    if (correctCount >= 5) return 3.0;
+                    if (correctCount >= 3) return 2.5;
+                    return 0.0;
+                }
+                let timer; // Biến lưu bộ đếm thời gian
+
+                function startTimer(duration) {
+                    const timerElement = document.getElementById("timer");
+                    let timeRemaining = duration;
+
+                    function updateTimer() {
+                        const minutes = Math.floor(timeRemaining / 60);
+                        const seconds = timeRemaining % 60;
+                        timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(timer); // Dừng bộ đếm thời gian
+                            timerElement.textContent = "Time's up!";
+                            autoSubmit(); // Tự động nộp bài khi hết thời gian
+                        }
+
+                        timeRemaining--;
+                    }
+
+                    updateTimer(); // Hiển thị thời gian ban đầu
+                    timer = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+                }
+
+                function autoSubmit() {
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name;
+
+                    if (question.type === "text" && !question.value.trim()) {
+                        question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (!selectedRadio) {
+                            // Tạo một radio ảo để lưu giá trị "NONE"
+                            const noneRadio = document.createElement("input");
+                            noneRadio.type = "radio";
+                            noneRadio.name = question.name;
+                            noneRadio.value = "NONE";
+                            noneRadio.checked = true;
+                            document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                        if (selectedCheckboxes.length === 0) {
+                            // Tạo một checkbox ảo để lưu giá trị "NONE"
+                            const noneCheckbox = document.createElement("input");
+                            noneCheckbox.type = "checkbox";
+                            noneCheckbox.name = question.name;
+                            noneCheckbox.value = "NONE";
+                            noneCheckbox.checked = true;
+                            document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+                        }
+                    }
+                });
+
+                checkAnswers(); // Gọi hàm nộp bài
+                }
+
+                // Bắt đầu bộ đếm thời gian khi người dùng bắt đầu bài kiểm tra
+                document.addEventListener("DOMContentLoaded", () => {
+                const duration = 60 * 60; // 60 phút
+                startTimer(duration);
+                });
+    
+    </script>
+</body>
+</html>

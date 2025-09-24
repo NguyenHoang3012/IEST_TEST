@@ -1,0 +1,56 @@
+// ...existing code...
+// Xử lý câu hỏi dạng text
+textQuestions.forEach(question => {
+    const questionId = question.id;
+    const correctAnswer = correctAnswers[questionId];
+
+    let userAnswer = question.value.trim();
+    if (!userAnswer) {
+        allFieldsFilled = false;
+        question.classList.add("incorrect");
+        unansweredQuestions.push(questionId.replace("q", "Question "));
+    } else {
+        question.classList.remove("incorrect");
+        answers[questionId] = userAnswer;
+
+        // Nếu đáp án đúng là mảng, kiểm tra từng phần tử
+        if (Array.isArray(correctAnswer)) {
+            const isCorrect = correctAnswer.some(ans => userAnswer.toLowerCase() === ans.toLowerCase());
+            if (isCorrect) {
+                correctCount++;
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer.join(" / ")}</td>
+                    <td>✔</td>
+                </tr>`;
+            } else {
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer.join(" / ")}</td>
+                    <td>✘</td>
+                </tr>`;
+            }
+        } else {
+            // So sánh không phân biệt hoa thường và loại bỏ khoảng trắng thừa
+            if (userAnswer.toLowerCase() === (correctAnswer || "").toLowerCase()) {
+                correctCount++;
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer}</td>
+                    <td>✔</td>
+                </tr>`;
+            } else {
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer}</td>
+                    <td>✘</td>
+                </tr>`;
+            }
+        }
+    }
+});
+// ...existing code...

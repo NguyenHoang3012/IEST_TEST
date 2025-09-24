@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Writing Task</title>
+</head>
+<style>
+body {
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+/* Giao diện đăng nhập */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
+
+.login-container form {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.login-container form h2 {
+    margin-bottom: 20px;
+}
+
+.login-container form label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.login-container form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.login-container form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container form button:hover {
+    background-color: #0056b3;
+}
+
+/* Ẩn giao diện chính khi chưa đăng nhập */
+.container {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.task {
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task h2 {
+    margin-top: 0;
+}
+.content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px; /* Khoảng cách giữa các phần */
+}
+.graph img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.description {
+    width: 100%; /* Chiếm 60% chiều rộng */
+}
+.writing-area {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+textarea {
+    width: 100%;
+    height: 570px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: "Times New Roman", Times, serif; /* Thay đổi font chữ */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: none;
+}
+
+.word-count {
+    margin-top: 10px;
+    text-align: right;
+    font-size: 14px;
+    color: #555;
+}
+.navigation {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.nav-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+}
+
+.task {
+    display: none;
+}
+
+.task.active {
+    display: block;
+}
+/* Ẩn giao diện chính khi chưa đăng nhập */
+.container {
+    display: none; /* Ẩn mặc định */
+}
+/* Ẩn navigation mặc định */
+.navigation {
+    display: none;
+}
+.btn-submit {
+            display: block; /* Đảm bảo nút là một khối */
+            margin: 20px auto;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+#part2-textarea{
+    height: 200px;
+}
+</style>
+<body>
+    <div class="login-container">
+        <form id="login-form">
+            <h2>Register</h2>
+            <label for="full-name">Full Name:</label>
+            <input type="text" id="full-name" name="full-name" placeholder="Enter your full name" required>
+            <label for="class">Class:</label>
+            <input type="text" id="class" name="class" placeholder="Enter your class" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+        <!-- Thêm phần hiển thị thời gian đếm ngược -->
+        <div id="timer" style="text-align: center; font-size: 20px; margin-bottom: 5px; color: red; display: none;">
+            Time: <span id="time-remaining">60:00</span>
+        </div>
+    <div class="navigation">
+        <button class="nav-button" data-target="part1">Part 1</button>
+        <button class="nav-button" data-target="part2">Part 2</button>
+    </div>
+    <div class="container">
+        <div id="part1" class="task">
+        <div class="content-container">
+            <div class="description">
+                <h2>Writing Task 1</h2>
+                <p>You should spend about 20 minutes on this task.</p>
+                <p>The graph below shows the average monthly change in the prices of three metals during 2014.</p>
+                <p>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+                <p>Write at least 150 words.</p>
+                <div class="graph">
+                    <img src="https://www.dropbox.com/scl/fi/i1r4w5nzk88erev16ar1z/P2_Writing.png?rlkey=pl6hunf29va5iku1zcyt4hxcd&st=alxab9z9&dl=1" alt="Graph showing average monthly change in prices of metals in 2014">
+                </div>
+            </div>
+                <div class="writing-area">
+                    <textarea id="part1-textarea" placeholder="Write your response here..."></textarea>
+                    <div class="word-count">Word count: 0</div>
+                </div>
+            </div>
+        </div>
+        <div id="part2" class="task" style="display: none;">
+            <div class="content-container">
+                <div class="description">
+                    <h2>Writing Task 2</h2>
+                    <p>You should spend about 40 minutes on this task.</p>
+                    <p>Write about the following topic:</p>
+                    <div class="task-box">
+                        <p>
+                            In many countries, people are now living longer than ever before. Some people say an ageing population creates problems for governments. Other people think there are benefits if society has more elderly people.
+                        </p>
+                        <p>
+                            To what extent do the advantages of having an ageing population outweigh the disadvantages?
+                        </p>
+                    </div>
+                    <p>Give reasons for your answer and include any relevant examples from your own knowledge or experience.</p>
+                    <p>Write at least 250 words.</p>
+                </div>
+                    <div class="writing-area">
+                        <textarea id="part2-textarea" placeholder="Write your response here..."></textarea>
+                        <div class="word-count">Word count: 0</div>
+                    </div>
+            </div>
+            <!-- Nút nộp bài -->
+            <button onclick="checkAnswers()" id="submit-all"class="btn-submit">Submit</button>
+            <div id="submission-message" style="display: none; text-align: center; font-size: 20px; color: green; margin-top: 20px;">
+                <!-- Thông báo sẽ được hiển thị ở đây -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Lấy các phần tử cần thiết
+        const loginForm = document.getElementById('login-form');
+        const loginContainer = document.querySelector('.login-container');
+        const mainContainer = document.querySelector('.container');
+        const navigation = document.querySelector('.navigation'); // Lấy phần navigation
+
+        // Xử lý sự kiện khi nhấn nút "Register"
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn chặn reload trang
+            loginContainer.style.display = 'none'; // Ẩn giao diện đăng nhập
+            mainContainer.style.display = 'flex'; // Hiển thị giao diện chính
+            navigation.style.display = 'block'; // Hiển thị navigation
+            startTimer(); // Bắt đầu đếm ngược thời gian
+        });
+        // Lấy tất cả các textarea và word-count
+        const textareas = document.querySelectorAll('.writing-area textarea');
+        const wordCountDisplays = document.querySelectorAll('.word-count');
+
+        // Gắn sự kiện input cho từng textarea
+        textareas.forEach((textarea, index) => {
+            textarea.addEventListener('input', () => {
+                const text = textarea.value.trim(); // Lấy nội dung trong textarea
+                const words = text === '' ? 0 : text.split(/\s+/).length; // Đếm số từ
+                wordCountDisplays[index].textContent = `Word count: ${words}`; // Cập nhật hiển thị
+            });
+        });
+            // Lấy tất cả các nút điều hướng và các phần nội dung
+        const navButtons = document.querySelectorAll('.nav-button');
+        const tasks = document.querySelectorAll('.task');
+
+        // Thêm sự kiện click cho từng nút
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-target'); // Lấy giá trị data-target
+
+                // Ẩn tất cả các phần
+                tasks.forEach(task => {
+                    task.classList.remove('active');
+                    task.style.display = 'none'; // Ẩn phần
+                });
+
+                // Hiển thị phần được chọn
+                const targetTask = document.getElementById(target);
+                targetTask.classList.add('active');
+                targetTask.style.display = 'block'; // Hiển thị phần
+            });
+        });
+
+        // Hiển thị mặc định Part 1
+        document.getElementById('part1').classList.add('active');
+        document.getElementById('part1').style.display = 'block'; // Hiển thị phần 1
+    // Lấy nội dung từ cả hai textarea
+        const part1Content = document.getElementById('part1-textarea').value.trim();
+        const part2Content = document.getElementById('part2-textarea').value.trim();
+        function sendDataToGoogleSheet(name, className, part1Content, part2Content) {
+                console.log("Sending data:", { name, className, part1Content, part2Content }); // Kiểm tra dữ liệu
+                const scriptURL = "https://script.google.com/macros/s/AKfycbw3xuDosF2xtm_JycbL88bhSQZ-4Xbh2_lcNwewY3gMCLdW1p8f16YXbmu9CgzvlExh5A/exec"; // Thay bằng URL của Google Apps Script
+                const data = {
+                    name: name,
+                    className: className,
+                    part1Content: part1Content,
+                    part2Content: part2Content
+                };
+
+                fetch(scriptURL, {
+                    method: "POST",
+                    mode: 'no-cors',
+                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(() => {
+                    console.log("Success: Data sent to Google Sheets.");
+                    // Hiển thị thông báo thành công
+                    const messageElement = document.getElementById('submission-message');
+                    messageElement.textContent = "Submit sucessfully";
+                    messageElement.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Không thể gửi dữ liệu đến Google Sheets. Vui lòng thử lại.");
+                });
+            }
+    function checkAnswers() {
+        const name = document.getElementById('full-name').value.trim();
+        const className = document.getElementById('class').value.trim();
+        const part1Content = document.getElementById('part1-textarea').value.trim();
+        const part2Content = document.getElementById('part2-textarea').value.trim();
+
+        if (part1Content === '' && part2Content === '') {
+            alert('Vui lòng viết bài trước khi nộp!');
+            return;
+        }
+         // Vô hiệu hóa nút "Submit"
+        const submitButton = document.getElementById('submit-all');
+        submitButton.disabled = true;
+        submitButton.textContent = "Done"; // Thay đổi nội dung nút để hiển thị trạng thái
+            // Dừng bộ đếm thời gian
+        clearInterval(timerInterval);
+        sendDataToGoogleSheet(name, className, part1Content, part2Content);
+    }
+        // Thời gian làm bài (60 phút)
+    const totalTime = 60 * 60; // 60 phút * 60 giây
+    let timeLeft = totalTime; // Biến lưu thời gian còn lại
+    // Biến lưu interval của bộ đếm thời gian
+    let timerInterval;
+
+    // Hàm bắt đầu đếm ngược thời gian
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        const timeRemainingElement = document.getElementById('time-remaining');
+        timerElement.style.display = 'block'; // Hiển thị bộ đếm thời gian
+
+        timerInterval = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            // Cập nhật hiển thị thời gian
+            timeRemainingElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval); // Dừng bộ đếm thời gian
+                alert('Time is up! Your session has ended.');
+                lockWritingAreas(); // Khóa các textarea
+            }
+
+            timeLeft--; // Giảm thời gian còn lại
+        }, 1000); // Cập nhật mỗi giây
+    }
+
+    // Hàm khóa các textarea khi hết thời gian
+    function lockWritingAreas() {
+        const textareas = document.querySelectorAll('.writing-area textarea');
+        textareas.forEach(textarea => {
+            textarea.disabled = true; // Vô hiệu hóa textarea
+        });
+        document.getElementById('submit-all').disabled = true; // Vô hiệu hóa nút nộp bài
+    }
+    </script>
+</body>
+</html>

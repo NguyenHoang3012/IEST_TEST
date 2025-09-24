@@ -1,0 +1,36 @@
+function autoSubmit() {
+    const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+    allQuestions.forEach(question => {
+        const questionId = question.id || question.name;
+
+        if (question.type === "text" && !question.value.trim()) {
+            question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+        } else if (question.type === "radio") {
+            const radios = document.getElementsByName(question.name);
+            const selectedRadio = Array.from(radios).find(radio => radio.checked);
+            if (!selectedRadio) {
+                // Tạo một radio ảo để lưu giá trị "NONE"
+                const noneRadio = document.createElement("input");
+                noneRadio.type = "radio";
+                noneRadio.name = question.name;
+                noneRadio.value = "NONE"; // Đảm bảo giá trị là "NONE"
+                noneRadio.checked = true;
+                document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+            }
+        } else if (question.type === "checkbox") {
+            const checkboxes = document.getElementsByName(question.name);
+            const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+            if (selectedCheckboxes.length === 0) {
+                // Tạo một checkbox ảo để lưu giá trị "NONE"
+                const noneCheckbox = document.createElement("input");
+                noneCheckbox.type = "checkbox";
+                noneCheckbox.name = question.name;
+                noneCheckbox.value = "NONE"; // Đảm bảo giá trị là "NONE"
+                noneCheckbox.checked = true;
+                document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+            }
+        }
+    });
+
+    checkAnswers(); // Gọi hàm nộp bài
+}

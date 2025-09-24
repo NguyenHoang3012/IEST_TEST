@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra - Multiple Choice & Fill in the Blank</title>
+    <style>
+		body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            font-size: 12px; 
+        }
+		h2 {
+            font-size: 30px; /* Tăng kích thước chữ tiêu đề */
+            font-weight: bold;
+            color: #333;
+        }
+		.highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .table {
+            margin: auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            padding: 2px;
+        }
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+		.title {
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+        }
+        .audio-container {
+			 width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Căn giữa nội dung */
+            gap: 10px; /* Khoảng cách giữa audio và icon */
+			
+            margin-top: 20px;
+			width: 100%
+        }
+        .reload-icon {
+            cursor: pointer;
+            font-size: 32px;
+            transition: transform 0.4s ease-in-out;
+        }
+        .reload-icon:active {
+            transform: rotate(360deg);
+        }
+		        .section {
+            margin-top: 20px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .blank {
+            border-bottom: 1px solid black;
+            width: 100px;
+            display: inline-block;
+        }
+		.flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .box {
+            width: 48%;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .subtitle, .instruction {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-style: italic;
+        }
+        .question-container {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .question-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .question-container li {
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .column {
+            width: 48%;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            margin-left: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 12px;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+        .incorrect {
+            background-color: lightcoral;
+        }
+		table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+			margin-top:20px
+        }
+        .nav-button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            width: 100%;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .welcome-container {
+            display: none;
+        }     
+      
+        /* ...existing styles... */
+        #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+  
+    </style>
+</head>
+<body>
+	<div class="container info-container">
+		<h2 style="text-align: center;">Insert your information</h2>
+			<form onsubmit="handleInfoSubmit(event)">
+				<div class="form-group">
+					<label for="name">Full Name:</label>
+					<input type="text" id="name" name="name" required>
+				</div>
+				<div class="form-group">
+					<label for="class">Class:</label>
+					<input type="text" id="class" name="class" required>
+				</div>
+				<button type="submit" class="btn">Register</button>
+			</form>
+		</div>
+		<div class="container welcome-container">
+			<h2 id="welcome-message"></h2>
+		<div class="table">
+		<h2 style="text-align: center;">LISTENING-TEST( C18-T4)</h2>
+		<div class="audio-container">
+			<audio id="audioPlayer" controls preload="auto">
+				<source src="https://media.vocaroo.com/mp3/1b8z8wZaBC85" type="audio/mp3">
+				Trình duyệt của bạn không hỗ trợ audio.
+			</audio>
+			<!-- Biểu tượng reload bên dưới -->
+			<span id="reloadButton" class="reload-icon">⇆</span>
+		</div>
+		</div>
+			<div class="navigation">
+			<button class="nav-button" onclick="showSection('part1')">Part 1</button>
+			<button class="nav-button" onclick="showSection('part2')">Part 2</button>
+			<button class="nav-button" onclick="showSection('part3')">Part 3</button>
+			<button class="nav-button" onclick="showSection('part4')">Part 4</button>
+		</div>
+		<div id="part1" class="section active">
+			<div class="table">
+				<h2 class="section-title">PART 1 <i>Questions 1-10</i></h2>
+				<p class="subtitle">Complete the notes below.</p>
+				<p class="instruction">Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p>
+				
+				<h3 class="section-title">Job details from employment agency</h3>
+				<div class="question-container">
+                    
+                        <p class="question">Role: 1 <input type="text" class="input-field" id="q1"></p>
+                        <p class="question">Location: Fordham 2 <input type="text" class="input-field" id="q2"> Centre</p>
+                        <p class="question">3 <input type="text" class="input-field" id="q3"> Road, Fordham</p>
+                    
+        
+                    <h4>Work involves</h4>
+               
+                        <p class="question">• Dealing with enquiries</p>
+                        <p class="question">• Making 4 <input type="text" class="input-field" id="q4"> and reorganising them</p>
+                        <p class="question">• Maintaining the internal 5 <input type="text" class="input-field" id="q5"></p>
+                        <p class="question">• General administration</p>
+                
+        
+                    <h4>Requirements</h4>
+                    
+                        <p class="question">• 6 <input type="text" class="input-field" id="q6"> (essential)</p>
+                        <p class="question">• A calm and 7 <input type="text" class="input-field" id="q7"> manner</p>
+                        <p class="question">• Good IT skills</li>
+                   
+        
+                    <h4>Other information</h4>
+                    
+                        <p class="question">• 8 <input type="text" class="input-field" id="q8"> job – further opportunities may be available</p>
+                        <p class="question">• Hours: 7:45 a.m. to 9 <input type="text" class="input-field" id="q9"> p.m. Monday to Friday</p>
+                        <p class="question">• 10 <input type="text" class="input-field" id="q10"> is available onsite</p>
+                    
+                </div>     
+			</div>
+		</div>
+	</div>
+	<div id="part2" class="section">
+		<div class="table">
+			<h2 class="section-title">PART 2 <i>Questions 11-20</i></h2>
+			<p class="subtitle">Choose the correct answer, A, B, or C.</p>
+			<div class="question-container">
+                <div class="column">
+                    <p class="question">11. The museum building was originally<br>
+                        <input type="radio" name="q11" value="A"> A. a factory.<br>
+                        <input type="radio" name="q11" value="B"> B. a private home.<br>
+                        <input type="radio" name="q11" value="C"> C. a hall of residence.
+                    </p>
+                    <p class="question">12. The university uses part of the museum building as<br>
+                        <input type="radio" name="q12" value="A"> A. teaching rooms.<br>
+                        <input type="radio" name="q12" value="B"> B. a research library.<br>
+                        <input type="radio" name="q12" value="C"> C. administration offices.
+                    </p>
+                </div>
+                <div class="column">
+                    <p class="question">13. What does the guide say about the entrance fee?<br>
+                        <input type="radio" name="q13" value="A"> A. Visitors decide whether or not they wish to pay.<br>
+                        <input type="radio" name="q13" value="B"> B. Only children and students receive a discount.<br>
+                        <input type="radio" name="q13" value="C"> C. The museum charges extra for special exhibitions.
+                    </p>
+                    <p class="question">14. What are visitors advised to leave in the cloakroom?<br>
+                        <input type="radio" name="q14" value="A"> A. cameras<br>
+                        <input type="radio" name="q14" value="B"> B. coats<br>
+                        <input type="radio" name="q14" value="C"> C. bags
+                    </p>
+                </div>	
+			</div>
+            <h2 class="section-title"><i>Questions 15–20</i></h2>
+            <p class="subtitle">What information does the speaker give about each of the following areas of the museum?</p>
+            <p class="subtitle">Choose SIX answers from the box and write the correct letter, A–H, next to Questions 15–20.</p>
+				<div class="question-container">
+                    <h4>Information</h4>
+                    <p>A. Parents must supervise their children.</p>
+                    <p>B. There are new things to see.</p>
+                    <p>C. It is closed today.</p>
+                    <p>D. This is only for school groups.</p>
+                    <p>E. There is a quiz for visitors.</p>
+                    <p>F. It features something created by students.</p>
+                    <p>G. An expert is here today.</p>
+                    <p>H. There is a one-way system.</p>
+				</div>
+					<div class="column">
+                        <h4>Areas of Museum</h4>
+                        <p class="question">15. Four Seasons <input type="text" class="input-field" id="q15"></p>
+                        <p class="question">16. Farmhouse Kitchen <input type="text" class="input-field" id="q16"></p>
+                        <p class="question">17. A Year on the Farm <input type="text" class="input-field" id="q17"></p>
+                        <p class="question">18. Wagon Walk <input type="text" class="input-field" id="q18"></p>
+                        <p class="question">19. Bees are Magic <input type="text" class="input-field" id="q19"></p>
+                        <p class="question">20. The Pond <input type="text" class="input-field" id="q20"></p>
+					</div>
+				</div>
+		</div>
+	</div>
+	<div id="part3" class="section">
+		<div class="table">	
+			<h2 class="section-title">PART 3 <i>Questions 21-30</i></h2>
+			<p class="subtitle">Choose TWO letters, A–E.</p>
+			<p class="question">21–22. Which TWO educational skills were shown in the video of children doing origami?</p>
+			
+			<div class="question-container">
+                <div class="column">
+                    <p>A. solving problems</p>
+                    <p>B. following instructions</p>
+                    <p>C. working cooperatively</p>
+                    <p>D. learning through play</p>
+                    <p>E. developing hand-eye coordination</p>
+                </div>
+            </div>
+                <div class="column">
+                    <p class="question">21. <input type="text" class="input-field" id="q21"></p>
+                    <p class="question">22. <input type="text" class="input-field" id="q22"></p>
+                </div>
+   
+        <h2 class="section-title"><i>Questions 23–27</i></h2>
+        <p class="subtitle">Which comment do the students make about each of the following children in the video?</p>
+         <p class="subtitle">Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 23–27.</p>
+            
+            <div class="question-container">
+                <div class="column">
+                    <h4>Comments</h4>
+                    <p>A. demonstrated independence</p>
+                    <p>B. asked for teacher support</p>
+                    <p>C. developed a competitive attitude</p>
+                    <p>D. seemed to find the activity calming</p>
+                    <p>E. seemed pleased with the results</p>
+                    <p>F. seemed confused</p>
+                    <p>G. seemed to find the activity easy</p>
+                </div>
+            </div>
+                <div class="column">
+                    <h4>Children</h4>
+                    <p class="question">23. Sid   <input type="text" class="input-field" id="q23"></p>
+                    <p class="question">24. Jack  <input type="text" class="input-field" id="q24"></p>
+                    <p class="question">25. Naomi <input type="text" class="input-field" id="q25"></p>
+                    <p class="question">26. Anya  <input type="text" class="input-field" id="q26"></p>
+                    <p class="question">27. Zara  <input type="text" class="input-field" id="q27"></p>
+                </div>
+            <h2 class="section-title"><i>Questions 28–30</i></h2>
+            <p class="subtitle">Choose the correct letter, A, B, or C.</p>
+                
+                <div class="question-container">
+                    <div class="column">
+                        <p class="question">28. Before starting an origami activity in class, the students think it is important for the teacher to<br>
+                            <input type="radio" name="q28" value="A"> A. make models that demonstrate the different stages.<br>
+                            <input type="radio" name="q28" value="B"> B. check children understand the terminology involved.<br>
+                            <input type="radio" name="q28" value="C"> C. tell children not to worry if they find the activity difficult.
+                        </p>
+                        <p class="question">29. The students agree that some teachers might be unwilling to use origami in class because<br>
+                            <input type="radio" name="q29" value="A"> A. they may not think that crafts are important.<br>
+                            <input type="radio" name="q29" value="B"> B. they may not have the necessary skills.<br>
+                            <input type="radio" name="q29" value="C"> C. they may worry that it will take up too much time.
+                        </p>
+                        <p class="question">30. Why do the students decide to use origami in their maths teaching practice?<br>
+                            <input type="radio" name="q30" value="A"> A. to correct a particular misunderstanding.<br>
+                            <input type="radio" name="q30" value="B"> B. to set a challenge.<br>
+                            <input type="radio" name="q30" value="C"> C. to introduce a new concept.
+                        </p>
+                    </div>
+                </div>
+		
+        </div>    
+	</div>
+    <div id="part4" class="section">
+        <div class="table">
+            <h2 class="section-title">PART 4 <i>Questions 31–40</i></h2>
+            <p class="subtitle"><em>Complete the notes below.</em></p>
+            <p class="subtitle"><em>Write <strong>ONE WORD ONLY</strong> for each answer.</em></p>
+            <h3">Victor Hugo</h3>
+    
+            <div class="question-container">
+                <h4>His novel, Les Misérables</h4>
+                <p class="question">• It has been adapted for theatre and cinema.</p>
+                <p class="question">• We know more about its overall 31 <input type="text" class="input-field" id="q31"> than about its author.</p>
+    
+                <h4>His early career</h4>
+                <p class="question">• In Paris, his career was successful and he led the Romantic movement.</p>
+                <p class="question">• He spoke publicly about social issues, such as 32 <input type="text" class="input-field" id="q32"> and education.</p>
+                <p class="question">• Napoleon III disliked his views and exiled him.</p>
+    
+                <h4>His exile from France</h4>
+                <p class="question">• Victor Hugo had to live elsewhere in 33 <input type="text" class="input-field" id="q33">.</p>
+                <p class="question">• He used his income from the sale of some 34 <input type="text" class="input-field" id="q34"> he had written to buy a house on Guernsey.</p>
+    
+                <h4>His house on Guernsey</h4>
+                <p class="question">• Victor Hugo lived in this house until the end of the Empire in France.</p>
+                <p class="question">• The ground floor contains portraits, 35 <input type="text" class="input-field" id="q35">, and tapestries that he valued.</p>
+                <p class="question">• He bought 36 <input type="text" class="input-field" id="q36"> made of wood and turned them into beautiful wall carvings.</p>
+                <p class="question">• The first floor consists of furnished areas with wallpaper and 37 <input type="text" class="input-field" id="q37"> that have a Chinese design.</p>
+                <p class="question">• The library still contains many of his favourite books.</p>
+                <p class="question">• He wrote in a room at the top of the house that had a view of the 38 <input type="text" class="input-field" id="q38">.</p>
+                <p class="question">• He entertained other writers as well as poor 39 <input type="text" class="input-field" id="q39"> in his house.</p>
+                <p class="question">• Victor Hugo’s 40 <input type="text" class="input-field" id="q40"> gave ownership of the house to the city of Paris in 1927.</p>
+            </div>
+    
+            <div class="navigation">
+                <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+ </div>
+    
+    <script>
+	    <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+					function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+						let range = getSelectedText();
+						if (range) {
+							let span = document.createElement("span");
+							span.className = className;
+							span.appendChild(range.extractContents());
+							range.insertNode(span);
+						}
+					}
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && event.key === "b") {
+                event.preventDefault();
+                highlightText();
+            } else if (event.ctrlKey && event.key === "u") {
+                event.preventDefault();
+                underlineText();
+            } else if (event.ctrlKey && event.key === "r") {
+                event.preventDefault();
+                removeFormattingFromSelection();
+            }
+        });
+	//Function handle Sign-in
+	let name_user;
+	let className_user;
+        function handleInfoSubmit(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+            let className = document.getElementById("class").value;
+			name_user=name;
+			className_user=className;
+            document.querySelector(".info-container").style.display = "none";
+            document.querySelector(".welcome-container").style.display = "block";
+            document.getElementById("welcome-message").innerText = `Register sucessfull,please start the test`;
+        }
+	//Function to check the Swap Tabs
+	    function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+        // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+                console.log("Sending data:", { name, className, answers, correctCount, bandScore }); // Kiểm tra dữ liệu
+                const scriptURL = "https://script.google.com/macros/s/AKfycbzcYxi5RBPuXBpnVTT_RlxwjoITIDiV2uwx7kVgVzRG8PNSm49xsmGHTlreyJxzSvpA/exec";
+                const data = {
+                name: name,
+                className: className,
+                answers: answers,
+                correctCount: correctCount,
+                bandScore: bandScore // Gửi bandScore
+            };
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+            });
+        }
+        function checkAnswers() {
+                    const correctAnswers = {
+                        q1: "receptionist",
+                        q2: "medical",
+                        q3: "Chastons",
+                        q4: "appointments",
+                        q5: "database",
+                        q6: "experience",
+                        q7: "confident",
+                        q8: "temporary",
+                        q9: "1.15",
+                        q10: "parking",
+                        q11: "A",
+                        q12: "A",
+                        q13: "C",
+                        q14: "B",
+                        q15: "A",
+                        q16: "F",
+                        q17: "C",
+                        q18: "G",
+                        q19: "E",
+                        q20: "B",
+                        q21: "D",
+                        q22: "B",
+                        q23: "A",
+                        q24: "C",
+                        q25: "C",
+                        q26: "F",
+                        q27: "A",
+                        q28: "B",
+                        q29: "C",
+                        q30: "C",
+                        q31: "plot",
+                        q32: "poverty",
+                        q33: "Europe",
+                        q34: "poetry",
+                        q35: "drawings",
+                        q36: "furniture",
+                        q37: "lamps",
+                        q38: "harbour",
+                        q39: "children",
+                        q40: "relatives"
+                    };
+
+                    let correctCount = 0;
+                    let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+                    const answers = {}; // Đối tượng lưu câu trả lời của người dùng
+                    const unansweredQuestions = []; // Danh sách các câu hỏi chưa được điền
+
+                    // Lấy tất cả các câu hỏi (bao gồm cả text và radio) theo thứ tự ID hoặc name
+                    const allQuestions = Array.from(document.querySelectorAll('.input-field, input[type="radio"]')).sort((a, b) => {
+                        const idA = parseInt((a.id || a.name).replace("q", ""), 10);
+                        const idB = parseInt((b.id || b.name).replace("q", ""), 10);
+                        return idA - idB;
+                    });
+
+                    let processedQuestions = new Set(); // Đảm bảo mỗi câu hỏi chỉ được xử lý một lần
+
+                    allQuestions.forEach(question => {
+                        const questionId = question.id || question.name; // Lấy ID hoặc name của câu hỏi
+                        if (processedQuestions.has(questionId)) return; // Bỏ qua nếu câu hỏi đã được xử lý
+                        processedQuestions.add(questionId);
+
+                        const correctAnswer = correctAnswers[questionId]; // Lấy đáp án đúng
+                        let userAnswer = "";
+
+                        if (question.type === "text") {
+                            userAnswer = question.value.trim(); // Lấy câu trả lời từ input text
+                            if (!userAnswer) {
+                                unansweredQuestions.push(questionId.replace("q", "Question ")); // Thêm câu hỏi chưa được điền vào danh sách
+                            }
+                        } else if (question.type === "radio") {
+                            const radios = document.getElementsByName(question.name);
+                            const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                            if (selectedRadio) {
+                                userAnswer = selectedRadio.value;
+                            } else {
+                                unansweredQuestions.push(questionId.replace("q", "Question ")); // Thêm câu hỏi chưa được điền vào danh sách
+                            }
+                        }
+
+                        if (userAnswer) {
+                            answers[questionId] = userAnswer; // Lưu câu trả lời của người dùng
+                            if ((questionId === "q21" || questionId === "q22") && 
+                            ((answers["q21"] === "D" && answers["q22"] === "B") || (answers["q21"] === "B" && answers["q22"] === "D"))) {
+                            if (!resultHTML.includes("Question 21")) {
+                                resultHTML += `<tr>
+                                    <td>Question 21</td>
+                                    <td>${answers["q21"]}</td>
+                                    <td>D</td>
+                                    <td>✔</td>
+                                </tr>`;
+                            }
+                            if (!resultHTML.includes("Question 22")) {
+                                resultHTML += `<tr>
+                                    <td>Question 22</td>
+                                    <td>${answers["q22"]}</td>
+                                    <td>B</td>
+                                    <td>✔</td>
+                                </tr>`;
+                            }
+                            correctCount += 2; // Tăng số câu đúng cho cả hai câu hỏi
+                        } else if (questionId === "q21" || questionId === "q22") {
+                            // Nếu chỉ một trong hai câu đúng, đánh dấu sai
+                            resultHTML += `<tr>
+                                <td>${questionId.replace("q", "Question ")}</td>
+                                <td>${userAnswer}</td>
+                                <td>${correctAnswer}</td>
+                                <td>✘</td>
+                            </tr>`;
+                        } else if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
+                            correctCount++;
+                            resultHTML += `<tr>
+                                <td>${questionId.replace("q", "Question ")}</td>
+                                <td>${userAnswer}</td>
+                                <td>${correctAnswer}</td>
+                                <td>✔</td>
+                            </tr>`;
+                        } else {
+                            resultHTML += `<tr>
+                                <td>${questionId.replace("q", "Question ")}</td>
+                                <td>${userAnswer}</td>
+                                <td>${correctAnswer}</td>
+                                <td>✘</td>
+                            </tr>`;
+                        }
+                    }
+                            
+                    });
+
+                    // Nếu có trường chưa được điền, hiển thị thông báo và dừng xử lý
+                    if (unansweredQuestions.length > 0) {
+                        const unansweredContainer = document.getElementById("unanswered-questions");
+                        unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><ul>${unansweredQuestions.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                        unansweredContainer.style.display = "block"; // Hiển thị danh sách
+                        return;
+                    }
+
+                    // Nếu tất cả các câu hỏi đã được trả lời
+                    const unansweredContainer = document.getElementById("unanswered-questions");
+                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                    unansweredContainer.style.display = "none"; // Ẩn thông báo
+
+                    // Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true; // Vô hiệu hóa nút để tránh nộp lại
+
+                    // Tính bandScore dựa trên correctCount
+                    let bandScore = calculateBandScore(correctCount);
+
+                    // Hiển thị kết quả
+                    document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
+                        <h3>Band Score: ${bandScore}</h3>` + resultHTML;
+
+                    console.log("Name:", name_user);
+                    console.log("Class:", className_user);
+                    console.log("Answers:", answers);
+                    console.log("Correct Count:", correctCount);
+                    console.log("Band Score:", bandScore);
+
+                    // Gửi dữ liệu đã sắp xếp lên Google Sheets
+                    sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+                }
+                // Hàm tính bandScore
+                function calculateBandScore(correctCount) {
+                    if (correctCount >= 39) return 9.0;
+                    if (correctCount >= 37) return 8.5;
+                    if (correctCount >= 35) return 8.0;
+                    if (correctCount >= 33) return 7.5;
+                    if (correctCount >= 30) return 7.0;
+                    if (correctCount >= 27) return 6.5;
+                    if (correctCount >= 23) return 6.0;
+                    if (correctCount >= 20) return 5.5;
+                    if (correctCount >= 16) return 5.0;
+                    if (correctCount >= 13) return 4.5;
+                    if (correctCount >= 10) return 4.0;
+                    if (correctCount >= 7) return 3.5;
+                    if (correctCount >= 5) return 3.0;
+                    if (correctCount >= 3) return 2.5;
+                    return 0.0;
+                }
+    </script>
+</body>
+</html>

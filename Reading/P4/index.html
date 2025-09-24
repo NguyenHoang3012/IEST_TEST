@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            font-size: 12px;
+        }
+        .container {
+            display: flex; /* Sử dụng Flexbox để chia bố cục */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+        .left-panel, .right-panel {
+            flex: 1; /* Mỗi cột chiếm một nửa chiều rộng */
+            padding: 20px;
+            overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+        }
+        .left-panel {
+            background-color: #fffbe6; /* Màu nền cho cột bên trái */
+        }
+        .right-panel {
+            background-color: #ffffff; /* Màu nền cho cột bên phải */
+            border-left: 2px solid #ccc; /* Đường viền giữa hai cột */
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .passage {
+            margin-top: 20px;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .content-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column; /* Thêm dòng này */
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .column {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-items: center; 
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        } 
+        .nav-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+                /* ...existing styles... */
+                #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        .btn-container {
+            text-align: center; /* Căn giữa nút Register */
+            margin-top: 20px;
+        }
+        .left-panel, .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .left-panel {
+        background-color: #fffbe6;
+        flex: 1;
+        }
+
+        .right-panel {
+        background-color: #ffffff;
+        flex: 1;
+        border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+        <!-- Form đăng nhập -->
+        <div class="container form-container">
+            <h2 style="text-align: center;">Insert your information</h2>
+            <form onsubmit="handleInfoSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="class">Class:</label>
+                    <input type="text" id="class" name="class" required>
+                </div style="text-align: center; margin-top: 20px;">
+                <div class="btn-container">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+        </div>
+    <div class="container welcome-container hidden">
+        <div class="container">
+            <!-- Cột bên trái -->
+            <div class="left-panel">  
+                 <!-- Nội dung Message 1 -->
+                <div id="message1">
+                    <h2 id="welcome-message" style="text-align: center;"></h2>
+                    <div class="subtitle">READING PASSAGE 1</div>
+                    <p>You should spend about 20 minutes on <strong>Questions 1-13</strong>, which are based on Reading Passage 1 below.</p>
+                    <div class="content-box">
+                        <h2>Rural transport Plan of 'Practical Action'</h2>
+                        <p><em>
+                            For more than 40 years, Practical Action has worked with poor communities to identify the types of transport that work best, taking into consideration culture, needs and skills. With our technical and practical support, isolated rural communities can design, build and maintain their own solutions.
+                        </em></p>
+                        <p>
+                            Although the National Development Plan in the transport sector has focused mainly on expanding all networks and bridges, there are still significant constraints in satisfying the needs of poorer communities. Practical Action aims to radically accelerate the improvement in urban public transport by focusing on the establishment of rural public transport systems, which will introduce alternative transport patterns and Intermediate Means of Transport (IMTs) that complement the connections between impoverished people with road networks and other socio-economic infrastructures to <strong>improve</strong> their livelihoods.
+                        </p>
+                        <p>
+                            On the other hand, the improvement of all weathered roads in rural areas (only 30 percent of the rural population have access to this now) and bridges is prohibitive for a country with a small and stagnant economy. In addition, whether or not these interventions are favourable in different geographical contexts relies heavily on environmental, social and economic conditions. The majority of the network is found in the lowland areas of the country. Although a lot of alternative ways fit into addressing transport development of rural communities in the hills, lack of clear government focus and policies, lack of fiscal and economic incentives, lack of adequate technical knowledge and manufacturing capacities have resulted in the under-development of this alternative transport sub-sector including the provision of IMTs.
+                        </p>
+                        <p>
+                            There is a strong link between isolation and poverty. The increasing mobility of low-income people in search of employment requires improved rural public transport. Improved transport system enables poor people to access markets where they can buy or sell goods for income and make better use of essential services such as health and education. No proper roads or vehicles mean women and children are forced to spend many hours each day attending to their most basic needs, such as collecting water and firewood. This is precious time that could be used to grow crops, care for the family, study, or develop small business ventures to earn more income.
+                        </p>
+                        <h4>Road building</h4>
+                        <p>
+                            It isn’t easy to conceive of the vigorous development of rural communities without an efficient road network. Therefore, the construction of roads is a top priority in rural communities without an efficient road network. Therefore, the construction of roads is a major priority for many rural communities where daily activities are regarded as huge tasks such as collecting water and going to local markets. Practical Action is aiming at improving rural transport infrastructures through the construction and rehabilitation of short rural roads, small bridges, culverts and other transport-related functions, which is to encourage community-driven development. This means villagers can improve their own lives through better access to markets, health care, education and other economic and social opportunities.
+                        </p>
+                            <h4>Driving forward new ideas</h4>
+                        <p>
+                            Practical Action and the communities we work with are constantly working out new ideas to help poor people. Cycle trailers, for example, have practical commercial uses, helping people carry their goods such as vegetables and charcoal to market for sale. Besides, those on the poverty line can earn a decent income by making, maintaining and operating bicycle taxis. Practical Action’s know-how has enabled Sri Lankan communities to start a bus service and maintain the roads along which it travels. The impact has been remarkable. This quick and affordable service not only puts an end to rural people’s social isolation, but also gives them a reliable way to travel to the nearest town. Practical Action is also an active member of many national and regional networks through which knowledge based on the initiative’s research can also be exchanged and disseminated, and one conspicuous example is the Lanka Organic Agriculture Movement Council (LOAM), a professional organisation that promotes organic agriculture by developing local organic markets in different regions.
+                        </p>
+                        <h4>Sky-scraping transport system</h4>
+                        <p>
+                            For people living in remote mountainous areas, how to get food to market is a major problem. The hills are so steep that it is dangerous to walk down them. Movers can help, but the service is expensive and time-consuming. As a result of such a long journey, the food starts to spoil and becomes worthless. Practical Action has come up with an ingenious solution – an aerial ropeway, used as a safe and efficient way for material, even people. It can be fully or partly powered by either gravitation or force of external power. The ropeway consists of two trolleys rolling over support tracks connected to a control cable in the middle, which moves in a traditional flywheel system. The trolley at the top is loaded with goods and can take up to 120 kg. This is pulled down to the station at the bottom, either by the force of gravity or by an external power. The other trolley at the bottom is, therefore, pulled upwards automatically. The external power can be produced by a micro-hydro system if access to an electricity grid is not an option.
+                        </p>
+                        <h4>Bringing people on board</h4>
+                        <p>
+                            Practical Action has developed a two-wheeled iron trailer that can be attached (via a hitch behind the seat) to a bicycle and be used to carry heavy cargo (up to around 200 kg) or even passengers. People can now carry three times as much as before and still pedal the bicycle. The trailers are used for transp01t­ ing goods by local producers, as ambulances, as shops, and even as mobile libraries. They are made in small village workshops from iron tubing, which is cut, bent, welded and drilled to make the frame and wheels. Sometimes, modifications are also carried out to the trailers at the request of buyers. The two­ wheeled 'ambulance' is made from moulded metal, with standard rubber-tyred wheels. The 'bed' section can be padded with cushions to make the patient comfortable, while the 'seat' section allows a family member to attend to the patient during transit. A dedicated bicycle is also needed to pull the an1bulance trailer, so that other community members do not need to go without the bicycles they depend on in their daily lives. A joining mechanism allows for easy removal and attachment. In response to user comments, a cover has been designed that can be added to give protection to the patient and attendant in poor weather. Made of treated cotton cloth, the cover is durable and waterproof.
+                        </p>    
+                    </div>
+                </div>
+                  <!-- Nội dung Message 2 -->
+                <div id="message2" class="content-box hidden">
+                    <div class="content-box">
+                        <h2>Follow Your Nose</h2>
+                        <p>
+                            <strong>A</strong> Aromatherapy is the most widely used complementary therapy in the National Health Service, and doctors use it most often for treating dementia. Some elderly patients have difficulty in verbal interaction, on which conventional medicine has little efficacy. For them, aromatherapy can help get better sleep, increase motivation and reduce disturbed behaviour. So the thinking goes. But last year, a systematic review of health care databases found almost no evidence that aromatherapy is effective in the treatment of dementia. Other findings suggest that aromatherapy works only if you believe it will. In reality, the only research that has precisely revealed it to have an effect was carried out on animals.
+                        <p>
+                            <strong>B</strong> Behavioural studies have consistently suggested that odours can elicit emotional memories far more easily than other sensory cues. And earlier this year, Rachel Herz, of Brown University in Providence, Rhode Island, and colleagues peered into people's heads using functional Magnetic Resonance Imaging (fMRI) to validate that. They scanned the brains of five women while they either watched a photo of a bottle of perfume that evoked a pleasant memory for them, or smelled that perfume. One woman, as an example, thought of how as a child living in Paris - she would look excitedly at her mother who dressed up to go out and sprayed herself with that perfume. The women themselves depicted the perfume as far more evocative than the photo, and Herz and co-workers found that the scent did indeed activate the amygdala and other brain regions associated with emotion processing far more strongly than the photo­ graph. But what's interesting was that the memory itself was not much better recalled by the fragrance than by the picture. 'People don't remember any more details or with any more clarity when the memory is recalled with an odour,' she says. 'However, you have this intense emotional feeling viscerally with the odour.'
+                        </p>
+                        <p>
+                            <strong>C</strong> That's hardly surprising, Herz thinks, given how the brain has evolved. 'The way I like to think about it is that emotion and olfaction are essentially the same things,' she says. 'The part of the brain controlling emotion literally comes out from the part of the brain controlling smell.' That, she says, probably explains why memories for odours that are associated with intense emotions are so strongly entrenched in us, because the smell was initially a survival skill: a signal to approach or to avoid.
+                        </p>
+                        <p>
+                            <strong>D</strong> Eric Vermetten, a psychiatrist at the University of Utrecht in the Netherlands, says that doctors have long known about the potential of smells to act as traumatic reminders but the evidence has been largely anecdotal. Last year, Vermetten and others began study it through three cases of post-traumatic stress disorder (PTSD) in which patients said either that a certain smell triggered their flashbacks, or that a smell was a feature of the flashback itself. The researchers concluded that odours could be made use of in exposure therapy, or for reconditioning patients' fear responses.
+                        </p>
+                        <p>
+                            <strong>E</strong> After Vermetten presented his findings at a conference, doctors in the audience told him how they had turned this association around and put it to good use. PTSD patients often undergo group therapy, but the traumatic reminders can be exposed by the therapy itself. 'Some clinicians put a strip of vanilla or a strong, pleasant, daily odorant such as coffee under their patients' noses, so that they have this continuous olfactory stimulation,' says Vermetten. So armed, the patients seem to be better protected against flashbacks. It's purely anecdotal, and nobody knows what's happening in the brain, says Vermetten, but it's possible that the neural pathways by which the odour elicits the pleasant, everyday memory override the fear-conditioned neural pathways that respond to verbal cues.
+                        </p>
+                        <p>
+                            <strong>F</strong> According to Herz, the therapeutic potential of scent could lie in their very unreliability. She has presented with her perfume-bottle experiment that even though the memories the scent elicits feel more real, it doesn't guarantee any better recall. And there's plenty of research to show that our noses can be tricked, because being predominantly visual and verbal creatures, we put more faith in those other modalities. In 2001, for example, Gil Morrot, of the National Institute for Agronomic Research in Montpellier, tricked 54 oenology students by colouring a glass of white wine with a scentless red dye in secret just before they were asked to describe the scent of some red and white wines. The students used tem1s typically reserved for red wines to desc1ibe the coloured wine. What's more, just like experts, they thought of terms alluding to the wine's redness and darkness-visual rather than olfactory qualities. Smell, the researchers concluded, cannot be separated from the other senses.
+                        </p>
+                        <p>
+                            <strong>G</strong> Last July, Jay Gottfried and Ray Dolan of the Wellcome Department of Imaging Neuroscience in London took that research a step further. They tested how much time people need to respond when naming an aroma, by presenting with an image that was associated with the odour or one that was not. Participants were asked to sniff vanilla and simultaneously showed either the picture of ice cream or of cheese. At the same time, their brains were being scanned in an fMRI machine. People named the smells faster when the picture presented something semantically related to them, and when that happened, a structure called the hippocampus was strongly activated. The research­ ers' interpretation was that the hippocampus plays a role in integrating information from the senses - information that the brain then uses o decide what it is perceiving.
+                        </p>
+                    </div>
+                </div>
+                    <!-- Nội dung Message 3 -->
+                <div id="message3" class="content-box hidden">
+                        <h3>READING PASSAGE 3</h3>
+                        <p>You should spend about 20 minutes on <strong>Questions 27-40</strong>, which are based on Reading Passage 3 below.</p>
+                        <div class="content-box">
+                            <h2>Personality and Appearance</h2>
+                            <p>Charles Darwin once applied to be the 'energetic' partner that Robert Fitzroy, the Beagle's captain, sought, but was all but rejected for one of his woeful yet absolutely obvious flaws: his nose. Fitzroy was a great believer in physiognomy, which claims that you can tell a ; person's character by his or her appearance. As Darwin's daughter Hemietta later recalled, Fitzroy was convinced that 'a person with such a nose would not have the energy'. But this was not always the case. Fortunately, Darwin's other facial features made up for his flat nose - his eyebrows came to his rescue.</p>
+                            <p>The idea that a person's character can be glimpsed in their face dates back to the ancient, Greeks. In the late 18th century, the Swiss poet Johann Lavater popularised this idea, making it a hot intellectual topic. In Darwin's day, it was somewhat taken for granted by the public. Only after becoming associated with the infamous phrenology of the late 19th century was physiognomy written off as pseudoscience.</p>
+                            <p>First impressions are highly influential, despite the well-worn admonition not to judge a. book by its cover. Within a tenth of a second of seeing an unfamiliar face, we have already ! made a judgement about its owner's character - caring, trustworthy, aggressive, extrovert, competent and so on. Once that snap judgement has formed, it is surprisingly hard to budge. Such snap judgements can also have an impact on people's behaviour. Politicians with com­ petent-looking faces have a greater chance of being elected, and CEOs who look dominant are more likely to run a profitable company. There is also a widely acknowledged 'attrac­ tiveness halo'. People seen as good-looking not only get the most valentines but are also judged to be more outgoing, socially competent, powerful, intelligent and healthy.</p>
+                            <p>In 1966, psychologists at the University of Michigan carried out a study in which 84 under­ graduates, total strangers to each other, rated one another on five personality traits based solely on their appearance, as they sat there for 15 minutes in sheer silence. Their judge­ ments over such traits as extroversion, conscientiousness and openness matched real per­ sonality scores significantly more often than chance. Lately, researchers, notably Anthony Little of the University of Stirling and David Perret of the University of St Andrews, have looked into the link between appearance and personality again. They pointed out that the Michigan studies failed to exert tight control over the confounding factors. However, when Little and Perrett reran this experiment, this time using mugshots instead of real subjects, they also noticed a connection between facial appearance and personality - though only for extroversion and conscientiousness. Little and Perrett claimed that they only found a corre­ lation at the extremes of personality.</p>
+                            <p>Justin Carre and Cheryl McCormick of Brock University in Ontario, Canada, examined 90 ice hockey players. They found that a wider face in which the cheekbone-to-cheekbone distance was unusually large relative to the distance between eyebrows and upper lip was linked in a statistically significant way with the number of penalty minutes a player was given for violent acts including slashing, elbowing, checking from behind and fighting. The kernel of truth idea isn't the only explanation on offer for our readiness to make facial judgements. According to Leslie Zebrowitz, a psychologist at Brandeis University in Waltham, Massachusetts, snap judgements in many cases are not accurate. The snap judgement, more often than not, is nothing but an 'overgeneralisation' of a more basic response, she says. A typical example of overgeneralisation can be seen in the predators' response to eyespots, the distinct circular markings on some moths, butterflies, and fish. These eyespots might end up terrorising the predators in that they resemble the eyes of other creatures considered threats by the would-be predators.</p>
+                            <p>Another researcher who leans towards overgeneralisation is Alexander Todorov. With Princeton colleague Nikolaas Oosterhof, he recently put forward a theory which he says explains our snap judgements of faces in terms of how threatening they appear. Todorov and Oosterhof asked people about their instinctive responses to pictures of emotionally neutral faces, sorted out all the responses, and narrowed them down to two fundamental factors: how reliable or dominant the face looks. Todorov and Oosterhof thus came to their conclusion that by making personal­ ity judgements on the basis of people's facial appearance, we are actually overgeneralising our ability to tell emotions from expressions as well as our ability to detect malignity and dangers from others. Todorov, however, stresses that overgeneralisation does not rule out the idea that there is sometimes a kernel of truth in these assessments of personality.</p>
+                            <p>So where does the kernel of truth, if it does have one, come from? Perret believes that the connection is established when our biases about faces evolve themselves into self-fulfilling expectations, just as was investigated by other researchers back in 1977. Our expectations can lead us to influence people to behave in ways that confirm those expectations: con­ sistently treat someone as untrustworthy and they end up behaving that way. Yet, in some cases, this effect could also wind up working the opposite way, especially among those with a cute look. Komad Lorenz, the Nobel prize-winning ethologist, once commented that baby­ faced looks were likely to invite nurturing responses. This viewpoint has been substanti­ ated by works of Zebrowitz, who found out that baby-faced boys and men provide similar stimuli to the amygdala, an emotional centre of the brain. But beware: the whole theory could be taking an unexpected twist here. As a matter of fact, the chance is pretty high that baby-faced men tum out better-educated, more assertive, and more apt to win military medals than other mature-looking men. They are also more likely to be criminals; think of Al Capone. Similarly, Zebrowitz found baby-faced boys to be quarrelsome and hostile, and more likely to be academic high-fliers. She calls this the 'self-defeating prophecy effect': a man with a baby face strives to confound expectations and ends up overcompensating.</p>
+                            <p>Another theory reminds people of the old parental warning in which parents caution children against pulling their own faces in case faces freeze that way. According to this theory, our personality moulds the way our faces look. It is supported by a study two decades ago which found that angry older people tend to look cross even when asked to make a neutral facial expression.  A lifetime of scowling, grumpiness and grimaces seemed to have left its mark.</p>
+                        </div>
+                </div>
+            </div>
+            <!-- Cột bên phải -->
+            <div class="right-panel">
+                <div id="timer" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;"></div>
+                <div class="nav-buttons">
+                    <button onclick="showMessage(1)">READING PASSAGE 1</button>
+                    <button onclick="showMessage(2)">READING PASSAGE 2</button>
+                    <button onclick="showMessage(3)">READING PASSAGE 3</button>
+                </div>
+                 <!-- Cột bên phải message1-->
+                <div id="right-message1" class="content-box active">
+                    <h3>Questions 1-4</h3>
+                    <p>
+                        Do the following statements agree with the claims of the writer in Reading Passage 1?<br>
+                        <strong>In boxes 1–4 on your answer sheet, write</strong>
+                    </p>
+                    <ul>
+                        <li><strong>YES</strong> if the statement agrees with the claims of the writer</li>
+                        <li><strong>NO</strong> if the statement contradicts the claims of the writer</li>
+                        <li><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</li>
+                    </ul>
+                    <div class="question-container">
+                        <div class="question">
+                            1. A slow-growing economy often cannot afford some road networks, especially those that have weathered away.<br>
+                            <p><input type="radio" name="q1" value="YES"> YES</p>
+                            <p><input type="radio" name="q1" value="NO"> NO</p>
+                            <p><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            2. Officials in rural communities know how to improve alternative transport technically.<br>
+                            <p><input type="radio" name="q2" value="YES"> YES</p>
+                            <p><input type="radio" name="q2" value="NO"> NO</p>
+                            <p><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            3. The primary goal of Practical Action to improve rural transport infrastructures is to increase trade between villages.<br>
+                            <p><input type="radio" name="q3" value="YES"> YES</p>
+                            <p><input type="radio" name="q3" value="NO"> NO</p>
+                            <p><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            4. The Lanka Organic Agriculture Movement Council has advanced its projects with deep involvement in Practical Action.<br>
+                            <p><input type="radio" name="q4" value="YES"> YES</p>
+                            <p><input type="radio" name="q4" value="NO"> NO</p>
+                            <p><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                    </div>
+                    <h3>Questions 5-8</h3>
+                    <p>
+                        Answer the questions below.<br>
+                        <strong>Choose NO MORE THAN THREE WORDS</strong> from the passage for each answer.<br>
+                        Write your answers in boxes 5-8 on your answer sheet.
+                    </p>
+                    <div class="question-container">
+                        <div class="question">
+                            5. What is the first duty for the development of suburban communities?<br>
+                            <input type="text" class="input-field" id="q5" autocomplete="off">
+                        </div>
+                        <div class="question">
+                            6. What new method can be used to help the poor deliver their goods directly to market?<br>
+                            <input type="text" class="input-field" id="q6" autocomplete="off">
+                        </div>
+                        <div class="question">
+                            7. What service has ended the isolation of Sri Lanka’s rural population?<br>
+                            <input type="text" class="input-field" id="q7" autocomplete="off">
+                        </div>
+                        <div class="question">
+                            8. What solution has been adopted to solve the problem of people living in remote mountain areas getting food to market?<br>
+                            <input type="text" class="input-field" id="q8" autocomplete="off">
+                        </div>
+                    </div>
+                    <h3>Questions 9–13</h3>
+                        <p>
+                            Complete the summary below.<br>
+                            <strong>Choose NO MORE THAN TWO WORDS</strong> from the passage for each answer.<br>
+                            Write your answers in boxes 9–13 on your answer sheet.
+                        </p>
+                        <div class="content-box" style="border: 1px solid #888; background: #fff;">
+                            <p>
+                                In addition to normal transport duties, the two-wheeled iron trailers can be used as medical emergency rooms or movable 
+                                9<input type="text" class="input-field" id="q9" autocomplete="off" style="width: 60px;">, and are sometimes modified at the buyers' requests. The 'ambulance' is made of metal with rubber wheels and is driven by another bicycle. 
+                                10<input type="text" class="input-field" id="q10" autocomplete="off" style="width: 60px;">
+                                can be placed on the vehicle to make the patient comfortable, and 
+                                11<input type="text" class="input-field" id="q11" autocomplete="off" style="width: 60px;">
+                                can accompany the vehicle to care for the patient during transport. In order to facilitate the disassembly and traction of other equipment, a connecting 
+                                12<input type="text" class="input-field" id="q12" autocomplete="off" style="width: 60px;">
+                                is designed. Later, as suggested by the users,
+                                13<input type="text" class="input-field" id="q13" autocomplete="off" style="width: 60px;">
+                                was added to protect patients.
+                            </p>
+                        </div>
+                    
+                </div>
+                <!-- Cột bên phải message2-->
+                <div id="right-message2" class="content-box hidden">
+                    <div class="content-box">
+                        <div class="subtitle">READING PASSAGE 2</div>
+                        <p>
+                            <em>You should spend about 20 minutes on <strong>Questions 14–26</strong>, which are based on Reading Passage 2 below.</em>
+                        </p>
+                        <h3>Questions 14–18</h3>
+                        <p>
+                            Reading Passage 2 has seven paragraphs, A–G.<br>
+                            Choose the correct heading for paragraphs A, C, E and G from the list of headings below.<br>
+                            Write the correct number, i–ix, in boxes 14–18 on your answer sheet.
+                        </p>
+                        <div class="content-box" style="background: #fff; border: 1px solid #888;">
+                            <strong>List of Headings</strong>
+                            <ol type="i" style="margin-left: 20px;">
+                                <li>Remembering the past more clearly</li>
+                                <li>Bringing back painful memories</li>
+                                <li>Originally an alarm signal</li>
+                                <li>The physical effects of scent versus image</li>
+                                <li>Checking unreliable evidence</li>
+                                <li>Reinforcing one sense with another</li>
+                                <li>Escaping from reliving the past</li>
+                                <li>The overriding power of sight and sound</li>
+                                <li>Conflicting views</li>
+                            </ol>
+                        </div>
+                        <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
+                            <tr>
+                                <td><em>Example</em> Paragraph B</td>
+                                <td><em>Answer</em> iv</td>
+                            </tr>
+                            <tr>
+                                <td><em>Example</em> Paragraph F</td>
+                                <td><em>Answer</em> v</td>
+                            </tr>                       
+                            <tr>
+                                <td style="width: 50%;">14. Paragraph A</td>
+                                <td style="width: 50%;"><input type="text" class="input-field" id="q14" autocomplete="off" style="width: 40px;"></td>
+                            </tr>
+                            <tr>
+                                <td>15. Paragraph C</td>
+                                <td><input type="text" class="input-field" id="q15" autocomplete="off" style="width: 40px;"></td>
+                            </tr>
+                            <tr>
+                                <td>16. Paragraph E</td>
+                                <td><input type="text" class="input-field" id="q16" autocomplete="off" style="width: 40px;"></td>
+                            </tr>
+                            <tr>
+                                <td>17. Paragraph G</td>
+                                <td><input type="text" class="input-field" id="q17" autocomplete="off" style="width: 40px;"></td>
+                            </tr>
+                            <tr>
+                                <td>18. Paragraph B</td>
+                                <td><input type="text" class="input-field" id="q18" autocomplete="off" style="width: 40px;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <h3>Questions 19–24</h3>
+                    <p>
+                        <em>Look at the following findings (Questions 19–24) and the list of researchers below.</em><br>
+                        Match each finding with the correct researcher, <strong>A, B, C or D</strong>.<br>
+                        Write the correct letter, <strong>A, B, C or D</strong>, in boxes 19–24 on your answer sheet.<br>
+                        <strong>NB</strong> You may use any letter more than once.
+                    </p>
+                    <div class="question-container">
+                        <div class="question">
+                            19. Smell can trigger images of horrible events.<br>
+                            <input type="text" class="input-field" id="q19" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question"> 
+                            20. Memory cannot get sharper by smell.<br>
+                            <input type="text" class="input-field" id="q20" autocomplete="off" style="width: 40px;">
+                        </div>
+                        
+                        <div class="question">
+                            21. When both the smell and the picture are given, the stimulation to the brain is stronger.<br>
+                            <input type="text" class="input-field" id="q21" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            22. Pleasant smells counteract unpleasant recollections.<br>
+                            <input type="text" class="input-field" id="q22" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            23. It is impossible to isolate smell from visual cues.<br>
+                            <input type="text" class="input-field" id="q23" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            24. The part of the brain that governs emotion is more stimulated by a smell than an image.<br>
+                            <input type="text" class="input-field" id="q24" autocomplete="off" style="width: 40px;">
+                        </div>
+                    </div>
+                    <div class="content-box" style="background: #fff; border: 1px solid #888; margin-top: 15px;">
+                        <strong>List of Researchers</strong>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><strong>A</strong> Rachel Herz</li>
+                            <li><strong>B</strong> Eric Vermetten</li>
+                            <li><strong>C</strong> Gil Morrot</li>
+                            <li><strong>D</strong> Jay Gottfried and Ray Dolan</li>
+                        </ul>
+                    </div>
+                    <h3>Questions 25 and 26</h3>
+                        <p>
+                            Choose the correct letter, <strong>A, B, C or D</strong>.<br>
+                            Write the correct letter in boxes 25 and 26 on your answer sheet.
+                        </p>
+                        <div class="question-container">
+                            <div class="question">
+                                25. What does the passage say about aromatherapy?<br>
+                                <input type="radio" name="q25" value="A"> A. Aromatherapy is the use of essential oils extracted from plants.<br>
+                                <input type="radio" name="q25" value="B"> B. Evidence has proved that aromatherapy is effective in treating dementia.<br>
+                                <input type="radio" name="q25" value="C"> C. People who feel aromatherapy is effective believe it is useful.<br>
+                                <input type="radio" name="q25" value="D"> D. Aromatherapy is especially helpful for elderly patients.<br>
+                            </div>
+                            <div class="question">
+                                26. What is Rachel Herz’s conclusion?<br>
+                                <input type="radio" name="q26" value="A"> A. The area of the brain that activates emotion has the same physiological structure as the one that controls olfaction.<br>
+                                <input type="radio" name="q26" value="B"> B. We cannot depend on smell, and people have more confidence in sight and spoken or written words.<br>
+                                <input type="radio" name="q26" value="C"> C. Odours can recall real memories even after the perfume-bottle experiment.<br>
+                                <input type="radio" name="q26" value="D"> D. Smell has proved its therapeutic effect over a long time span.<br>
+                            </div>
+                        </div>
+                </div>
+                <!-- Cột bên phải message3-->
+                <div id="right-message3" class="content-box hidden">
+                    <h3>Questions 27–31</h3>
+                    <p>
+                        Do the following statements agree with the claims of the writer given in Reading Passage 3?<br>
+                        <strong>In boxes 27–31 on your answer sheet, write</strong>
+                    </p>
+                    <ul>
+                        <li><strong>YES</strong> if the statement agrees with the claims of the writer</li>
+                        <li><strong>NO</strong> if the statement contradicts the claims of the writer</li>
+                        <li><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about it</li>
+                    </ul>
+                    <div class="question-container">
+                        <div class="question">
+                            27. Robert Fitzroy’s first impression of Darwin was accurate.<br>
+                            <p><input type="radio" name="q27" value="YES"> YES</p>
+                            <p><input type="radio" name="q27" value="NO"> NO</p>
+                            <p><input type="radio" name="q27" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            28. The precise rules of ‘physiognomy’ have remained unchanged since the 18th century.<br>
+                            <p><input type="radio" name="q28" value="YES"> YES</p>
+                            <p><input type="radio" name="q28" value="NO"> NO</p>
+                            <p><input type="radio" name="q28" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            29. The first impression of a person can be modified later with little effort.<br>
+                            <p><input type="radio" name="q29" value="YES"> YES</p>
+                            <p><input type="radio" name="q29" value="NO"> NO</p>
+                            <p><input type="radio" name="q29" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            30. People who appear capable are more likely to be chosen to a position of power.<br>
+                            <p><input type="radio" name="q30" value="YES"> YES</p>
+                            <p><input type="radio" name="q30" value="NO"> NO</p>
+                            <p><input type="radio" name="q30" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                        <div class="question">
+                            31. It is unfair for good-looking people to be better treated in society.<br>
+                            <p><input type="radio" name="q31" value="YES"> YES</p>
+                            <p><input type="radio" name="q31" value="NO"> NO</p>
+                            <p><input type="radio" name="q31" value="NOT GIVEN"> NOT GIVEN</p>
+                        </div>
+                    </div>
+                    <h3>Questions 32–36</h3>
+                    <p>
+                        Choose the correct letter, <strong>A, B, C or D</strong>.<br>
+                        Write the correct letter in boxes 32–36 on your answer sheet.
+                    </p>
+                    <div class="question-container">
+                        <div class="question">
+                            32. Which one of the following is TRUE about Anthony Little and David Perrett’s experiment?<br>
+                            <input type="radio" name="q32" value="A"> A. It is based on the belief that none of the conclusions in the Michigan experiment is accurate.<br>
+                            <input type="radio" name="q32" value="B"> B. It supports parts of the conclusions in the Michigan experiment.<br>
+                            <input type="radio" name="q32" value="C"> C. It replicates the study conditions in the Michigan experiment.<br>
+                            <input type="radio" name="q32" value="D"> D. It has a greater range of faces than in the Michigan experiment.<br>
+                        </div>
+                        <div class="question">
+                            33. What can be concluded from Justin Carre and Cheryl McCormick’s experiment?<br>
+                            <input type="radio" name="q33" value="A"> A. A wide-faced man may be more aggressive.<br>
+                            <input type="radio" name="q33" value="B"> B. Aggressive men have a wide range of facial features.<br>
+                            <input type="radio" name="q33" value="C"> C. There is no relation between facial features and an aggressive character.<br>
+                            <input type="radio" name="q33" value="D"> D. It’s necessary for people to be aggressive in competitive games.<br>
+                        </div>
+                        <div class="question">
+                            34. What is exemplified by referring to butterfly marks?<br>
+                            <input type="radio" name="q34" value="A"> A. Threats to safety are easy to notice.<br>
+                            <input type="radio" name="q34" value="B"> B. Instinct does not necessarily lead to accurate judgment.<br>
+                            <input type="radio" name="q34" value="C"> C. People should learn to distinguish between accountable and unaccountable judgments.<br>
+                            <input type="radio" name="q34" value="D"> D. Different species have various ways to notice danger.<br>
+                        </div>
+                        <div class="question">
+                            35. What is the aim of Alexander Todorov's study?<br>
+                            <input type="radio" name="q35" value="A"> A. to determine the correlation between facial features and social develo ment.<br>
+                            <input type="radio" name="q35" value="B"> B. to undermine the belief that appearance is important.<br>
+                            <input type="radio" name="q35" value="C"> C. to learn the influence of facial features on judgments of a person's personality.<br>
+                            <input type="radio" name="q35" value="D"> D. to study the role of judgments in a person's relationship.<br>
+                        </div>
+                        <div class="question">
+                            36. What is the conclusion of Alexander Todorov's study?<br>
+                            <input type="radio" name="q36" value="A"> A. People should draw accurate judgments from overgeneralisation.<br>
+                            <input type="radio" name="q36" value="B"> B. Using appearance to determine a person's character is undependable.<br>
+                            <input type="radio" name="q36" value="C"> C. Overgeneralisation can be misleading as a way to determine a person's character.<br>
+                            <input type="radio" name="q36" value="D"> D. The judgment of a person's character based on appearance may be accurate.<br>
+                        </div>
+                    </div>
+                    <h3>Questions 37–40</h3>
+                    <p>
+                        Complete each sentence with the correct ending, <strong>A–F</strong>, below.<br>
+                        Write the correct letter, <strong>A–F</strong>, in boxes 37–40 on your answer sheet.
+                    </p>
+                    <div class="question-container">
+                        <div class="question">
+                            37. Perret believed people behaving dishonestly<br>
+                            <input type="text" class="input-field" id="q37" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            38. The writer supports the view that people with babyish features<br>
+                            <input type="text" class="input-field" id="q38" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            39. According to Zebrowitz, baby-faced people who behave dominantly<br>
+                            <input type="text" class="input-field" id="q39" autocomplete="off" style="width: 40px;">
+                        </div>
+                        <div class="question">
+                            40. The writer believes facial features<br>
+                            <input type="text" class="input-field" id="q40" autocomplete="off" style="width: 40px;">
+                        </div>
+                    </div>
+                    <div class="content-box" style="background: #fff; border: 1px solid #888; margin-top: 15px;">
+                        <strong>A</strong> judge other people by overgeneralisation.<br>
+                        <strong>B</strong> may influence the behaviour of other people.<br>
+                        <strong>C</strong> tend to commit criminal acts.<br>
+                        <strong>D</strong> may be influenced by the low expectations of other people.<br>
+                        <strong>E</strong> may show the effect of long-term behaviours.<br>
+                        <strong>F</strong> may be trying to repel the expectations of other people.
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                    </div>
+                    <div id="results"></div>
+                    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+                  <!-- continue -->  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+                // Khai báo biến toàn cục
+        let name_user = "";
+        let className_user = "";
+        function handleInfoSubmit(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Lấy giá trị từ các trường nhập liệu
+            const name = document.getElementById("name").value;
+            const className = document.getElementById("class").value;
+            name_user=name;
+            className_user=className;
+            // Kiểm tra nếu các trường nhập liệu không rỗng
+            if (!name || !className) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Ẩn form đăng nhập
+            document.querySelector(".form-container").classList.add("hidden");
+
+            // Hiển thị bài test
+            const welcomeContainer = document.querySelector(".welcome-container");
+            welcomeContainer.classList.remove("hidden");
+
+            // Hiển thị thông báo chào mừng
+            document.getElementById("welcome-message").innerText = `READING 3(RAT-V7-T3)`;
+        }
+        //Handle button 
+        function showMessage(messageNumber) {
+            // Ẩn tất cả các message trong left-panel
+            document.getElementById("message1").classList.add("hidden");
+            document.getElementById("message2").classList.add("hidden");
+            document.getElementById("message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong left-panel
+            document.getElementById(`message${messageNumber}`).classList.remove("hidden");
+
+            // Ẩn tất cả các message trong right-panel
+            document.getElementById("right-message1").classList.add("hidden");
+            document.getElementById("right-message2").classList.add("hidden");
+            document.getElementById("right-message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong right-panel
+            document.getElementById(`right-message${messageNumber}`).classList.remove("hidden");
+
+            // Cuộn về đầu trang
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Cuộn mượt
+            });
+        }
+        <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+		function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+						let range = getSelectedText();
+						if (range) {
+							let span = document.createElement("span");
+							span.className = className;
+							span.appendChild(range.extractContents());
+							range.insertNode(span);
+						}
+					}
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && event.key === "b") {
+                event.preventDefault();
+                highlightText();
+            } else if (event.ctrlKey && event.key === "u") {
+                event.preventDefault();
+                underlineText();
+            } else if (event.ctrlKey && event.key === "r") {
+                event.preventDefault();
+                removeFormattingFromSelection();
+            }
+        });
+                // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+            console.log("Sending data:", { name, className, answers, correctCount, bandScore }); // Kiểm tra dữ liệu
+            const scriptURL = "https://script.google.com/macros/s/AKfycbzYHv3xSJ8zz3_hk0pt9ODeD_xP4qASOsMb16ceF7K2cG_sTkH1RahnDeRkeJwc-Lh_/exec"; // Thay bằng URL của Google Apps Script
+            const data = {
+                name: name,
+                className: className,
+                answers: answers,
+                correctCount: correctCount,
+                bandScore: bandScore // Gửi bandScore
+            };
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+            });
+        }
+        function checkAnswers() {
+                    const correctAnswers = {
+                               // Reading Passage 1
+                                q1: "YES",
+                                q2: "NO",
+                                q3: "NOT GIVEN",
+                                q4: "YES",
+                                q5: "construction of roads",
+                                q6: "cycle trailers",
+                                q7: ["bus service","a bus service"],//["50", "fifty"]
+                                q8: ["aerial ropeway","an aerial ropeway"],
+                                q9: "libraries",
+                                q10: "cushions",
+                                q11: "family member",
+                                q12: "mechanism",
+                                q13: "a cover",
+                                q14: "ix",
+                                q15: "iii",
+                                q16: "vii",
+                                q17: "vi",
+                                q18: "vii",
+                                q19: "B",
+                                q20: "A",
+                                q21: "D",
+                                q22: "B",
+                                q23: "C",
+                                q24: "A",
+                                q25: "C",
+                                q26: "B",
+                                // Reading Passage 3
+                                q27: "NO",
+                                q28: "NOT GIVEN",
+                                q29: "NO",
+                                q30: "YES",
+                                q31: "NOT GIVEN",
+                                q32: "B",
+                                q33: "A",
+                                q34: "B",
+                                q35: "C",
+                                q36: "D",
+                                q37: "D",
+                                q38: "B",
+                                q39: "F",
+                                q40: "E"
+                    };
+
+                    let correctCount = 0;
+                    let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+                    const answers = {}; // Đối tượng lưu câu trả lời của người dùng
+                    const unansweredQuestions = []; // Danh sách các câu hỏi chưa được điền
+
+                    // Lấy tất cả các câu hỏi dạng text
+                    const textQuestions = Array.from(document.querySelectorAll('.input-field')).sort((a, b) => {
+                        const idA = parseInt(a.id.replace("q", ""), 10);
+                        const idB = parseInt(b.id.replace("q", ""), 10);
+                        return idA - idB;
+                    });
+
+                    // Lấy tất cả các câu hỏi dạng radio
+                    const radioQuestions = Array.from(document.querySelectorAll('input[type="radio"]')).reduce((acc, radio) => {
+                        if (!acc.includes(radio.name)) acc.push(radio.name);
+                        return acc;
+                    }, []);
+
+                    let allFieldsFilled = true; // Biến kiểm tra xem tất cả các trường đã được điền chưa
+
+                    // Xử lý câu hỏi dạng text
+                    textQuestions.forEach(question => {
+                        const questionId = question.id; // Lấy ID của câu hỏi
+                        const correctAnswer = correctAnswers[questionId]; // Lấy đáp án đúng
+
+                        let userAnswer = question.value.trim().toLowerCase(); // Lấy câu trả lời từ input text và chuyển về chữ thường
+                        if (!userAnswer) {
+                            allFieldsFilled = false; // Nếu trường text chưa được điền
+                            question.classList.add("incorrect"); // Đánh dấu trường chưa điền
+                            unansweredQuestions.push(questionId.replace("q", "Question ")); // Thêm câu hỏi chưa được điền vào danh sách
+                        } else {
+                            question.classList.remove("incorrect");
+                            answers[questionId] = userAnswer; // Lưu câu trả lời của người dùng
+
+                            // Kiểm tra đáp án cho câu 25
+                            if (questionId === "q7"||questionId==="q8") {
+                                if (correctAnswer.includes(userAnswer)) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(" or ")}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(" or ")}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                // So sánh câu trả lời của người dùng với đáp án đúng
+                                if (userAnswer === correctAnswer?.toLowerCase()) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            }
+                        }
+                    });
+
+                    // Xử lý câu hỏi dạng radio
+                    radioQuestions.forEach(name => {
+                        const radios = document.getElementsByName(name);
+                        const questionId = name; // Lấy name của câu hỏi
+                        const correctAnswer = correctAnswers[questionId]; // Lấy đáp án đúng
+
+                        let userAnswer = "";
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (selectedRadio) {
+                            userAnswer = selectedRadio.value;
+                            answers[questionId] = userAnswer; // Lưu câu trả lời của người dùng
+
+                            // So sánh câu trả lời của người dùng với đáp án đúng
+                            if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
+                                correctCount++;
+                                resultHTML += `<tr>
+                                    <td>${questionId.replace("q", "Question ")}</td>
+                                    <td>${userAnswer}</td>
+                                    <td>${correctAnswer}</td>
+                                    <td>✔</td>
+                                </tr>`;
+                            } else {
+                                resultHTML += `<tr>
+                                    <td>${questionId.replace("q", "Question ")}</td>
+                                    <td>${userAnswer}</td>
+                                    <td>${correctAnswer}</td>
+                                    <td>✘</td>
+                                </tr>`;
+                            }
+                        } else {
+                            allFieldsFilled = false; // Nếu radio button chưa được chọn
+                            unansweredQuestions.push(questionId.replace("q", "Question ")); // Thêm câu hỏi chưa được điền vào danh sách
+                        }
+                    });
+
+                    // Nếu có trường chưa được điền, hiển thị thông báo và dừng xử lý
+                    if (!allFieldsFilled) {
+                        const unansweredContainer = document.getElementById("unanswered-questions");
+                        unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><ul>${unansweredQuestions.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                        unansweredContainer.style.display = "block"; // Hiển thị danh sách
+                        return;
+                    }
+                    // Tính bandScore dựa trên correctCount
+                    let bandScore = calculateBandScore(correctCount);
+                    // Nếu tất cả các câu hỏi đã được trả lời
+                    const unansweredContainer = document.getElementById("unanswered-questions");
+                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                    unansweredContainer.style.display = "block"; // Hiển thị thông báo "None"
+					// Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true; // Vô hiệu hóa nút để tránh nộp lại
+                    // Hiển thị kết quả
+                    resultHTML += `</table>`;
+                    //document.getElementById("results").innerHTML = `<h2>You got ${correctCount} correct answers!</h2>` + resultHTML;
+                    //console.log("Correct Count:", correctCount);
+                    //console.log("Answers:", answers);
+                    
+                    // Gửi dữ liệu đã sắp xếp lên Google Sheets
+                    sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+                }
+                // Hàm tính bandScore
+                function calculateBandScore(correctCount) {
+                    if (correctCount >= 39) return 9.0;
+                    if (correctCount >= 37) return 8.5;
+                    if (correctCount >= 35) return 8.0;
+                    if (correctCount >= 33) return 7.5;
+                    if (correctCount >= 30) return 7.0;
+                    if (correctCount >= 27) return 6.5;
+                    if (correctCount >= 23) return 6.0;
+                    if (correctCount >= 20) return 5.5;
+                    if (correctCount >= 16) return 5.0;
+                    if (correctCount >= 13) return 4.5;
+                    if (correctCount >= 10) return 4.0;
+                    if (correctCount >= 7) return 3.5;
+                    if (correctCount >= 5) return 3.0;
+                    if (correctCount >= 3) return 2.5;
+                    return 0.0;
+                }
+                let timer; // Biến lưu bộ đếm thời gian
+
+                function startTimer(duration) {
+                    const timerElement = document.getElementById("timer");
+                    let timeRemaining = duration;
+
+                    function updateTimer() {
+                        const minutes = Math.floor(timeRemaining / 60);
+                        const seconds = timeRemaining % 60;
+                        timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(timer); // Dừng bộ đếm thời gian
+                            timerElement.textContent = "Time's up!";
+                            autoSubmit(); // Tự động nộp bài khi hết thời gian
+                        }
+
+                        timeRemaining--;
+                    }
+
+                    updateTimer(); // Hiển thị thời gian ban đầu
+                    timer = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+                }
+
+                function autoSubmit() {
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name;
+
+                    if (question.type === "text" && !question.value.trim()) {
+                        question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (!selectedRadio) {
+                            // Tạo một radio ảo để lưu giá trị "NONE"
+                            const noneRadio = document.createElement("input");
+                            noneRadio.type = "radio";
+                            noneRadio.name = question.name;
+                            noneRadio.value = "NONE";
+                            noneRadio.checked = true;
+                            document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                        if (selectedCheckboxes.length === 0) {
+                            // Tạo một checkbox ảo để lưu giá trị "NONE"
+                            const noneCheckbox = document.createElement("input");
+                            noneCheckbox.type = "checkbox";
+                            noneCheckbox.name = question.name;
+                            noneCheckbox.value = "NONE";
+                            noneCheckbox.checked = true;
+                            document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+                        }
+                    }
+                });
+
+                checkAnswers(); // Gọi hàm nộp bài
+                }
+
+                // Bắt đầu bộ đếm thời gian khi người dùng bắt đầu bài kiểm tra
+                document.addEventListener("DOMContentLoaded", () => {
+                const duration = 60 * 60; // 60 phút
+                startTimer(duration);
+                });
+    
+    </script>
+</body>
+</html>

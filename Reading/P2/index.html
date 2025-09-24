@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            font-size: 12px;
+        }
+        .container {
+            display: flex; /* Sử dụng Flexbox để chia bố cục */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+        .left-panel, .right-panel {
+            flex: 1; /* Mỗi cột chiếm một nửa chiều rộng */
+            padding: 20px;
+            overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+        }
+        .left-panel {
+            background-color: #fffbe6; /* Màu nền cho cột bên trái */
+        }
+        .right-panel {
+            background-color: #ffffff; /* Màu nền cho cột bên phải */
+            border-left: 2px solid #ccc; /* Đường viền giữa hai cột */
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .passage {
+            margin-top: 20px;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .content-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .column {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-items: center; 
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        } 
+        .nav-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+                /* ...existing styles... */
+                #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        .btn-container {
+            text-align: center; /* Căn giữa nút Register */
+            margin-top: 20px;
+        }
+        .left-panel, .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .left-panel {
+        background-color: #fffbe6;
+        flex: 1;
+        }
+
+        .right-panel {
+        background-color: #ffffff;
+        flex: 1;
+        border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+        <!-- Form đăng nhập -->
+        <div class="container form-container">
+            <h2 style="text-align: center;">Insert your information</h2>
+            <form onsubmit="handleInfoSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="class">Class:</label>
+                    <input type="text" id="class" name="class" required>
+                </div style="text-align: center; margin-top: 20px;">
+                <div class="btn-container">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+        </div>
+    <div class="container welcome-container hidden">
+        <div class="container">
+            <!-- Cột bên trái -->
+            <div class="left-panel">  
+                 <!-- Nội dung Message 1 -->
+                <div id="message1">
+                    <h2 id="welcome-message" style="text-align: center;"></h2>
+                    <div class="subtitle">READING PASSAGE 1</div>
+                    <p>You should spend about 20 minutes on <strong>Questions 1-13</strong>, which are based on Reading Passage 1 below.</p>
+                    <div class="content-box">
+                        <div class="passage">
+                            <h2>Green Roofs</h2>
+                            <p><strong>A</strong> Rooftops covered with grass, vegetable gardens and lush foliage are now a common sight in many cities around the world. More and more private companies and city authorities are investing in green roofs, drawn to their wide-ranging benefits. Among the benefits are saving on energy costs, mitigating the risk of floods, making habitats for urban wildlife, tackling air pollution and even growing food. These increasingly radical urban designs can help cities adapt to the monumental problems they face, such as access to resources and a lack of green space due to development. But the involvement of city authorities, businesses and other institutions is crucial to ensuring their success – as is research investigating different options to suit the variety of rooftop spaces found in cities. The UK is relatively new to developing green roofs, and local governments and institutions are playing a major role in spreading the practice. London is home to much of the UK’s green roof market, mainly due to forward-thinking policies such as the London Plan, which has paved the way to more than doubling the area of green roofs in the capital.</p>
+                            <p><strong>B</strong> Ongoing research is showcasing how green roofs in cities can integrate with ‘living walls’: environmentally friendly walls which are partially or completely covered with greenery, including a growing medium, such as soil or water. Research also indicates that green roofs can be integrated with drainage systems on the ground, such as street trees, so that the water is managed better and the built environment is made more sustainable. There is also evidence to demonstrate the social value of green roofs. Doctors are increasingly prescribing time spent outdoors for patients dealing with anxiety and depression. And research has found that access to even the most basic green spaces can provide a better quality of life for dementia sufferers and help people avoid obesity.</p>
+                            <p><strong>C</strong> In North America, green roofs have become mainstream, with a wide array of expensive, accessible and food-producing roofs installed in buildings. Again, city leaders and authorities have helped push the movement forward – only recently, San Francisco, USA, created a policy requiring new buildings to have green roofs. Toronto, Canada, has policies dating from the 1990s, encouraging the development of urban farms on rooftops. These actions are not without reason. Being able to keep enough water off roof height and distributing it easier to the ground is crucial to retaining the plants on any green roof – especially on edible roofs where rainwater is vital. In the long run, it is much easier to design a roof with a higher weight capacity to accommodate the plants than to retrofit old ones. Having a stronger roof also makes it easier to grow a greater variety of plants, since the soil can be deeper.</p>
+                            <!-- Đoạn D -->
+                            <p><strong>D</strong> For green roofs to become the norm for new developments, there needs to be support from public authorities and private investors. Those responsible for maintaining buildings may have to acquire new skills, such as landscaping, and in some cases, volunteers may be needed to help out. Other considerations include installing drainage paths, meeting health and safety requirements and perhaps allowing access for the public, as well as planning restrictions and disruption from regular activities in and around the buildings during installation. To convince investors and developers that installing green roofs is worthwhile, economic arguments are still the most important. The term ‘natural capital’ has been developed to explain the economic value of nature; for example, measuring the money saved by installing natural solutions to protect against flood damage, adapt to climate change or help people lead healthier and happier lives.</p>
+                             <!-- Đoạn E -->
+                            <p><strong>E</strong> As the expertise about green roofs grows, official standards have been developed to ensure that they are designed, constructed and maintained properly, and function well. Improvements in the science and technology underpinning green roof development have also led to new variations in the concept. For example, ‘blue roofs’ enable buildings to hold water over longer periods of time, rather than draining it away quickly – crucial in times of heavier rainfall. There are also combinations of green roofs with solar panels, and ‘brown roofs’ which are wilder in nature and maximise biodiversity. If the trend continues, it could create new jobs and a more vibrant and sustainable local food economy – alongside many other benefits. There are still barriers to overcome, but the evidence so far indicates that green roofs have the potential to transform cities and help them function sustainably long into the future. The success stories need to be studied and replicated elsewhere, to make green, blue, brown and food-producing roofs the norm in cities around the world.</p>
+                        </div>
+                    </div>
+                </div>
+                  <!-- Nội dung Message 2 -->
+                <div id="message2" class="content-box hidden">
+                    <div class="content-box">
+                        <h3>Reading Passage 2</h3>
+                        <h4>The Growth Mindset</h4>
+                        <p>
+                            Over the past century, a powerful idea has taken root in the educational landscape. The concept of intelligence as something innate has been supplanted by the idea that intelligence is not fixed, and that, with the right training, we can be the authors of our own cognitive capabilities. Psychologist Alfred Binet, the developer of the first intelligence tests, was one of many 19th-century scientists who held that earlier view and sought to quantify cognitive ability. Then, in the early 20th century, progressive thinkers revolted against the notion that inherent ability is destiny. Instead, educators such as John Dewey argued that every child’s intelligence could be developed, given the right environment.
+                        </p>
+                        <p>
+                            ‘Growth mindset theory’ is a relatively new – and extremely popular – version of this idea. In many schools today you will see hallways covered in motivational posters and hear speeches on the mindset of great sporting heroes who simply <em>believed</em> their way to the top. A major focus of the growth mindset in schools is coaxing students away from seeing failure as an indication of their ability, and towards seeing it as a chance to improve that ability. As educationalist Jeff Howard noted several decades ago: “Smart is not something that you just are, smart is something that you can get.”
+                        </p>
+                        <p>
+                            The idea of the growth mindset is based on the work of psychologist Carol Dweck in California in the 1990s. In one key experiment, Dweck divided a group of 10-to-12-year-olds into two groups. All were told that they had achieved a high score on a test but the first group were praised for their intelligence in achieving this, while the others were praised for their effort. The second group – those who had been instilled with a ‘growth mindset’ – were subsequently far more likely to put effort into future tasks. Meanwhile, the former took on only those tasks that would not risk their sense of worth. This group had inferred that success or failure is due to innate ability, and this ‘fixed mindset’ had led them to fear of failure and lack of effort. Praising ability actually made the students perform worse, while praising effort emphasised that change was possible.
+                        </p>
+                        <p>
+                            One of the greatest impediments to successfully implementing a growth mindset, however, is the education system itself: in many parts of the world, the school climate is obsessed with competition. The focus on constant testing, analysing and ranking of students – a key characteristic of the fixed mindset. Nor is it unusual for schools to create a certain cognitive dissonance, where they endorse the benefits of a growth mindset but then hand out fixed target grades in lessons based on performance.
+                        </p>
+                        <p>
+                            Aside from the practical issues, the concept of growth mindset research has also received criticism. The statistician Andrew Gelman claims that ‘their research designs have enough degrees of freedom that they could take their data to support just about any theory at all’.Professor of Psychology Timothy Bates, who has been trying to replicate Dweck’s work, is finding that the results are repeatedly null. He notes that: “People with a growth mindset don’t do any better with failure … Kids with the growth mindset aren’t getting better grades, either before or after our intervention study.”
+                        </p>
+                        <p>
+                            Much of this criticism is not on Dweck, and she deserves great credit for responding to it and adapting her work accordingly. In fact, she argues that her work has been misunderstood and misapplied in a range of ways. She has also expressed concerns that her theories are being misappropriated in schools by being conflated with the self-esteem movement: “For me, the growth mindset is a tool for learning and improvement. It’s not just a vehicle for making children feel good.”
+                        </p>
+                        <p>
+                            But there is another factor at work here. The failure to translate the growth mindset into the classroom might reflect a misunderstanding of the nature of teaching and learning itself. Growth mindset supporters David Yeager and Gregory Walton claim that interventions should be delivered in a subtle way to maximise their effectiveness. They say that if adolescents perceive a teacher’s intervention as conveying that they are in need of help, this could undo its intended effects.
+                        </p>
+                        <p>
+                            A lot of what drives students is their innate beliefs and how they perceive themselves. There is a strong correlation between self-perception and achievement, but there is evidence to suggest that the actual effect of achievement on self-perception is stronger than the other way round. To stand up in a classroom and successfully deliver a good speech is a genuine achievement, and that is likely to be more powerfully motivating than vague notions of ‘motivation’ itself.
+                        </p>
+                        <p>
+                            Recent evidence would suggest that growth mindset interventions are not the elixir of student learning that its proponents claim it to be. The growth mindset appears to be a viable construct in the lab, which, when administered in the classroom via targeted interventions, doesn’t seem to work. It is hard to dispute that having faith in the capacity to change is a good attitude for students. Paradoxically, however, that aspiration is not well served by direct interventions that try to instil it.
+                        </p>
+                        <p>
+                            Motivational posters and talks are often a waste of time, and might well give students a deluded account of what success actually means. Teaching concrete skills such as how to write an effective introduction to an essay rather than praising students’ effort in getting there is probably a far better way of improving confidence than telling them how unique they are, or indeed how capable they are of changing their own brains. Perhaps growth mindset works best as a philosophy and not an intervention.
+                        </p>
+                    </div>
+                </div>
+                    <!-- Nội dung Message 3 -->
+                <div id="message3" class="content-box hidden">
+                        <h3>READING PASSAGE 3</h3>
+                        <p>You should spend about 20 minutes on <strong>Questions 27-40</strong>, which are based on Reading Passage 3 below.</p>
+                        <h4>Art in Iron and Steel</h4>
+                        <p>
+                            <strong>A </strong>Art and engineering seem to have little opportunity to collaborate in their historical development, and even works of engineering and technology are sometimes viewed as the antitheses of art and humanity. Think of the connotations of assembly lines, robots and computers; such creations embody positive values in the human industry, which might be overwhelmed by the negative images of repetitive, stressful and threatened jobs. The images reinforce the arguments of critics of technology who, while enjoying the comfort and efficiency of industrialised and digitised society, might be driving powerful cars and using the Internet to protest the artless and dehumanising aspects of modern life. At the same time, landmark mega-structures such as the Brooklyn and Golden Gate bridges are almost universally hailed as majestic human feats as well as great architectural jewels that have come to represent the spirits of their respective cities. The relationship between art and engineering has seldom been easy or consistent.
+                        </p>
+                        <p>
+                            <strong>B</strong> The human worker may have appeared to be but a cog in the wheel of industry, yet pho­ tographers could reveal the beauty of line and composition in a worker doing something as common as using a wrench to tum a bolt. When Henry Ford's enormous River Rouge Plant opened in 1927 to produce the Model A, the painter and photographer Charles Sheeler produced a series of extraordinary photographs of workers who were toiling on assembly lines. The material from the world's largest car factory was described by Sheeler as the most thrilling subject he ever had worked on. The artist also composed oil paintings of the plant, giving them the titles such as American Landscape and Classic Landscape.
+                        </p>
+                        <p>
+                            <strong>C</strong> Long before Sheeler, other artists, too, had perceived the beauty and humanity in works of engineering and technology. This is remarkably evident in Coalbrookdale, England, where iron was worked for centuries. In 1779, the world's first iron bridge, erected by Abraham Darby m, was constructed of cast iron pieces whose strength is exploited in compression. This monument presented a dramatic distinction from the classic stone and timber bridges that dotted the countryside and were captured in numerous serene landscape paintings. The metal structure, known as Iron Bridge, still spans the river there, and has not only seized engineers, artists and tourists to gaze upon and walk across it, as if on a pilgrimage to a revered place, but also freed up the imagination of designers.
+                        </p>
+                        <p>
+                            <strong>D</strong> At Coalbrookdale, the reflection of the ironwork in the water completes the semicircular structure to form a wide-open eye into the future that is now the past. One artist's bucolic depiction shows pedestrians and horsemen on the bridge, as if on a woodland trail. Onone shore, a pair of well-dressed onlookers interrupts their stroll along the riverbank, perhaps to admire the bridge. On the other side of the gently flowing river, a lone man leads two mules beneath an arch that lets the towpath pass through the bridge's abutment. A single boatman paddles across the river in a tiny tub boat. He is in no rush because there is no towline to carry from one side of the bridge to the other. This is how Michael Rooker saw Iron Bridge in his 1792 painting. A colour engraving of the scene hangs in the nearby Coalbrookdale museum, along with countless other contemporary renderings of the bridge in its full glory and in its context, showing the iron structure not as a blight on the landscape but at the centre of it. The surrounding area at the same time radiates out from the bridge and pales behind it.
+                        </p>
+                        <p>
+                            <strong>E </strong>In the 19th century, the railroads kindled the imagination of artists, and the steam engine in the distance of a landscape became as much a part of their works as the herd of cows in the foreground. Man-made structures like railway stations, cathedrals, and water lilies were represented in the paintings of the Impressionist Claude Monet. Engineers, inventors and their inventions, as well as the American founding fathers, had become the subjects of portrait painters such as Christian Schussele. By the 20th century, engineer­ ing, technology and industry were very well established as subjects for artists.
+                        </p>
+                        <p>
+                            <strong>F </strong> American-born Joseph Pennell, one of the major etchers and book illustrators of his time, illustrated many European travel articles and books. Early in his career, he produced a great number of artistic works on architectural subjects. Pennell is best known among engineers for his depiction of the Panama Canal as it neared completion and his etchings of the paitially completed Hell Gate and Delaware River bridges.
+                        </p>
+                        <p>
+                            <strong>F </strong>Pennell has often been quoted as saying, 'Great engineering is great art', a sentiment that he expressed repeatedly. 'I understand nothing of engineering, but I know that engineers are the greatest architects since the Greeks,' he wrote in several published books on painting and printmaking. His works pursued not only utility but also beauty. He felt he was not only presenting a concrete subject but also conveying the impression that it made on him. Pennell called this sensation that he felt before a great construction project 'The Wonder of Work'. In his opinion, engineering is an artistic process, which is memori­ alised in every spectacular engineering achievement.
+                        </p>
+                        <p>
+                            <strong>H </strong>If Pennell experienced the wonder of work in the aggregate, Lewis Hine focused on the individuals who engaged in the work. Hine was once a sociologist but later became a photographer. In 1905, He began to document some migrants who crossed Ellis Island, photographing the tenements where they were forced to live and the sweatshops where they worked. After returning to New York, he was hired to record the construction of the Empire State Building, which resulted in the striking photographs that later became such famous images of daring and insouciance. To achieve proper aerial views, he had himself swung out beyond the building to photograph the workers on cables hundreds of feet in the air and resting on a high girder. To today's engineers, one of the most impressive features of these photos, published in Men at Work in 1932, is the absence of safety lines and hard hats. However, perhaps more than anything, the photos evoked Pennell's The Wonder of Work and inspired admiration for the bravery and skill that bring a great engi­neering project to completion.
+                        </p>
+                </div>
+            </div>
+            <!-- Cột bên phải -->
+            <div class="right-panel">
+                <div id="timer" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;"></div>
+                <div class="nav-buttons">
+                    <button onclick="showMessage(1)">READING PASSAGE 1</button>
+                    <button onclick="showMessage(2)">READING PASSAGE 2</button>
+                    <button onclick="showMessage(3)">READING PASSAGE 3</button>
+                </div>
+                 <!-- Cột bên phải message1-->
+                <div id="right-message1" class="content-box active">
+                    <div class="content-box">
+                        <h3>Questions 1-5</h3>
+                        <p>Reading Passage 1 has five paragraphs, <strong>A–E</strong>.</p>
+                        <p>Which paragraph contains the following information?</p>
+                        <p>Write the correct letter, <strong>A–E</strong>, in boxes 1–5 on your answer sheet.</p>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">1. mention of several challenges to be overcome before a green roof can be installed<br>
+                                    <input type="text" class="input-field" id="q1" autocomplete="off">
+                                </p>
+                                <p class="question">2. reference to a city where green roofs have been promoted for many years<br>
+                                    <input type="text" class="input-field" id="q2" autocomplete="off">
+                                </p>
+                                <p class="question">3. a belief that existing green roofs should be used as a model for new ones<br>
+                                    <input type="text" class="input-field" id="q3" autocomplete="off">
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="question">4. examples of how green roofs can work in combination with other green urban initiatives<br>
+                                    <input type="text" class="input-field" id="q4" autocomplete="off">
+                                </p>
+                                <p class="question">5. the need to make a persuasive argument for the financial benefits of green roofs<br>
+                                    <input type="text" class="input-field" id="q5" autocomplete="off">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-box">
+                        <h3>Questions 6-9</h3>
+                        <p>Complete the summary below.</p>
+                        <p><strong>Choose ONE WORD ONLY</strong> from the passage for each answer.</p>
+                        <p>Write your answers in boxes 6–9 on your answer sheet.</p>
+                        <div class="summary">
+                            <h4>Advantages of green roofs</h4>
+                            <p>
+                                City rooftops covered with greenery have many advantages. These include lessening the likelihood that floods will occur, reducing how much money is spent on 6
+                                <input type="text" class="input-field" id="q6" autocomplete="off"> and creating environments that are suitable for wildlife. In many cases, they can also be used for producing 7
+                                <input type="text" class="input-field" id="q7" autocomplete="off">.
+                            </p>
+                            <p>
+                                There are also social benefits of green roofs. For example, the medical profession recommends 8
+                                <input type="text" class="input-field" id="q8" autocomplete="off"> as an activity to help people cope with mental health issues. Studies have also shown that the availability of green spaces can prevent physical problems such as 9
+                                <input type="text" class="input-field" id="q9" autocomplete="off">.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        <h3>Questions 10 and 11</h3>
+                        <p>Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</p>
+                        <p>Write the correct letters in boxes 10 and 11 on your answer sheet.</p>
+                        <p>Which TWO advantages of using newer buildings for green roofs are mentioned in Paragraph C of the passage?</p>
+                        <p><input type="checkbox" name="q10_11" value="A"> A. a longer growing season for edible produce</p>
+                        <p><input type="checkbox" name="q10_11" value="B"> B. more economical use of water</p>
+                        <p><input type="checkbox" name="q10_11" value="C"> C. greater water-storage capacity</p>
+                        <p><input type="checkbox" name="q10_11" value="D"> D. ability to cultivate more plant types</p>
+                        <p><input type="checkbox" name="q10_11" value="E"> E. a large surface area for growing plants</p>
+                    </div>
+                    
+                    <div class="content-box">
+                        <h3>Questions 12 and 13</h3>
+                        <p>Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</p>
+                        <p>Write the correct letters in boxes 12 and 13 on your answer sheet.</p>
+                        <p>Which TWO aims of new variations on the concept of green roofs are mentioned in Paragraph E of the passage?</p>
+                        <p><input type="checkbox" name="q12_13" value="A"> A. to provide habitats for a wide range of species</p>
+                        <p><input type="checkbox" name="q12_13" value="B"> B. to grow plants successfully even in the wettest climates</p>
+                        <p><input type="checkbox" name="q12_13" value="C"> C. to regulate the temperature of the immediate environment</p>
+                        <p><input type="checkbox" name="q12_13" value="D"> D. to generate power from a sustainable source</p>
+                        <p><input type="checkbox" name="q12_13" value="E"> E. to collect water to supply other buildings</p>
+                    </div>
+                </div>
+                <!-- Cột bên phải message2-->
+                <div id="right-message2" class="content-box hidden">
+                    <div class="content-box">
+                        <h3>Questions 14–16</h3>
+                        <p>Choose the correct letter, <strong>A, B, C or D</strong>.</p>
+                        <p>Write the correct letter in boxes 14–16 on your answer sheet.</p>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">14. What can we learn from the first paragraph?<br>
+                                    <input type="radio" name="q14" value="A"> A. where the notion of innate intelligence first began<br>
+                                    <input type="radio" name="q14" value="B"> B. when ideas about the nature of intelligence began to shift<br>
+                                    <input type="radio" name="q14" value="C"> C. how scientists have responded to changing views of intelligence<br>
+                                    <input type="radio" name="q14" value="D"> D. why thinkers turned away from the idea of intelligence being fixed<br>
+                                </p>
+                                <p class="question">15. The second paragraph describes how schools encourage students to<br>
+                                    <input type="radio" name="q15" value="A"> A. identify their personal ambitions.<br>
+                                    <input type="radio" name="q15" value="B"> B. help each other to realise their goals.<br>
+                                    <input type="radio" name="q15" value="C"> C. have confidence in their potential to succeed.<br>
+                                    <input type="radio" name="q15" value="D"> D. concentrate on where their particular strengths lie.<br>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="question">16. In the third paragraph, the writer suggests that students with a fixed mindset<br>
+                                    <input type="radio" name="q16" value="A"> A. tend to be less competitive.<br>
+                                    <input type="radio" name="q16" value="B"> B. generally have a low sense of self-esteem.<br>
+                                    <input type="radio" name="q16" value="C"> C. will only work hard if they are given constant encouragement.<br>
+                                    <input type="radio" name="q16" value="D"> D. are afraid to push themselves beyond what they see as their limitations.<br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        <h3>Questions 17–22</h3>
+                        <p>Look at the following statements (Questions 17–22) and the list of people below.</p>
+                        <p>Match each statement with the correct person or people, <strong>A–E</strong>.</p>
+                        <p>Write the correct letter, <strong>A–E</strong>, in boxes 17–22 on your answer sheet.</p>
+                        <p><strong>NB</strong> You may use any letter more than once.</p>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">17. The methodology behind the growth mindset studies was not strict enough.<br>
+                                    <input type="text" class="input-field" id="q17" autocomplete="off">
+                                </p>
+                                <p class="question">18. The idea of the growth mindset has been incorrectly interpreted.<br>
+                                    <input type="text" class="input-field" id="q18" autocomplete="off">
+                                </p>
+                                <p class="question">19. Intellectual ability is an unchangeable feature of each individual.<br>
+                                    <input type="text" class="input-field" id="q19" autocomplete="off">
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="question">20. The growth mindset should be promoted without students being aware of it.<br>
+                                    <input type="text" class="input-field" id="q20" autocomplete="off">
+                                </p>
+                                <p class="question">21. The growth mindset is not simply about boosting students’ morale.<br>
+                                    <input type="text" class="input-field" id="q21" autocomplete="off">
+                                </p>
+                                <p class="question">22. Research shows that the growth mindset has no effect on academic achievement.<br>
+                                    <input type="text" class="input-field" id="q22" autocomplete="off">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="content-box">
+                            <h3 style="text-align: center;">List of People</h3>
+                            <ul>
+                                <li><strong>A</strong> Alfred Binet</li>
+                                <li><strong>B</strong> Carol Dweck</li>
+                                <li><strong>C</strong> Andrew Gelman</li>
+                                <li><strong>D</strong> Timothy Bates</li>
+                                <li><strong>E</strong> David Yeager and Gregory Walton</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="content-box">
+                        <h3>Questions 23–26</h3>
+                        <p>Do the following statements agree with the views of the writer in Reading Passage 2?</p>
+                        <p>In boxes 23–26 on your answer sheet, write:</p>
+                        <ul>
+                            <li><strong>YES</strong> if the statement agrees with the views of the writer</li>
+                            <li><strong>NO</strong> if the statement contradicts the views of the writer</li>
+                            <li><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</li>
+                        </ul>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">23. Dweck has handled criticisms of her work in an admirable way.<br>
+                                    <input type="radio" name="q23" value="YES"> YES<br>
+                                    <input type="radio" name="q23" value="NO"> NO<br>
+                                    <input type="radio" name="q23" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                                <p class="question">24. Students’ self-perception is a more effective driver of self-confidence than actual achievement is.<br>
+                                    <input type="radio" name="q24" value="YES"> YES<br>
+                                    <input type="radio" name="q24" value="NO"> NO<br>
+                                    <input type="radio" name="q24" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                            </div>
+                            <div class="column">
+                                    <p class="question">25. Recent evidence about growth mindset interventions has attracted unfair coverage in the media.<br>
+                                        <input type="radio" name="q25" value="YES"> YES<br>
+                                        <input type="radio" name="q25" value="NO"> NO<br>
+                                        <input type="radio" name="q25" value="NOT GIVEN"> NOT GIVEN<br>
+                                    </p>
+                                    <p class="question">26. Deliberate attempts to encourage students to strive for high achievement may have a negative effect.<br>
+                                        <input type="radio" name="q26" value="YES"> YES<br>
+                                        <input type="radio" name="q26" value="NO"> NO<br>
+                                        <input type="radio" name="q26" value="NOT GIVEN"> NOT GIVEN<br>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cột bên phải message3-->
+                <div id="right-message3" class="content-box hidden">
+                    <div class="content-box">
+                        <h3>Questions 27–30</h3>
+                        <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
+                        <p>In boxes 27–30 on your answer sheet, write:</p>
+                        <ul>
+                            <li><strong>YES</strong> if the statement agrees with the claims of the writer</li>
+                            <li><strong>NO</strong> if the statement contradicts the claims of the writer</li>
+                            <li><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</li>
+                        </ul>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">27. Wegener’s ideas about continental drift were widely disputed while he was alive.<br>
+                                    <input type="radio" name="q27" value="YES"> YES<br>
+                                    <input type="radio" name="q27" value="NO"> NO<br>
+                                    <input type="radio" name="q27" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                                <p class="question">28. The idea that the continents remained fixed in place was defended in a number of respected scientific publications.<br>
+                                    <input type="radio" name="q28" value="YES"> YES<br>
+                                    <input type="radio" name="q28" value="NO"> NO<br>
+                                    <input type="radio" name="q28" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="question">29. Wegener relied on a limited range of scientific fields to support his theory of continental drift.<br>
+                                    <input type="radio" name="q29" value="YES"> YES<br>
+                                    <input type="radio" name="q29" value="NO"> NO<br>
+                                    <input type="radio" name="q29" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                                <p class="question">30. The similarities between Wegener’s theory of continental drift and modern-day plate tectonics are enormous.<br>
+                                    <input type="radio" name="q30" value="YES"> YES<br>
+                                    <input type="radio" name="q30" value="NO"> NO<br>
+                                    <input type="radio" name="q30" value="NOT GIVEN"> NOT GIVEN<br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-box">
+                        <h3>Questions 31–36</h3>
+                        <p>Complete the summary using the list of phrases, <strong>A–J</strong>, below.</p>
+                        <p>Write the correct letter, <strong>A–J</strong>, in boxes 31–36 on your answer sheet.</p>
+                        <h4>Wegener’s life and work</h4>
+                        <p>
+                            One of the remarkable things about Wegener from a 31 
+                            <input type="text" class="input-field" id="q31" autocomplete="off"> is that although he proposed a theory of continental drift, he was not a geologist. His 32 
+                            <input type="text" class="input-field" id="q32" autocomplete="off"> were limited to atmospheric physics. However, at the time he proposed his theory of continental drift in 1912, he was already a person of 33 
+                            <input type="text" class="input-field" id="q33" autocomplete="off">. Six years previously, there had been his 34 
+                            <input type="text" class="input-field" id="q34" autocomplete="off"> of 52 hours in a hot-air balloon, followed by his well-publicised but </p>35
+                            <input type="text" class="input-field" id="q35" autocomplete="off"> of Greenland’s coast. With the publication of his textbook on thermodynamics, he had also come to the attention of a 36 
+                            <input type="text" class="input-field" id="q36" autocomplete="off"> of German scientists.
+                        </p>
+                        <div class="content-box">
+                            <h4 style="text-align: center;">List of Phrases</h4>
+                            <ul>
+                                <li><strong>A</strong> modest fame</li>
+                                <li><strong>B</strong> vast range</li>
+                                <li><strong>C</strong> record-breaking achievement</li>
+                                <li><strong>D</strong> research methods</li>
+                                <li><strong>E</strong> select group</li>
+                                <li><strong>F</strong> professional interests</li>
+                                <li><strong>G</strong> hazardous exploration</li>
+                                <li><strong>H</strong> biographer’s perspective</li>
+                                <li><strong>I</strong> narrow investigation</li>
+                                <li><strong>J</strong> innovative ideas</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        <h3>Questions 37–40</h3>
+                        <p>Choose the correct letter, <strong>A, B, C or D</strong>.</p>
+                        <p>Write the correct letter in boxes 37–40 on your answer sheet.</p>
+                        <div class="question-container">
+                            <div class="column">
+                                <p class="question">37. What is Mott T Greene doing in the fifth paragraph?<br>
+                                    <input type="radio" name="q37" value="A"> A. describing what motivated him to write the book<br>
+                                    <input type="radio" name="q37" value="B"> B. explaining why it is desirable to read the whole book<br>
+                                    <input type="radio" name="q37" value="C"> C. suggesting why Wegener pursued so many different careers<br>
+                                    <input type="radio" name="q37" value="D"> D. indicating what aspects of Wegener’s life interested him most<br>
+                                </p>
+                                <p class="question">38. What is said about Wegener in the sixth paragraph?<br>
+                                    <input type="radio" name="q38" value="A"> A. He was not a particularly ambitious person.<br>
+                                    <input type="radio" name="q38" value="B"> B. He kept a record of all his scientific observations.<br>
+                                    <input type="radio" name="q38" value="C"> C. He did not adopt many of the scientific practices of the time.<br>
+                                    <input type="radio" name="q38" value="D"> D. He enjoyed discussing new discoveries with other scientists.<br>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="question">39. What does Greene say about some other famous scientists?<br>
+                                    <input type="radio" name="q39" value="A"> A. Their published works had a greater impact than Wegener’s did.<br>
+                                    <input type="radio" name="q39" value="B"> B. They had fewer doubts about their scientific ideas than Wegener did.<br>
+                                    <input type="radio" name="q39" value="C"> C. Their scientific ideas were more controversial than Wegener’s.<br>
+                                    <input type="radio" name="q39" value="D"> D. They are easier subjects to write about than Wegener.<br>
+                                </p>
+                                <p class="question">40. What is Greene’s main point in the final paragraph?<br>
+                                    <input type="radio" name="q40" value="A"> A. It is not enough in life to have good intentions.<br>
+                                    <input type="radio" name="q40" value="B"> B. People need to plan carefully if they want to succeed.<br>
+                                    <input type="radio" name="q40" value="C"> C. People have little control over many aspects of their lives.<br>
+                                    <input type="radio" name="q40" value="D"> D. It is important that people ensure they have the freedom to act.<br>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                    </div>
+                    <div id="results"></div>
+                    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+                </div>
+        </div>
+    </div>
+
+    <script>
+                // Khai báo biến toàn cục
+        let name_user = "";
+        let className_user = "";
+        function handleInfoSubmit(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Lấy giá trị từ các trường nhập liệu
+            const name = document.getElementById("name").value;
+            const className = document.getElementById("class").value;
+            name_user=name;
+            className_user=className;
+            // Kiểm tra nếu các trường nhập liệu không rỗng
+            if (!name || !className) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Ẩn form đăng nhập
+            document.querySelector(".form-container").classList.add("hidden");
+
+            // Hiển thị bài test
+            const welcomeContainer = document.querySelector(".welcome-container");
+            welcomeContainer.classList.remove("hidden");
+
+            // Hiển thị thông báo chào mừng
+            document.getElementById("welcome-message").innerText = `READING 1(C18T4)`;
+        }
+        //Handle button 
+        function showMessage(messageNumber) {
+            // Ẩn tất cả các message trong left-panel
+            document.getElementById("message1").classList.add("hidden");
+            document.getElementById("message2").classList.add("hidden");
+            document.getElementById("message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong left-panel
+            document.getElementById(`message${messageNumber}`).classList.remove("hidden");
+
+            // Ẩn tất cả các message trong right-panel
+            document.getElementById("right-message1").classList.add("hidden");
+            document.getElementById("right-message2").classList.add("hidden");
+            document.getElementById("right-message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong right-panel
+            document.getElementById(`right-message${messageNumber}`).classList.remove("hidden");
+
+            // Cuộn về đầu trang
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Cuộn mượt
+            });
+        }
+        <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+		function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+                            let range = getSelectedText();
+                            if (range) {
+                                // Kiểm tra nếu vùng chọn nằm trong cùng một node cha
+                                let startParent = range.startContainer.parentNode;
+                                let endParent = range.endContainer.parentNode;
+                                if (startParent === endParent) {
+                                    let span = document.createElement("span");
+                                    span.className = className;
+                                    span.appendChild(range.extractContents());
+                                    range.insertNode(span);
+                                } else {
+                                    alert("Chỉ có thể bôi đen trong cùng một dòng hoặc đoạn!");
+                                }
+                            }
+                    }
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+
+
+        document.addEventListener("mouseup", function() {
+                const selection = window.getSelection();
+                if (selection.rangeCount && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    // Không highlight nếu vùng chọn nằm trong input, textarea
+                    let startNode = range.startContainer.parentNode;
+                    let endNode = range.endContainer.parentNode;
+                    if (
+                        !["INPUT", "TEXTAREA"].includes(startNode.nodeName) &&
+                        !["INPUT", "TEXTAREA"].includes(endNode.nodeName)
+                    ) {
+                        wrapSelection("highlight");
+                        selection.removeAllRanges();
+                    }
+                }
+            });
+            document.addEventListener("keydown", function(e) {
+                // Nếu nhấn Ctrl+R (hoặc Cmd+R trên Mac)
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+                    e.preventDefault(); // Ngăn reload trang
+                    removeFormattingFromSelection();
+                }
+            });
+            document.addEventListener("click", function(e) {
+                // Chỉ xóa highlight nếu click vào vùng đã bôi vàng và KHÔNG có vùng chọn nào đang active
+                const selection = window.getSelection();
+                if (
+                    e.target.classList &&
+                    e.target.classList.contains("highlight") &&
+                    selection.isCollapsed // Không có vùng chọn nào đang active
+                ) {
+                    let parent = e.target.parentNode;
+                    while (e.target.firstChild) {
+                        parent.insertBefore(e.target.firstChild, e.target);
+                    }
+                    parent.removeChild(e.target);
+                }
+            });
+
+                // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+            console.log("Sending data:", { name, className, answers, correctCount, bandScore }); // Kiểm tra dữ liệu
+            const scriptURL = "https://script.google.com/macros/s/AKfycbyno9058ZWcaMTHxyWXLiE8aWNK5tvsvvdWT-SQIvJztAeQ8TtIA1H5MxhhqiOpntT3yw/exec"; // Thay bằng URL của Google Apps Script
+            const data = {
+                name: name,
+                className: className,
+                answers: answers,
+                correctCount: correctCount,
+                bandScore: bandScore // Gửi bandScore
+            };
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+            });
+        }
+        function checkAnswers() {
+                    const correctAnswers = {
+                        q1: "D",
+                        q2: "C",
+                        q3: "E",
+                        q4: "B",
+                        q5: "B",
+                        q6: "energy",
+                        q7: "food",
+                        q8: "gardening",
+                        q9: "obesity",
+                        q10_11:["B", "D"], // Đáp án đúng cho câu 10 và 11 (checkbox)
+                        q12_13:["C", "A"], // Đáp án đúng cho câu 12 và 13 (checkbox)
+                        q14: "B",
+                        q15: "C",
+                        q16: "D",
+                        q17: "C",
+                        q18: "B",
+                        q19: "A",
+                        q20: "E",
+                        q21: "B",
+                        q22: "D",
+                        q23: "YES",
+                        q24: "YES",
+                        q25: "NO",
+                        q26: "NOT GIVEN",
+                        q27: "YES",
+                        q28: "NOT GIVEN",
+                        q29: "NO",
+                        q30: "NO",
+                        q31: "F",
+                        q32: "A",
+                        q33: "C",
+                        q34: "H",
+                        q35: "A",
+                        q36: "E",
+                        q37: "B",
+                        q38: "A",
+                        q39: "C",
+                        q40: "C"
+                    };
+
+                        
+                        let correctCount = 0;
+                        let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+                        const answers = {}; // Lưu câu trả lời của người dùng
+                        const unansweredQuestions = []; // Danh sách câu hỏi chưa trả lời
+
+                        // Lấy tất cả các câu hỏi
+                        const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                        const processedQuestions = new Set(); // Đảm bảo mỗi câu hỏi chỉ được xử lý một lần
+
+                        allQuestions.forEach(question => {
+                            const questionId = question.id || question.name; // Lấy ID hoặc name của câu hỏi
+                            if (processedQuestions.has(questionId)) return; // Bỏ qua nếu đã xử lý
+                            processedQuestions.add(questionId);
+
+                            const correctAnswer = correctAnswers[questionId];
+                            let userAnswer = "";
+
+                            if (question.type === "text") {
+                                userAnswer = question.value.trim();
+                                if (!userAnswer) {
+                                    unansweredQuestions.push(questionId.replace("q", "Question "));
+                                }
+                            } else if (question.type === "radio") {
+                                const radios = document.getElementsByName(question.name);
+                                const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                                if (selectedRadio) {
+                                    userAnswer = selectedRadio.value;
+                                } else {
+                                    unansweredQuestions.push(questionId.replace("q", "Question "));
+                                }
+                            } else if (question.type === "checkbox") {
+                                const checkboxes = document.getElementsByName(question.name);
+                                const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(cb => cb.value);
+                                userAnswer = selectedCheckboxes.join(", "); // Ghép các đáp án checkbox
+                            }
+
+                            // Kiểm tra đáp án
+                            if (userAnswer) {
+                                answers[questionId] = userAnswer;
+
+                                if (Array.isArray(correctAnswer)) {
+                                    // Nếu đáp án đúng là mảng (checkbox)
+                                    const userAnswersArray = userAnswer.split(", ").sort();
+                                    const correctAnswersArray = correctAnswer.sort();
+                                    if (JSON.stringify(userAnswersArray) === JSON.stringify(correctAnswersArray)) {
+                                        correctCount += 2; // Cộng 2 điểm nếu trả lời đúng toàn bộ
+                                        resultHTML += `<tr>
+                                            <td>${questionId.replace("q", "Question ")}</td>
+                                            <td>${userAnswer}</td>
+                                            <td>${correctAnswer.join(", ")}</td>
+                                            <td>✔</td>
+                                        </tr>`;
+                                    } else {
+                                        resultHTML += `<tr>
+                                            <td>${questionId.replace("q", "Question ")}</td>
+                                            <td>${userAnswer}</td>
+                                            <td>${correctAnswer.join(", ")}</td>
+                                            <td>✘</td>
+                                        </tr>`;
+                                    }
+                                } else if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            }
+                        });
+                    // Nếu có trường chưa được điền, hiển thị thông báo và dừng xử lý
+                    
+                // Hiển thị câu hỏi chưa trả lời
+                if (unansweredQuestions.length > 0) {
+                    const unansweredContainer = document.getElementById("unanswered-questions");
+                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><ul>${unansweredQuestions.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                    unansweredContainer.style.display = "block";
+                    return;
+                }
+				// Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true; // Vô hiệu hóa nút để tránh nộp lại
+                
+                // Hiển thị câu hỏi chưa trả lời
+                    const unansweredContainer = document.getElementById("unanswered-questions");
+                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                    unansweredContainer.style.display = "block";
+
+                // Tính bandScore
+                const bandScore = calculateBandScore(correctCount);
+
+                // Hiển thị kết quả
+                //document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
+                //<h3>Band Score: ${bandScore}</h3>` + resultHTML;
+
+                // Gửi dữ liệu lên Google Sheets
+                sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+                }
+                // Hàm tính bandScore
+        function calculateBandScore(correctCount) {
+                    if (correctCount >= 39) return 9.0;
+                    if (correctCount >= 37) return 8.5;
+                    if (correctCount >= 35) return 8.0;
+                    if (correctCount >= 33) return 7.5;
+                    if (correctCount >= 30) return 7.0;
+                    if (correctCount >= 27) return 6.5;
+                    if (correctCount >= 23) return 6.0;
+                    if (correctCount >= 20) return 5.5;
+                    if (correctCount >= 16) return 5.0;
+                    if (correctCount >= 13) return 4.5;
+                    if (correctCount >= 10) return 4.0;
+                    if (correctCount >= 7) return 3.5;
+                    if (correctCount >= 5) return 3.0;
+                    if (correctCount >= 3) return 2.5;
+                    return 0.0;
+                }
+                let timer; // Biến lưu bộ đếm thời gian
+
+                function startTimer(duration) {
+                    const timerElement = document.getElementById("timer");
+                    let timeRemaining = duration;
+
+                    function updateTimer() {
+                        const minutes = Math.floor(timeRemaining / 60);
+                        const seconds = timeRemaining % 60;
+                        timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(timer); // Dừng bộ đếm thời gian
+                            timerElement.textContent = "Time's up!";
+                            autoSubmit(); // Tự động nộp bài khi hết thời gian
+                        }
+
+                        timeRemaining--;
+                    }
+
+                    updateTimer(); // Hiển thị thời gian ban đầu
+                    timer = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+                }
+
+            function autoSubmit() {
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name;
+
+                    if (question.type === "text" && !question.value.trim()) {
+                        question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (!selectedRadio) {
+                            // Tạo một radio ảo để lưu giá trị "NONE"
+                            const noneRadio = document.createElement("input");
+                            noneRadio.type = "radio";
+                            noneRadio.name = question.name;
+                            noneRadio.value = "NONE";
+                            noneRadio.checked = true;
+                            document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                        if (selectedCheckboxes.length === 0) {
+                            // Tạo một checkbox ảo để lưu giá trị "NONE"
+                            const noneCheckbox = document.createElement("input");
+                            noneCheckbox.type = "checkbox";
+                            noneCheckbox.name = question.name;
+                            noneCheckbox.value = "NONE";
+                            noneCheckbox.checked = true;
+                            document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+                        }
+                    }
+                });
+
+                checkAnswers(); // Gọi hàm nộp bài
+            }
+
+            // Bắt đầu bộ đếm thời gian khi người dùng bắt đầu bài kiểm tra
+            document.addEventListener("DOMContentLoaded", () => {
+                const duration = 60 * 60; // 60 phút
+                startTimer(duration);
+            });
+    
+    </script>
+</body>
+</html>

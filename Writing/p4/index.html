@@ -185,7 +185,10 @@ textarea {
             transition: all 0.3s ease-in-out;
             box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
         }
-#part2-textarea{height: 200px;}
+#part2-textarea {
+    height: 200px; /* Đặt chiều cao ngắn hơn cho textarea của Part 2 */
+    width: 600px;
+}
 </style>
 <body>
     <div class="login-container">
@@ -302,13 +305,20 @@ textarea {
         function sendDataToGoogleSheet(name, className, part1Content, part2Content) {
                 console.log("Sending data:", { name, className, part1Content, part2Content }); // Kiểm tra dữ liệu
                 const scriptURL = "https://script.google.com/macros/s/AKfycbyVN82FR8EacJvmHZ9hCXpJxEqexL1Ljmc149DMsOZ-lIftT9PhSbu9DjCtDYjbTTHpOw/exec"; // Thay bằng URL của Google Apps Script
+                 // Đổi nút thành Waiting...
+                const submitButton = document.getElementById("submit-all");
+                if (submitButton) {
+                    submitButton.innerText = "Waiting...";
+                    submitButton.disabled = true;
+                }
                 const data = {
                     name: name,
                     className: className,
                     part1Content: part1Content,
                     part2Content: part2Content
                 };
-
+                // Lưu dữ liệu vào localStorage trước khi gửi
+                localStorage.setItem("pendingSubmission", JSON.stringify(data));
                 fetch(scriptURL, {
                     method: "POST",
                     mode: 'no-cors',
@@ -318,7 +328,12 @@ textarea {
                     }
                 })
                 .then(() => {
-                    console.log("Success: Data sent to Google Sheets.");
+                    localStorage.removeItem("pendingSubmission");
+                    // Đổi nút Submit thành Done
+                    if (submitButton) {
+                                    submitButton.innerText = "Done";
+                                    submitButton.disabled = true;
+                    }
                     // Hiển thị thông báo thành công
                     const messageElement = document.getElementById('submission-message');
                     messageElement.textContent = "Submit sucessfully";
@@ -327,22 +342,32 @@ textarea {
                 .catch(error => {
                     console.error("Error:", error);
                     alert("Không thể gửi dữ liệu đến Google Sheets. Vui lòng thử lại.");
+                    // Nếu gửi lỗi, cho phép thử lại  
+                    if (submitButton) {
+                                submitButton.innerText = "Submit";
+                                submitButton.disabled = false;
+                            }
+                    // Hiển thị thông báo cần nộp lại 
+                    const messageElement = document.getElementById('submission-message');
+                    messageElement.textContent = "Please try Submit button again";
+                    messageElement.style.display = 'block';
                 });
             }
     function checkAnswers() {
         const name = document.getElementById('full-name').value.trim();
         const className = document.getElementById('class').value.trim();
-        const part1Content = document.getElementById('part1-textarea').value.trim();
-        const part2Content = document.getElementById('part2-textarea').value.trim();
+        let part1Content = document.getElementById('part1-textarea').value.trim();
+        let part2Content = document.getElementById('part2-textarea').value.trim();
 
         if (part1Content === '' && part2Content === '') {
-            alert('Vui lòng viết bài trước khi nộp!');
+            //alert('Vui lòng viết bài trước khi nộp!');
+            part1Content = 'No answer';
+            part2Content = 'No answer';
+            // Dừng bộ đếm thời gian
+            clearInterval(timerInterval);
+            sendDataToGoogleSheet(name, className, part1Content, part2Content);
             return;
         }
-         // Vô hiệu hóa nút "Submit"
-        const submitButton = document.getElementById('submit-all');
-        submitButton.disabled = true;
-        submitButton.textContent = "Done"; // Thay đổi nội dung nút để hiển thị trạng thái
             // Dừng bộ đếm thời gian
         clearInterval(timerInterval);
         sendDataToGoogleSheet(name, className, part1Content, part2Content);
@@ -382,7 +407,7 @@ textarea {
         textareas.forEach(textarea => {
             textarea.disabled = true; // Vô hiệu hóa textarea
         });
-        document.getElementById('submit-all').disabled = true; // Vô hiệu hóa nút nộp bài
+        checkAnswers();
     }
     </script>
 </body>

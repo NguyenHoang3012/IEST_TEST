@@ -357,11 +357,16 @@ textarea {
     function checkAnswers() {
         const name = document.getElementById('full-name').value.trim();
         const className = document.getElementById('class').value.trim();
-        const part1Content = document.getElementById('part1-textarea').value.trim();
-        const part2Content = document.getElementById('part2-textarea').value.trim();
+        let part1Content = document.getElementById('part1-textarea').value.trim();
+        let part2Content = document.getElementById('part2-textarea').value.trim();
 
         if (part1Content === '' && part2Content === '') {
-            alert('Vui lòng viết bài trước khi nộp!');
+            //alert('Vui lòng viết bài trước khi nộp!');
+            part1Content = 'No answer';
+            part2Content = 'No answer';
+            // Dừng bộ đếm thời gian
+            clearInterval(timerInterval);
+            sendDataToGoogleSheet(name, className, part1Content, part2Content);
             return;
         }
             // Dừng bộ đếm thời gian

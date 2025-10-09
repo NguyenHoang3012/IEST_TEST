@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Listening TRAN HOANG</title>
+    <style>
+		body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            font-size: 12px; 
+        }
+		h2 {
+            font-size: 30px; /* Tăng kích thước chữ tiêu đề */
+            font-weight: bold;
+            color: #333;
+        }
+		.highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .table {
+            margin: auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            padding: 2px;
+        }
+        td {
+            padding: 10px;
+            text-align: left;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+		.title {
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+        }
+        .audio-container {
+			 width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Căn giữa nội dung */
+            gap: 10px; /* Khoảng cách giữa audio và icon */
+			
+            margin-top: 20px;
+			width: 100%
+        }
+        .reload-icon {
+            cursor: pointer;
+            font-size: 32px;
+            transition: transform 0.4s ease-in-out;
+        }
+        .reload-icon:active {
+            transform: rotate(360deg);
+        }
+		        .section {
+            margin-top: 20px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .blank {
+            border-bottom: 1px solid black;
+            width: 100px;
+            display: inline-block;
+        }
+		.flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .box {
+            width: 48%;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .subtitle {
+            font-style: italic;
+            text-align: center;
+        }
+        .instruction {
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .column {
+            width: 48%;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+        .incorrect {
+            background-color: lightcoral;
+        }
+		table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+			margin-top:20px
+        }
+        .nav-button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            width: 100%;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .welcome-container {
+            display: none;
+        }     
+      
+        /* ...existing styles... */
+        #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        
+/* Tăng kích thước chữ chỉ cho PART 1 và PART 2 */
+        #part1 .section-title,
+        #part2 .section-title {
+            font-size: 28px; /* tiêu đề lớn hơn */
+        }
+
+        #part1 .subtitle,
+        #part2 .subtitle,
+        #part1 .instruction,
+        #part2 .instruction {
+            font-size: 16px; /* subtitle / instruction lớn hơn */
+        }
+
+        #part1 .question,
+        #part2 .question {
+            font-size: 16px; /* nội dung câu hỏi lớn hơn */
+            line-height: 1.4;
+        }
+
+        #part1 .input-field,
+        #part2 .input-field {
+            font-size: 14px; /* input lớn hơn để dễ đọc */
+            width: 110px; /* có thể điều chỉnh */
+        }
+        #part1 {
+    /* tăng kích thước cơ bản của vùng để các phần tử thừa kế */
+        padding-left: 3cm;
+        padding-right:3cm;
+        font-size: 16px;
+        }
+        /* ...existing code... */
+  
+    </style>
+</head>
+<body>
+	<div class="container info-container">
+		<h2 style="text-align: center;">Insert your information</h2>
+			<form onsubmit="handleInfoSubmit(event)">
+				<div class="form-group">
+					<label for="name">Full Name:</label>
+					<input type="text" id="name" name="name" required>
+				</div>
+				<div class="form-group">
+					<label for="class">Class:</label>
+					<input type="text" id="class" name="class" required>
+				</div>
+				<button type="submit" class="btn">Register</button>
+			</form>
+		</div>
+		<div class="container welcome-container">
+			<h2 id="welcome-message"></h2>
+		<div class="table">
+		<h2 style="text-align: center;">FINAL TEST</h2>
+		</div>
+			<div class="navigation">
+			<button class="nav-button" onclick="showSection('part1')">Part 1</button>
+			<button class="nav-button" onclick="showSection('part2')">Part 2</button>
+		</div>
+		<div id="part1" class="section active">
+            
+			<div class="table">
+                <div class="audio-container">
+                    <p class="subtitle">PART1</p>
+                    <audio id="audioPlayer" controls>
+                        <source id="audioSource" src="mp3/PART1.mp3" alt="PART1" type="audio/mp3">
+                        Trình duyệt của bạn không hỗ trợ audio.
+                    </audio>
+                    <!-- Biểu tượng reload bên dưới -->
+                    <span id="reloadButton" class="reload-icon">⇆</span>
+		        </div>
+                <h2 class="section-title">PART 1 <i>Questions 1–10</i></h2>
+                <p class="subtitle">Complete the table below.</p>
+                <p class="instruction">Write <b>ONE WORD AND/OR A NUMBER</b> for each answer.</p>
+
+                <h3 class="section-title">The London Relocation Services</h3>
+                <h4>Customer’s name</h4>
+                <p>Anna Woods</p>
+
+                <h4>Customer’s personal details</h4>
+                <ul>
+                <li>--- Current address: 118 1 <input type="text" class="input-field" id="q1" autocomplete="off"> Park, Ballysillan</li>
+                <li>--- Postcode: BT149BJ</li>
+                <li>--- Phone No: 2 <input type="text" class="input-field" id="q2" autocomplete="off"> (Mobile)</li>
+                </ul>
+
+                <h4>Other information</h4>
+                <ul>
+                <li>--- Anna is hoping to find work as a 3 <input type="text" class="input-field" id="q3" autocomplete="off"></li>
+                <li>--- She needs to find a 4 <input type="text" class="input-field" id="q4" autocomplete="off"> school for her son.</li>
+                </ul>
+
+                <h4>Requirements for the new property</h4>
+                <h5>Location</h5>
+                <ul>
+                <li>--- Her preferred location is in the 5 <input type="text" class="input-field" id="q5" autocomplete="off"> of the city.</li>
+                <li>--- Her husband would like to be near a 6 <input type="text" class="input-field" id="q6" autocomplete="off">.</li>
+                <li>--- Her son would prefer to be close to a 7 <input type="text" class="input-field" id="q7" autocomplete="off">.</li>
+                </ul>
+
+                <h5>Property details</h5>
+                <ul>
+                <li>--- She would like to live in a 8 <input type="text" class="input-field" id="q8" autocomplete="off"></li>
+                <li>--- She would prefer 9 <input type="text" class="input-field" id="q9" autocomplete="off"> bedrooms</li>
+                <li>--- A small 10 <input type="text" class="input-field" id="q10" autocomplete="off"> is also desirable</li>
+                </ul>
+            </div>		
+		</div>
+	<div id="part2" class="section">
+		<div class="table">
+                <div class="audio-container">
+                    <p class="subtitle">PART2</p>
+                <audio id="audioPlayer" controls>
+                    <source id="audioSource" src="mp3/PART2.mp3" type="audio/mp3">
+                    Trình duyệt của bạn không hỗ trợ audio.
+                </audio>
+                <!-- Biểu tượng reload bên dưới -->
+                <span id="reloadButton" class="reload-icon">⇆</span>
+		    </div>
+            <h2 class="section-title">PART 2 <i>Questions 11–20</i></h2>
+                <p class="subtitle">Choose the correct letter, A, B or C.</p>
+
+                <h3 class="section-title">Questions 11–16</h3>
+
+                <div class="question-container">
+                    <div class="column">
+                        <p class="question">
+                        11. The park was originally the site of<br>
+                        <input type="radio" name="q11" value="A"> A. a forest.<br>
+                        <input type="radio" name="q11" value="B"> B. a lake.<br>
+                        <input type="radio" name="q11" value="C"> C. a volcano.
+                        </p>
+
+                        <p class="question">
+                        12. The two chiefs met in the area to<br>
+                        <input type="radio" name="q12" value="A"> A. trade.<br>
+                        <input type="radio" name="q12" value="B"> B. end the fight.<br>
+                        <input type="radio" name="q12" value="C"> C. celebrate their victory.
+                        </p>
+
+                        <p class="question">
+                        13. The park was founded in<br>
+                        <input type="radio" name="q13" value="A"> A. 1840.<br>
+                        <input type="radio" name="q13" value="B"> B. 1842.<br>
+                        <input type="radio" name="q13" value="C"> C. 1942.
+                        </p>
+                    </div>
+
+                    <div class="column">
+                        <p class="question">
+                        14. The area used for testing is the<br>
+                        <input type="radio" name="q14" value="A"> A. duck pond.<br>
+                        <input type="radio" name="q14" value="B"> B. formal gardens.<br>
+                        <input type="radio" name="q14" value="C"> C. iron bridge.
+                        </p>
+
+                        <p class="question">
+                        15. Who provided the artwork to the village?<br>
+                        <input type="radio" name="q15" value="A"> A. the city council<br>
+                        <input type="radio" name="q15" value="B"> B. local residents<br>
+                        <input type="radio" name="q15" value="C"> C. local museum
+                        </p>
+
+                        <p class="question">
+                        16. What is special about the Temperate House?<br>
+                        <input type="radio" name="q16" value="A"> A. It saves a large number of endangered New Zealand plants.<br>
+                        <input type="radio" name="q16" value="B"> B. It accommodates newly discovered plants.<br>
+                        <input type="radio" name="q16" value="C"> C. It collects plants from around the world.
+                        </p>
+                    </div>
+                </div>
+                <h3 class="section-title">Questions 17–20</h3>
+                <p class="subtitle">Label the map below.</p>
+                <p class="instruction">Write the correct letter, <b>A–G</b>, next to Questions 17–20.</p>
+
+                <div class="question-container">
+                    <div class="column">
+                        <div class="table" style="text-align:center;">
+                        <h3>Hobson Park</h3>
+                        <img src="mp3/hobson-park-map.png" alt="Hobson Park Map" style="max-width:100%; height:auto; border:1px solid #ccc;">
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="table" style="text-align:left;">
+                        <p class="question">17. Plant nursery <input type="text" class="input-field" id="q17" maxlength="1" autocomplete="off"></p>
+                        <p class="question">18. Pine tree hill <input type="text" class="input-field" id="q18" maxlength="1" autocomplete="off"></p>
+                        <p class="question">19. Eagle mountain <input type="text" class="input-field" id="q19" maxlength="1" autocomplete="off"></p>
+                        <p class="question">20. Food kiosk <input type="text" class="input-field" id="q20" maxlength="1" autocomplete="off"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="navigation">
+                        <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                        <div id="results"></div>
+                </div>   
+		</div>
+	</div>
+    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+ </div>
+    
+    <script>
+	    <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+					function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+                            // Function to send data to Google Sheets
+                    function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+                            const scriptURL = "https://script.google.com/macros/s/AKfycbxiG2xH7MFXtmF7rX4gczOIBGkXvlatZGE0guMDfV7uq5QLR80Yp9fKRBYwS6v2iGZb9A/exec";
+                            const data = { name, className, answers, correctCount, bandScore };
+                            // Lưu dữ liệu vào localStorage trước khi gửi
+                            localStorage.setItem("pendingSubmission", JSON.stringify(data));
+                            // Đổi nút thành Waiting...
+                            const submitButton = document.querySelector(".btn-submit");
+                                if (submitButton) {
+                                    submitButton.innerText = "Waiting...";
+                                    submitButton.disabled = true;
+                                }
+                            fetch(scriptURL, {
+                                method: "POST",
+                                mode: 'no-cors',
+                                body: JSON.stringify(data),
+                                headers: { "Content-Type": "application/json" }
+                            })
+                            .then(response => response.text())
+                            .then(result => {
+                                localStorage.removeItem("pendingSubmission");
+                                // Đổi nút Submit thành Done
+                                if (submitButton) {
+                                    submitButton.innerText = "Done";
+                                    submitButton.disabled = true;
+                                }
+                                // Cập nhật Unanswered Questions thành None
+                                const unansweredContainer = document.getElementById("unanswered-questions");
+                                unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                                unansweredContainer.style.display = "block";
+                                alert("Data sent to Google Sheets successfully!");
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Failed to send data to Google Sheets. Will retry automatically when online.");
+                                // Nếu gửi lỗi, cho phép thử lại  
+                                if (submitButton) {
+                                submitButton.innerText = "Submit";
+                                submitButton.disabled = false;
+                                }
+                            });
+                    }
+                    function resendPendingSubmission() {
+                        const pending = localStorage.getItem("pendingSubmission");
+                        if (pending) {
+                            alert("Đang gửi lại dữ liệu lên Google Sheets...");
+                            const data = JSON.parse(pending);
+                            fetch("https://script.google.com/macros/s/AKfycbyWWJcQBMTZio7XHQGMT0ogXegEBlg9puJQcuORQPnCZ4ymknl6GGRygJQFul5cIol_/exec", {
+                                method: "POST",
+                                mode: 'no-cors',
+                                body: JSON.stringify(data),
+                                headers: { "Content-Type": "application/json" }
+                            })
+                            .then(response => {
+                                localStorage.removeItem("pendingSubmission");
+                                const submitButton = document.querySelector(".btn-submit");
+                                if (submitButton) {
+                                    submitButton.innerText = "Done";
+                                    submitButton.disabled = true;
+                                }
+                                const unansweredContainer = document.getElementById("unanswered-questions");
+                                if (unansweredContainer) {
+                                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                                    unansweredContainer.style.display = "block";
+                                }
+                                alert("Gửi lại dữ liệu thành công!");
+                            })
+                            .catch(error => {
+                                alert("Gửi lại dữ liệu thất bại!");
+                                console.error("Error:", error);
+                            });
+                        } else {
+                            //alert("Không có dữ liệu nào cần gửi lại.");
+                        }
+                    }
+                    window.addEventListener('online', resendPendingSubmission);
+                    window.addEventListener('DOMContentLoaded', resendPendingSubmission);
+                    function wrapSelection(className) {
+                            let range = getSelectedText();
+                            if (range) {
+                                // Kiểm tra nếu vùng chọn nằm trong cùng một node cha
+                                let startParent = range.startContainer.parentNode;
+                                let endParent = range.endContainer.parentNode;
+                                if (startParent === endParent) {
+                                    let span = document.createElement("span");
+                                    span.className = className;
+                                    span.appendChild(range.extractContents());
+                                    range.insertNode(span);
+                                } else {
+                                    alert("Chỉ có thể bôi đen trong cùng một dòng hoặc đoạn!");
+                                }
+                            }
+                    }
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+			document.addEventListener("mouseup", function() {
+                const selection = window.getSelection();
+                if (selection.rangeCount && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    // Không highlight nếu vùng chọn nằm trong input, textarea
+                    let startNode = range.startContainer.parentNode;
+                    let endNode = range.endContainer.parentNode;
+                    if (
+                        !["INPUT", "TEXTAREA"].includes(startNode.nodeName) &&
+                        !["INPUT", "TEXTAREA"].includes(endNode.nodeName)
+                    ) {
+                        wrapSelection("highlight");
+                        selection.removeAllRanges();
+                    }
+                }
+            });
+            document.addEventListener("keydown", function(e) {
+                // Nếu nhấn Ctrl+R (hoặc Cmd+R trên Mac)
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+                    e.preventDefault(); // Ngăn reload trang
+                    removeFormattingFromSelection();
+                }
+            });
+            document.addEventListener("click", function(e) {
+                // Chỉ xóa highlight nếu click vào vùng đã bôi vàng và KHÔNG có vùng chọn nào đang active
+                const selection = window.getSelection();
+                if (
+                    e.target.classList &&
+                    e.target.classList.contains("highlight") &&
+                    selection.isCollapsed // Không có vùng chọn nào đang active
+                ) {
+                    let parent = e.target.parentNode;
+                    while (e.target.firstChild) {
+                        parent.insertBefore(e.target.firstChild, e.target);
+                    }
+                    parent.removeChild(e.target);
+                }
+            });
+
+	//Function handle Sign-in
+	let name_user;
+	let className_user;
+        function handleInfoSubmit(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value;
+            let className = document.getElementById("class").value;
+			name_user=name;
+			className_user=className;
+            document.querySelector(".info-container").style.display = "none";
+            document.querySelector(".welcome-container").style.display = "block";
+            document.getElementById("welcome-message").innerText = `Register sucessfull,please start the test`;
+        }
+	//Function to check the Swap Tabs
+	    function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+                function checkAnswers() {
+                const correctAnswers = {
+                    q1: "Fordyce",
+                    q2: "07840051963",
+                    q3: "Nurse",
+                    q4: "primary",
+                    q5: "South",
+                    q6: "Station",
+                    q7: "Park",
+                    q8: "House",
+                    q9: ["Three","3"],
+                    q10: "Office",
+                    q11: "C",
+                    q12: "B",
+                    q13: "B",
+                    q14: "B",
+                    q15: "A",
+                    q16: "A",
+                    q17: "E",
+                    q18: "B",
+                    q19: "G",
+                    q20: "D",
+                };
+                let correctCount = 0;
+                let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+                const answers = {}; // Lưu câu trả lời của người dùng
+                const unansweredQuestions = []; // Danh sách câu hỏi chưa trả lời
+
+                // Lấy tất cả các câu hỏi
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                const processedQuestions = new Set(); // Đảm bảo mỗi câu hỏi chỉ được xử lý một lần
+
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name; // Lấy ID hoặc name của câu hỏi
+                    if (processedQuestions.has(questionId)) return; // Bỏ qua nếu đã xử lý
+                    processedQuestions.add(questionId);
+
+                    const correctAnswer = correctAnswers[questionId];
+                    let userAnswer = "";
+
+                    if (question.type === "text") {
+                        userAnswer = question.value.trim();
+                        if (!userAnswer) {
+                            unansweredQuestions.push(questionId.replace("q", "Question "));
+                        }
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (selectedRadio) {
+                            userAnswer = selectedRadio.value;
+                        } else {
+                            unansweredQuestions.push(questionId.replace("q", "Question "));
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(cb => cb.value);
+                        userAnswer = selectedCheckboxes.join(", "); // Ghép các đáp án checkbox
+                    }
+
+                    // Kiểm tra đáp án
+                    if (userAnswer) {
+                        answers[questionId] = userAnswer;
+
+                        // ...existing code...
+                        if (Array.isArray(correctAnswer)) {
+                            // Nếu correctAnswer là mảng, có thể là:
+                            // - nhiều đáp án hợp lệ cho input text (ví dụ q9: ["Three","3"])
+                            // - hoặc checkbox group (ví dụ q21_22)
+                            if (question.type === "text" && !questionId.includes("_")) {
+                                // Nhiều đáp án hợp lệ cho input text
+                                const isCorrect = correctAnswer.some(ans => userAnswer.toUpperCase() === String(ans).toUpperCase());
+                                if (isCorrect) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(" or ")}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(" or ")}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                // Xử lý mảng cho checkbox multiple choice
+                                const userAnswersArray = userAnswer.split(", ").map(a => a.trim().toUpperCase());
+                                const correctAnswersArray = correctAnswer.map(a => a.trim().toUpperCase());
+                                
+                                if (userAnswersArray.length > correctAnswersArray.length) {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(", ")}</td>
+                                        <td>✘ (Chọn quá số đáp án)</td>
+                                    </tr>`;
+                                } else {
+                                    let matchCount = userAnswersArray.filter(ans => correctAnswersArray.includes(ans)).length;
+                                    correctCount += matchCount; // Mỗi đáp án đúng cộng 1 điểm
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer.join(", ")}</td>
+                                        <td>${matchCount > 0 ? `+${matchCount}` : "✘"}</td>
+                                    </tr>`;
+                                }
+                            }
+                        } else if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
+                            correctCount++;
+                            resultHTML += `<tr>
+                                <td>${questionId.replace("q", "Question ")}</td>
+                                <td>${userAnswer}</td>
+                                <td>${correctAnswer}</td>
+                                <td>✔</td>
+                            </tr>`;
+                        } else {
+                            resultHTML += `<tr>
+                                <td>${questionId.replace("q", "Question ")}</td>
+                                <td>${userAnswer}</td>
+                                <td>${correctAnswer}</td>
+                                <td>✘</td>
+                            </tr>`;
+                        }
+// ...existing code...
+                    }
+                });
+
+                // Hiển thị câu hỏi chưa trả lời
+                if (unansweredQuestions.length > 0) {
+                    const unansweredContainer = document.getElementById("unanswered-questions");
+                    unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><ul>${unansweredQuestions.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                    unansweredContainer.style.display = "block";
+                    return;
+                }
+                // Cập nhật Unanswered Questions thành None
+                const unansweredContainer = document.getElementById("unanswered-questions");
+                unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+                unansweredContainer.style.display = "block";
+                // Tính bandScore
+                const bandScore = calculateBandScore(correctCount);
+
+                // Hiển thị kết quả
+                document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
+                    <h3>Band Score: ${bandScore}</h3>` + resultHTML;
+
+                // Gửi dữ liệu lên Google Sheets
+                sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+            }
+                // Hàm tính bandScore
+                function calculateBandScore(correctCount) {
+                    if (correctCount >= 20) return 9.0;
+                    if (correctCount >= 18) return 8.5;
+                    if (correctCount >= 17) return 8.0;
+                    if (correctCount >= 16) return 7.5;
+                    if (correctCount >= 15) return 7.0;
+                    if (correctCount >= 13) return 6.5;
+                    if (correctCount >= 11) return 6.0;
+                    if (correctCount >= 10) return 5.5;
+                    if (correctCount >= 8) return 5.0;
+                    if (correctCount >= 7) return 4.5;
+                    if (correctCount >= 5) return 4.0;
+                    if (correctCount >= 3) return 3.5;
+                    if (correctCount >= 2) return 3.0;
+                    if (correctCount >= 1) return 2.5;
+                    return 0.0;
+                }
+    </script>
+</body>
+</html>

@@ -430,47 +430,52 @@
 						return selection.getRangeAt(0);
 					}
                             // Function to send data to Google Sheets
-                    function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
-                            const scriptURL = "https://script.google.com/macros/s/AKfycbxiG2xH7MFXtmF7rX4gczOIBGkXvlatZGE0guMDfV7uq5QLR80Yp9fKRBYwS6v2iGZb9A/exec";
-                            const data = { name, className, answers, correctCount, bandScore };
-                            // Lưu dữ liệu vào localStorage trước khi gửi
-                            localStorage.setItem("pendingSubmission", JSON.stringify(data));
-                            // Đổi nút thành Waiting...
-                            const submitButton = document.querySelector(".btn-submit");
-                                if (submitButton) {
-                                    submitButton.innerText = "Waiting...";
-                                    submitButton.disabled = true;
-                                }
-                            fetch(scriptURL, {
-                                method: "POST",
-                                mode: 'no-cors',
-                                body: JSON.stringify(data),
-                                headers: { "Content-Type": "application/json" }
-                            })
-                            .then(response => response.text())
-                            .then(result => {
-                                localStorage.removeItem("pendingSubmission");
-                                // Đổi nút Submit thành Done
-                                if (submitButton) {
-                                    submitButton.innerText = "Done";
-                                    submitButton.disabled = true;
-                                }
-                                // Cập nhật Unanswered Questions thành None
-                                const unansweredContainer = document.getElementById("unanswered-questions");
+                    // ...existing code...
+                    function sendDataToGoogleSheet(name, className, answers, correctCount) {
+                        const scriptURL = "https://script.google.com/macros/s/AKfycbxkC5R0XGNsYX0zIfM8UDMZs28HKuHjZb5zmyzG5M4E1v4xbqaIsdxA5AFtpMnYFV5_Iw/exec";
+                        const data = {
+                            name,
+                            className,
+                            answers,
+                            correctCount,
+                            timestamp: new Date().toISOString()
+                        };
+                        // Lưu dữ liệu vào localStorage trước khi gửi (không chứa bandScore)
+                        localStorage.setItem("pendingSubmission", JSON.stringify(data));
+                        const submitButton = document.querySelector(".btn-submit");
+                        if (submitButton) {
+                            submitButton.innerText = "Waiting...";
+                            submitButton.disabled = true;
+                        }
+                        fetch(scriptURL, {
+                            method: "POST",
+                            mode: 'no-cors',
+                            body: JSON.stringify(data),
+                            headers: { "Content-Type": "application/json" }
+                        })
+                        .then(() => {
+                            localStorage.removeItem("pendingSubmission");
+                            if (submitButton) {
+                                submitButton.innerText = "Done";
+                                submitButton.disabled = true;
+                            }
+                            const unansweredContainer = document.getElementById("unanswered-questions");
+                            if (unansweredContainer) {
                                 unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
                                 unansweredContainer.style.display = "block";
-                                alert("Data sent to Google Sheets successfully!");
-                            })
-                            .catch(error => {
-                                console.error("Error:", error);
-                                alert("Failed to send data to Google Sheets. Will retry automatically when online.");
-                                // Nếu gửi lỗi, cho phép thử lại  
-                                if (submitButton) {
+                            }
+                            alert("Data sent to Google Sheets successfully!");
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Failed to send data to Google Sheets. Will retry automatically when online.");
+                            if (submitButton) {
                                 submitButton.innerText = "Submit";
                                 submitButton.disabled = false;
-                                }
-                            });
+                            }
+                        });
                     }
+                    // ...existing code...
                     function resendPendingSubmission() {
                         const pending = localStorage.getItem("pendingSubmission");
                         if (pending) {
@@ -758,33 +763,16 @@
                 unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
                 unansweredContainer.style.display = "block";
                 // Tính bandScore
-                const bandScore = calculateBandScore(correctCount);
+                //const bandScore = calculateBandScore(correctCount);
 
                 // Hiển thị kết quả
-                document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
-                    <h3>Band Score: ${bandScore}</h3>` + resultHTML;
+                //document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
+                //    <h3>Band Score: </h3>` + resultHTML;
 
                 // Gửi dữ liệu lên Google Sheets
-                sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+                sendDataToGoogleSheet(name_user, className_user, answers, correctCount);
             }
                 // Hàm tính bandScore
-                function calculateBandScore(correctCount) {
-                    if (correctCount >= 20) return 9.0;
-                    if (correctCount >= 18) return 8.5;
-                    if (correctCount >= 17) return 8.0;
-                    if (correctCount >= 16) return 7.5;
-                    if (correctCount >= 15) return 7.0;
-                    if (correctCount >= 13) return 6.5;
-                    if (correctCount >= 11) return 6.0;
-                    if (correctCount >= 10) return 5.5;
-                    if (correctCount >= 8) return 5.0;
-                    if (correctCount >= 7) return 4.5;
-                    if (correctCount >= 5) return 4.0;
-                    if (correctCount >= 3) return 3.5;
-                    if (correctCount >= 2) return 3.0;
-                    if (correctCount >= 1) return 2.5;
-                    return 0.0;
-                }
     </script>
 </body>
 </html>

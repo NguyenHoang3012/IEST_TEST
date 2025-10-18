@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS_TRAN_HOANG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            font-size: 12px;
+        }
+        .container {
+            display: flex; /* Sử dụng Flexbox để chia bố cục */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+        .left-panel, .right-panel {
+            flex: 1; /* Mỗi cột chiếm một nửa chiều rộng */
+            padding: 20px;
+            overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+        }
+        .left-panel {
+            background-color: #fffbe6; /* Màu nền cho cột bên trái */
+        }
+        .right-panel {
+            background-color: #ffffff; /* Màu nền cho cột bên phải */
+            border-left: 2px solid #ccc; /* Đường viền giữa hai cột */
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .passage {
+            margin-top: 20px;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .content-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .column {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-items: center; 
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        } 
+        .nav-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+                /* ...existing styles... */
+                #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        .btn-container {
+            text-align: center; /* Căn giữa nút Register */
+            margin-top: 20px;
+        }
+        .left-panel, .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .left-panel {
+        background-color: #fffbe6;
+        flex: 1;
+        }
+
+        .right-panel {
+        background-color: #ffffff;
+        flex: 1;
+        border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+        <!-- Form đăng nhập -->
+        <div class="container form-container">
+            <h2 style="text-align: center;">Insert your information</h2>
+            <form onsubmit="handleInfoSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="class">Class:</label>
+                    <input type="text" id="class" name="class" required>
+                </div style="text-align: center; margin-top: 20px;">
+                <div class="btn-container">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+        </div>
+    <div class="container welcome-container hidden">
+        <div class="container">
+            <!-- Cột bên trái -->
+            <div class="left-panel">  
+                 <!-- Nội dung Message 1 -->
+                <div id="message1">
+                    <h2 id="welcome-message" style="text-align: center;"></h2>
+                    <div class="subtitle">READING PASSAGE 1</div>
+                    <p>You should spend about 20 minutes on <strong>Questions 1-13</strong>, which are based on Reading Passage 1 below.</p>
+                    <div class="content-box">
+                        <div class="passage">
+                        <h4>Henry Moore (1898–1986)</h4>
+                        <h4>The British sculptor Henry Moore was a leading figure in the 20th-century art world</h4>
+                            <p>Henry Moore was born in Castleford, a small town near Leeds in the north of England. He was the seventh child of Raymond Moore and his wife Mary Baker. He studied at Castleford Grammar School from 1909 to 1915, where his early interest in art was encouraged by his teacher Alice Gostick. After leaving school, Moore hoped to become a sculptor, but instead he complied with his father’s wish that he train as a schoolteacher. He had to abandon his training in 1917 when he was sent to France to fight in the First World War.</p>
+
+                            <p>After the war, Moore enrolled at the Leeds School of Art, where he studied for two years. In his first year, he spent most of his time drawing. Although he wanted to study sculpture, no teacher was appointed until his second year. At the end of that year, he passed the sculpture examination and was awarded a scholarship to the Royal College of Art in London. In September 1921, he moved to London and began three years of advanced study in sculpture.</p>
+
+                            <p>Alongside the instruction he received at the Royal College, Moore visited many of the London museums, particularly the British Museum, which had a wide-ranging collection of ancient sculpture. During these visits, he discovered the power and beauty of ancient Egyptian and African sculpture. As he became increasingly interested in these ‘primitive’ forms of art, he turned away from European sculptural traditions.</p>
+
+                            <p>After graduating, Moore spent the first six months of 1925 travelling in France. When he visited the Trocadero Museum in Paris, he was impressed by a cast of a Mayan sculpture of the rain spirit. It was a male reclining figure with its knees drawn up together, and its head at a right angle to its body. Moore became fascinated with this stone sculpture, which he thought had a power and originality that no other stone sculpture possessed. He himself started carving a variety of subjects in stone, including depictions of reclining women, mother-and-child groups, and masks.</p>
+
+                            <p>Moore’s exceptional talent soon gained recognition, and in 1926 he started work as a sculpture instructor at the Royal College. In 1933, he became a member of a group of young artists called Unit One. The aim of the group was to convince the English public of the merits of the emerging international movement in modern art and architecture.</p>
+
+                            <p>Around this time, Moore moved away from the human figure to experiment with abstract shapes. In 1931, he held an exhibition at the Leicester Galleries in London. His work was enthusiastically welcomed by fellow sculptors, but the reviews in the press were extremely negative and turned Moore into a notorious figure. There were calls for his resignation from the Royal College, and the following year, when his contract expired, he left to start a sculpture department at the Chelsea School of Art in London.</p>
+
+                            <p>Throughout the 1930s, Moore did not show any inclination to please the British public. He became interested in the paintings of the Spanish artist Pablo Picasso, whose work inspired him to distort the human body in a radical way. At times, he seemed to abandon the human figure altogether. The pages of his sketchbooks from this period show his ideas for abstract sculptures that bore little resemblance to the human form.</p>
+
+                            <p>In 1940, during the Second World War, Moore stopped teaching at the Chelsea School and moved to a farmhouse about 20 miles north of London. A shortage of materials forced him to focus on drawing. He did numerous small sketches of Londoners, later turning these ideas into large coloured drawings in his studio. In 1942, he returned to Castleford to make a series of sketches of the miners who worked there.</p>
+
+                            <p>In 1944, Harlow, a town near London, offered Moore a commission for a sculpture depicting a family. The resulting work signifies a dramatic change in Moore’s style, away from the experimentation of the 1930s towards a more natural and humanistic subject matter. He did dozens of studies in clay for the sculpture, and these were cast in bronze and issued in editions of seven to nine copies each. In this way, Moore’s work became available to collectors all over the world. The boost to his income enabled him to take on ambitious projects and start working on the scale he felt his sculpture demanded.</p>
+
+                            <p>Critics who had begun to think that Moore had become less revolutionary were proven wrong by the appearance, in 1950, of the first of Moore’s series of standing figures in bronze, with their harsh and angular pierced forms and distinct impression of menace. Moore also varied his subject matter in the 1950s with such works as <i>Warrior with Shield</i> and <i>Falling Warrior</i>. These were rare examples of Moore’s use of the male figure and owe something to his visit to Greece in 1951, when he had the opportunity to study ancient works of art.</p>
+
+                            <p>In his final years, Moore created the Henry Moore Foundation to promote art appreciation and to display his work. Moore was the most famous English sculptor of the 20th century, achieving international acclaim and he is still regarded as one of the greatest sculptors of all time.</p>
+
+                        </div>
+                    </div>
+                </div>
+                  <!-- Nội dung Message 2 -->
+                <div id="message2" class="content-box hidden">
+                    <div class="content-box">
+                        <h3>Reading Passage 2</h3>
+                        <h4>The Life and Work of Marie Curie</h4>
+
+                        <p>Marie Curie is probably the most famous woman scientist who has ever lived. Born Maria Sklodowska in Poland in 1867, she is famous for her work on radioactivity, and was twice a winner of the Nobel Prize. With her husband, Pierre Curie, and Henri Becquerel, she was awarded the 1903 Nobel Prize for Physics, and was the sole winner of the 1911 Nobel Prize for Chemistry. She was the first woman to win a Nobel Prize.</p>
+
+                        <p>From childhood, Marie was remarkable for her prodigious memory, and at the age of 16 won a gold medal on completion of her secondary education. Because her father lost his savings through bad investment, she then had to take work as a teacher. From her earnings she was able to finance her sister Bronja’s medical studies in Paris, on the understanding that Bronja would, in turn, later help her to get an education.</p>
+
+                        <p>In 1891 this promise was fulfilled and Marie went to Paris and began to study at the Sorbonne (the University of Paris). She often worked far into the night and lived on little more than bread and butter and tea. She came first in the examination in the physical sciences in 1893, and in 1894 was placed second in the examination in mathematical sciences. It was not until the spring of that year that she was introduced to Pierre Curie.</p>
+
+                        <p>Their marriage in 1895 marked the start of a partnership that was soon to achieve results of world significance. Following Henri Becquerel’s discovery in 1896 of a new phenomenon, which Marie later called ‘radioactivity’, Marie Curie decided to find out if the radioactivity discovered in uranium was to be found in other elements. She discovered that this was true for thorium.</p>
+
+                        <p>Turning her attention to minerals, she found her interest drawn to pitchblende, a mineral whose radioactivity, superior to that of pure uranium, could be explained only by the presence in the ore of small quantities of an unknown substance of very high activity. Pierre Curie joined her in the work that she had undertaken to resolve this problem, and that led to the discovery in 1898 of two new elements, polonium and radium. While Pierre Curie devoted himself chiefly to the physical study of the new radiations, Marie Curie struggled to obtain pure radium in the metallic state. This was achieved with the help of the chemist André-Louis Debierne, one of Pierre Curie’s pupils. Based on the results of this research, Marie Curie received her Doctorate of Science, and in 1903 Marie and Pierre shared with Becquerel the Nobel Prize for Physics for the discovery of radioactivity.</p>
+                        <p>The births of Marie’s two daughters, Irène and Ève, in 1897 and 1904 failed to interrupt her scientific work. She was appointed lecturer in physics at the École Normale Supérieure for girls in Sèvres, France (1900), and introduced a method of teaching based on experimental demonstrations. In December 1904 she was appointed chief assistant in the laboratory directed by Pierre Curie.</p>
+
+                        <p>The sudden death of her husband in 1906 was a bitter blow to Marie Curie, but was also a turning point in her career: henceforth she was to devote all her energy to completing alone the scientific work that they had undertaken. On May 13, 1906, she was appointed to the professorship that had been left vacant on her husband’s death, becoming the first woman to teach at the Sorbonne. In 1911 she was awarded the Nobel Prize for Chemistry for the isolation of a pure form of radium.</p>
+
+                        <p>During World War I, Marie Curie, with the help of her daughter Irène, devoted herself to the development of the use of X-radiography, including the mobile units which came to be known as ‘Little Curies’, used for the treatment of wounded soldiers. In 1918 the Radium Institute, whose staff Irène had joined, began to operate in earnest, and became a centre for nuclear physics and chemistry. Marie Curie, now at the highest point of her fame and, from 1922, a member of the Academy of Medicine, researched the chemistry of radioactive substances and their medical applications.</p>
+
+                        <p>In 1921, accompanied by her two daughters, Marie Curie made a triumphant journey to the United States to raise funds for research on radium. Women there presented her with a gram of radium for her campaign. Marie also gave lectures in Belgium, Brazil, Spain and Czechoslovakia and, in addition, had the satisfaction of seeing the development of the Curie Foundation in Paris, and the inauguration in 1932 in Warsaw of the Radium Institute, where her sister Bronja became director.</p>
+
+                        <p>One of Marie Curie’s outstanding achievements was to have understood the need to accumulate intense radioactive sources, not only to treat illness but also to maintain an abundant supply for research. The existence in Paris at the Radium Institute of a stock of 1.5 grams of radium made a decisive contribution to the success of the experiments undertaken in the years around 1930. This work prepared the way for the discovery of the neutron and of artificial radioactivity. A few months after this discovery, Marie Curie died as a result of leukaemia caused by exposure to radiation. She had often carried test tubes containing radioactive isotopes in her pocket, remarking on the pretty blue-green light they gave off.</p>
+
+                        <p>Her contribution to physics had been immense, not only in her own work, the importance of which had been demonstrated by her two Nobel Prizes, but because of her influence on subsequent generations of nuclear physicists and chemists.</p>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Cột bên phải -->
+            <div class="right-panel">
+                <div id="timer" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;"></div>
+                <div class="nav-buttons">
+                    <button onclick="showMessage(1)">READING PASSAGE 1</button>
+                    <button onclick="showMessage(2)">READING PASSAGE 2</button>
+                   
+                </div>
+                 <!-- Cột bên phải message1-->
+                <div id="right-message1" class="content-box active">
+                    <div class="content-box">
+                         <h1>Questions 1–7 — Reading Passage 1</h1>
+                        <p class="desc">
+                        Do the following statements agree with the information given in Reading Passage 1?<br>
+                        Write <b>TRUE</b> / <b>FALSE</b> / <b>NOT GIVEN</b>
+                        </p>
+
+                        <div id="questions">
+                        <div class="question">
+                            <div class="qnum">1</div>
+                            <div class="qtext">On leaving school, Moore did what his father wanted him to do.</div>
+                            <select id="q1">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">2</div>
+                            <div class="qtext">Moore began studying sculpture in his first term at the Leeds School of Art.</div>
+                            <select id="q2">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">3</div>
+                            <div class="qtext">When Moore started at the Royal College of Art, its reputation for teaching sculpture was excellent.</div>
+                            <select id="q3">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">4</div>
+                            <div class="qtext">Moore became aware of ancient sculpture as a result of visiting London museums.</div>
+                            <select id="q4">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">5</div>
+                            <div class="qtext">The Trocadero Museum’s Mayan sculpture attracted a lot of public interest.</div>
+                            <select id="q5">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">6</div>
+                            <div class="qtext">Moore thought the Mayan sculpture was similar in certain respects to other stone sculptures.</div>
+                            <select id="q6">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">7</div>
+                            <div class="qtext">The artists who belonged to Unit One wanted to make modern art and architecture more popular.</div>
+                            <select id="q7">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-box">
+                        <h2 style="margin-top:28px;">Questions 8–13 — Moore’s career as an artist</h2>
+                        <p style="font-size:14px;color:#555;margin-bottom:12px">
+                        Complete the notes below.<br>
+                        <b>Choose ONE WORD ONLY</b> from the passage for each answer.<br>
+                        Write your answers in boxes 8–13 on your answer sheet.
+                        </p>
+
+                        <div id="questions2">
+                        <div class="question">
+                            <div class="qnum">8</div>
+                            <div class="qtext">
+                            Moore is urged to offer his 
+                            <input type="text" id="q8" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            and leave the Royal College.
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">9</div>
+                            <div class="qtext">
+                            Moore turns to drawing because 
+                            <input type="text" id="q9" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            for sculpting are not readily available.
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">10</div>
+                            <div class="qtext">
+                            While visiting his hometown, Moore does some drawings of 
+                            <input type="text" id="q10" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            .
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">11</div>
+                            <div class="qtext">
+                            Moore is employed to produce a sculpture of a 
+                            <input type="text" id="q11" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            .
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">12</div>
+                            <div class="qtext">
+                            <input type="text" id="q12" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            start to buy Moore’s work.
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">13</div>
+                            <div class="qtext">
+                            Moore’s increased 
+                            <input type="text" id="q13" placeholder="Enter one word only" style="width:150px;padding:6px 8px;border-radius:6px;border:1px solid #ccc;font-size:14px;">
+                            makes it possible for him to do more ambitious sculptures.
+                            </div>
+                        </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+                <!-- Cột bên phải message2-->
+                <div id="right-message2" class="content-box hidden">
+                    <div class="content-box">
+                         <h1>Questions 14–20 — Reading Passage: Marie Curie</h1>
+                        <p class="desc">
+                        Do the following statements agree with the information given in Reading Passage 1?<br />
+                        Write <strong>TRUE</strong> / <strong>FALSE</strong> / <strong>NOT GIVEN</strong> in boxes 14–20.
+                        </p>
+
+                        <div id="questions">
+                        <div class="question">
+                            <div class="qnum">14</div>
+                            <div class="qtext">Marie Curie’s husband was a joint winner of both Marie’s Nobel Prizes.</div>
+                            <select id="q14">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">15</div>
+                            <div class="qtext">Marie became interested in science when she was a child.</div>
+                            <select id="q15">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">16</div>
+                            <div class="qtext">Marie was able to attend the Sorbonne because of her sister’s financial contribution.</div>
+                            <select id="q16">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">17</div>
+                            <div class="qtext">Marie stopped doing research for several years when her children were born.</div>
+                            <select id="q17">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">18</div>
+                            <div class="qtext">Marie took over the teaching position her husband had held.</div>
+                            <select id="q18">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                        <div class="question">
+                            <div class="qnum">19</div>
+                            <div class="qtext">Marie’s sister Bronia studied the medical uses of radioactivity.</div>
+                            <select id="q19">
+                            <option value="">— Select —</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                            <option value="NOT GIVEN">NOT GIVEN</option>
+                            </select>
+                        </div>
+
+                    </div>
+                            <h1>Questions 20–26 — Marie Curie’s Research on Radioactivity</h1>
+                            <p class="desc">
+                            Complete the notes below.<br />
+                            <strong>Choose ONE WORD ONLY</strong> from the passage for each answer.<br />
+                            Write your answers in boxes 20–26 on your answer sheet.
+                            </p>
+
+                            <div id="questions">
+                            <div class="question">
+                                <div class="qnum">20</div>
+                                <div class="qtext">
+                                When uranium was discovered to be radioactive, Marie Curie found that the element called
+                                <input type="text" id="q20" placeholder="Enter one word only" /> had the same property.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">21</div>
+                                <div class="qtext">
+                                Marie and Pierre Curie’s research into the radioactivity of the mineral known as
+                                <input type="text" id="q21" placeholder="Enter one word only" /> led to the discovery of two new elements.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">22</div>
+                                <div class="qtext">
+                                In 1911, Marie Curie received recognition for her work on the element
+                                <input type="text" id="q22" placeholder="Enter one word only" />.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">23</div>
+                                <div class="qtext">
+                                Marie and Irène Curie developed X-radiography which was used as a medical technique for
+                                <input type="text" id="q23" placeholder="Enter one word only" />.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">24</div>
+                                <div class="qtext">
+                                Marie Curie saw the importance of collecting radioactive material both for research and for cases of
+                                <input type="text" id="q24" placeholder="Enter one word only" />.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">25</div>
+                                <div class="qtext">
+                                The radioactive material stocked in Paris contributed to the discoveries in the 1930s of the
+                                <input type="text" id="q25" placeholder="Enter one word only" /> and of what was known as artificial radioactivity.
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <div class="qnum">26</div>
+                                <div class="qtext">
+                                During her research, Marie Curie was exposed to radiation and as a result she suffered from
+                                <input type="text" id="q26" placeholder="Enter one word only" />.
+                                </div>
+                            </div>
+                            <div class="btn-container">
+                            <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                            </div>
+                            <div id="results"></div>
+                            <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- Cột bên phải message3-->
+        </div>
+    </div>
+
+    <script>
+                // Khai báo biến toàn cục
+        let name_user = "";
+        let className_user = "";
+        function handleInfoSubmit(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Lấy giá trị từ các trường nhập liệu
+            const name = document.getElementById("name").value;
+            const className = document.getElementById("class").value;
+            name_user=name;
+            className_user=className;
+            // Kiểm tra nếu các trường nhập liệu không rỗng
+            if (!name || !className) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Ẩn form đăng nhập
+            document.querySelector(".form-container").classList.add("hidden");
+
+            // Hiển thị bài test
+            const welcomeContainer = document.querySelector(".welcome-container");
+            welcomeContainer.classList.remove("hidden");
+
+            // Hiển thị thông báo chào mừng
+            document.getElementById("welcome-message").innerText = `FINAL_SESSION_2`;
+        }
+        //Handle button 
+        function showMessage(messageNumber) {
+            // Ẩn tất cả các message trong left-panel
+            document.getElementById("message1").classList.add("hidden");
+            document.getElementById("message2").classList.add("hidden");
+           
+
+            // Hiển thị message được chọn trong left-panel
+            document.getElementById(`message${messageNumber}`).classList.remove("hidden");
+
+            // Ẩn tất cả các message trong right-panel
+            document.getElementById("right-message1").classList.add("hidden");
+            document.getElementById("right-message2").classList.add("hidden");
+            
+
+            // Hiển thị message được chọn trong right-panel
+            document.getElementById(`right-message${messageNumber}`).classList.remove("hidden");
+
+            // Cuộn về đầu trang
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Cuộn mượt
+            });
+        }
+        <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+		function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+                            let range = getSelectedText();
+                            if (range) {
+                                // Kiểm tra nếu vùng chọn nằm trong cùng một node cha
+                                let startParent = range.startContainer.parentNode;
+                                let endParent = range.endContainer.parentNode;
+                                if (startParent === endParent) {
+                                    let span = document.createElement("span");
+                                    span.className = className;
+                                    span.appendChild(range.extractContents());
+                                    range.insertNode(span);
+                                } else {
+                                    alert("Chỉ có thể bôi đen trong cùng một dòng hoặc đoạn!");
+                                }
+                            }
+                    }
+                    // ...existing code...
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+			document.addEventListener("mouseup", function() {
+                const selection = window.getSelection();
+                if (selection.rangeCount && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    // Không highlight nếu vùng chọn nằm trong input, textarea
+                    let startNode = range.startContainer.parentNode;
+                    let endNode = range.endContainer.parentNode;
+                    if (
+                        !["INPUT", "TEXTAREA"].includes(startNode.nodeName) &&
+                        !["INPUT", "TEXTAREA"].includes(endNode.nodeName)
+                    ) {
+                        wrapSelection("highlight");
+                        selection.removeAllRanges();
+                    }
+                }
+            });
+            document.addEventListener("keydown", function(e) {
+                // Nếu nhấn Ctrl+R (hoặc Cmd+R trên Mac)
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+                    e.preventDefault(); // Ngăn reload trang
+                    removeFormattingFromSelection();
+                }
+            });
+            document.addEventListener("click", function(e) {
+                // Chỉ xóa highlight nếu click vào vùng đã bôi vàng và KHÔNG có vùng chọn nào đang active
+                const selection = window.getSelection();
+                if (
+                    e.target.classList &&
+                    e.target.classList.contains("highlight") &&
+                    selection.isCollapsed // Không có vùng chọn nào đang active
+                ) {
+                    let parent = e.target.parentNode;
+                    while (e.target.firstChild) {
+                        parent.insertBefore(e.target.firstChild, e.target);
+                    }
+                    parent.removeChild(e.target);
+                }
+            });
+			
+                // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount) {
+            console.log("Sending data:", { name, className, answers, correctCount }); // Kiểm tra dữ liệu
+            const scriptURL = "https://script.google.com/macros/s/AKfycbziCuq_9f5nBT567I5TzYduJpMRpn287jZDWgKVLqvlR78DqqFeIDsveIuy5KDCQKM/exec"; // Thay bằng URL của Google Apps Script
+            // Chuyển các đáp án là mảng thành chuỗi trước khi gửi
+            const answersToSend = {};
+            for (let key in answers) {
+                if (Array.isArray(answers[key])) {
+                    answersToSend[key] = answers[key].join(", ");
+                } else {
+                    answersToSend[key] = answers[key];
+                }
+            }
+
+            const data = {
+                name: name,
+                className: className,
+                answers: answers,
+                correctCount: correctCount,
+            };
+            // Lưu dữ liệu vào localStorage trước khi gửi
+            localStorage.setItem("pendingSubmission", JSON.stringify(data));
+            // Đổi nút thành Waiting...
+            const submitButton = document.querySelector(".btn-submit");
+                if (submitButton) {
+                        submitButton.innerText = "Waiting...";
+                        submitButton.disabled = true;
+                    }
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                    if (submitButton) {
+                    // Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true;
+                    }
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+                // Nếu gửi lỗi, cho phép thử lại  
+                if (submitButton) {
+                    submitButton.innerText = "Submit";
+                    submitButton.disabled = false;
+                    }
+            });
+        }
+// ...existing code...
+        function checkAnswers() {
+            const correctAnswers = {
+                q1: "TRUE", q2: "FALSE", q3: "NOT GIVEN", q4: "TRUE", q5: "NOT GIVEN",
+                q6: "FALSE", q7: "TRUE", q8: "resignation", q9: "materials", q10: "miners",
+                q11: "family", q12: "collectors", q13: "income", q14: "FALSE", q15: "NOT GIVEN",
+                q16: "TRUE", q17: "FALSE", q18: "TRUE", q19: "NOT GIVEN", q20: "thorium",
+                q21: "pitchblende", q22: "radium", q23: "soldiers", q24: "illness", q25: "neutron",
+                q26: ["leukaemia", "leukemia"]
+            };
+
+            let correctCount = 0;
+            let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+            const answers = {};
+            const unansweredQuestions = [];
+
+            const processed = new Set();
+
+            // Collect text inputs and selects
+            const textInputs = Array.from(document.querySelectorAll('input[type="text"]'));
+            const selects = Array.from(document.querySelectorAll('select'));
+            const radios = Array.from(document.querySelectorAll('input[type="radio"]'));
+            const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+
+            // Helper to record and evaluate one question
+            function evaluate(questionId, userAnswer, inputKind) {
+                if (processed.has(questionId)) return;
+                processed.add(questionId);
+
+                const correctAnswer = correctAnswers[questionId];
+                const userVal = (userAnswer || "").toString().trim();
+                if (!userVal) {
+                    unansweredQuestions.push(questionId.replace('q', 'Question '));
+                    return;
+                }
+                answers[questionId] = userVal;
+
+                // Normalize for comparisons
+                if (Array.isArray(correctAnswer)) {
+                    // If checkbox group
+                    if (inputKind === 'checkbox') {
+                        const ua = userVal.split(',').map(s => s.trim().toLowerCase()).filter(Boolean).sort();
+                        const ca = correctAnswer.map(s => String(s).trim().toLowerCase()).sort();
+                        if (JSON.stringify(ua) === JSON.stringify(ca)) {
+                            // full match => award full points (use 1 per correct here)
+                            correctCount += ca.length;
+                            resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer.join(", ")}</td><td>✔</td></tr>`;
+                        } else {
+                            const matchCount = ua.filter(x => ca.includes(x)).length;
+                            correctCount += matchCount;
+                            resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer.join(", ")}</td><td>${matchCount>0?`+${matchCount}`:"✘"}</td></tr>`;
+                        }
+                    } else {
+                        // multiple acceptable answers for a text/select (e.g. leukaemia/leukemia)
+                        const isCorrect = correctAnswer.some(ans => String(ans).trim().toLowerCase() === userVal.toLowerCase());
+                        if (isCorrect) {
+                            correctCount++;
+                            resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer.join(" or ")}</td><td>✔</td></tr>`;
+                        } else {
+                            resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer.join(" or ")}</td><td>✘</td></tr>`;
+                        }
+                    }
+                } else {
+                    // single correct answer
+                    if (userVal.toLowerCase() === String(correctAnswer || "").toLowerCase()) {
+                        correctCount++;
+                        resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer}</td><td>✔</td></tr>`;
+                    } else {
+                        resultHTML += `<tr><td>${questionId.replace("q","Question ")}</td><td>${userVal}</td><td>${correctAnswer}</td><td>✘</td></tr>`;
+                    }
+                }
+            }
+
+            // Process text inputs
+            textInputs.forEach(input => {
+                const id = input.id || input.name;
+                if (!id) return;
+                evaluate(id, input.value, 'text');
+            });
+
+            // Process selects
+            selects.forEach(sel => {
+                const id = sel.id || sel.name;
+                if (!id) return;
+                evaluate(id, sel.value, 'select');
+            });
+
+            // Process radios by group name
+            const radioNames = Array.from(new Set(radios.map(r => r.name).filter(Boolean)));
+            radioNames.forEach(name => {
+                const selected = document.querySelector(`input[type="radio"][name="${name}"]:checked`);
+                const userVal = selected ? selected.value : "";
+                evaluate(name, userVal, 'radio');
+            });
+
+            // Process checkboxes by group name
+            const checkboxNames = Array.from(new Set(checkboxes.map(cb => cb.name).filter(Boolean)));
+            checkboxNames.forEach(name => {
+                const checked = Array.from(document.querySelectorAll(`input[type="checkbox"][name="${name}"]:checked`)).map(cb => cb.value);
+                const userVal = checked.join(", ");
+                evaluate(name, userVal, 'checkbox');
+            });
+
+            // If there are unanswered questions, show and stop
+            if (unansweredQuestions.length > 0) {
+                const unansweredContainer = document.getElementById("unanswered-questions");
+                unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><ul>${unansweredQuestions.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                unansweredContainer.style.display = "block";
+                return;
+            }
+
+            // Update UI: disable submit
+            const submitButton = document.querySelector(".btn-submit");
+            if (submitButton) {
+                submitButton.innerText = "Done";
+                submitButton.disabled = true;
+            }
+
+            const unansweredContainer = document.getElementById("unanswered-questions");
+            unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+            unansweredContainer.style.display = "block";
+
+
+            // Show results
+            //document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
+            //    <h3>Band Score: ${correctCount}</h3>` + resultHTML + `</table>`;
+            // Send to Google Sheets
+            sendDataToGoogleSheet(name_user, className_user, answers, correctCount);
+        }
+        // ...existing code...
+        let timer; // Biến lưu bộ đếm thời gian
+
+                function startTimer(duration) {
+                    const timerElement = document.getElementById("timer");
+                    let timeRemaining = duration;
+
+                    function updateTimer() {
+                        const minutes = Math.floor(timeRemaining / 60);
+                        const seconds = timeRemaining % 60;
+                        timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(timer); // Dừng bộ đếm thời gian
+                            timerElement.textContent = "Time's up!";
+                            autoSubmit(); // Tự động nộp bài khi hết thời gian
+                        }
+
+                        timeRemaining--;
+                    }
+
+                    updateTimer(); // Hiển thị thời gian ban đầu
+                    timer = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+                }
+
+            function autoSubmit() {
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name;
+
+                    if (question.type === "text" && !question.value.trim()) {
+                        question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (!selectedRadio) {
+                            // Tạo một radio ảo để lưu giá trị "NONE"
+                            const noneRadio = document.createElement("input");
+                            noneRadio.type = "radio";
+                            noneRadio.name = question.name;
+                            noneRadio.value = "NONE";
+                            noneRadio.checked = true;
+                            document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                        if (selectedCheckboxes.length === 0) {
+                            // Tạo một checkbox ảo để lưu giá trị "NONE"
+                            const noneCheckbox = document.createElement("input");
+                            noneCheckbox.type = "checkbox";
+                            noneCheckbox.name = question.name;
+                            noneCheckbox.value = "NONE";
+                            noneCheckbox.checked = true;
+                            document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+                        }
+                    }
+                });
+
+                checkAnswers(); // Gọi hàm nộp bài
+            }
+
+            // Bắt đầu bộ đếm thời gian khi người dùng bắt đầu bài kiểm tra
+            document.addEventListener("DOMContentLoaded", () => {
+                const duration = 60 * 55; // 55 phút
+                startTimer(duration);
+            });
+    
+    </script>
+</body>
+</html>

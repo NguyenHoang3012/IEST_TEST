@@ -61,6 +61,10 @@
             width: 90px;
             font-size: 12px;
         }
+        .input-field[style*="width: 200px"] {
+            width: 200px !important;
+            min-width: 200px;
+        }
         .column {
             width: 48%;
         }
@@ -546,13 +550,21 @@
                         </div>
                         <div class="content-box">
                             <h3 style="text-align: center;">List of People</h3>
-                            <ul>
-                                <li><strong>A</strong> Alfred Binet</li>
-                                <li><strong>B</strong> Carol Dweck</li>
-                                <li><strong>C</strong> Andrew Gelman</li>
-                                <li><strong>D</strong> Timothy Bates</li>
-                                <li><strong>E</strong> David Yeager and Gregory Walton</li>
-                            </ul>
+                            <div class="question-container">
+                                <div>
+                                    <ul>
+                                        <li><strong>A</strong> Alfred Binet</li>
+                                        <li><strong>B</strong> Carol Dweck</li>
+                                        <li><strong>C</strong> Andrew Gelman</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li><strong>D</strong> Timothy Bates</li>
+                                        <li><strong>E</strong> David Yeager and Gregory Walton</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -577,31 +589,26 @@
                                     <input type="radio" name="q24" value="NO"> NO &nbsp;
                                     <input type="radio" name="q24" value="NOT GIVEN"> NOT GIVEN
                                 </p>
-                            </div>
-                            <div>
-                                    <p class="question">25. Recent evidence about growth mindset interventions has attracted unfair coverage in the media.<br>
-                                        <input type="radio" name="q25" value="YES"> YES &nbsp;
-                                        <input type="radio" name="q25" value="NO"> NO &nbsp;
-                                        <input type="radio" name="q25" value="NOT GIVEN"> NOT GIVEN
-                                    </p>
-                                    <p class="question">26. Deliberate attempts to encourage students to strive for high achievement may have a negative effect.<br>
-                                        <input type="radio" name="q26" value="YES"> YES &nbsp;
-                                        <input type="radio" name="q26" value="NO"> NO &nbsp;
-                                        <input type="radio" name="q26" value="NOT GIVEN"> NOT GIVEN
-                                    </p>
+                                <p class="question">25. Recent evidence about growth mindset interventions has attracted unfair coverage in the media.<br>
+                                    <input type="radio" name="q25" value="YES"> YES &nbsp;
+                                    <input type="radio" name="q25" value="NO"> NO &nbsp;
+                                    <input type="radio" name="q25" value="NOT GIVEN"> NOT GIVEN
+                                </p>
+                                <p class="question">26. Deliberate attempts to encourage students to strive for high achievement may have a negative effect.<br>
+                                    <input type="radio" name="q26" value="YES"> YES &nbsp;
+                                    <input type="radio" name="q26" value="NO"> NO &nbsp;
+                                    <input type="radio" name="q26" value="NOT GIVEN"> NOT GIVEN
+                                </p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Cột bên phải message3-->
-                <div id="right-message3" class="content-box hidden">
                     <div class="content-box">
                         <h3>Questions 27–30</h3>
-                        <p>Do the following statements agree with the claims of the writer in Reading Passage 3?</p>
-                        <p>In boxes 27–30 on your answer sheet, write:</p>
+                        <p>Do the following statements agree with the views/claims of the writer?</p>
+                        <p>In boxes 25–30 on your answer sheet, write:</p>
                         <ul>
-                            <li><strong>YES</strong> if the statement agrees with the claims of the writer</li>
-                            <li><strong>NO</strong> if the statement contradicts the claims of the writer</li>
+                            <li><strong>YES</strong> if the statement agrees with the views/claims of the writer</li>
+                            <li><strong>NO</strong> if the statement contradicts the views/claims of the writer</li>
                             <li><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</li>
                         </ul>
                         <div class="question-container">
@@ -615,9 +622,7 @@
                                     <input type="radio" name="q28" value="YES"> YES &nbsp;
                                     <input type="radio" name="q28" value="NO"> NO &nbsp;
                                     <input type="radio" name="q28" value="NOT GIVEN"> NOT GIVEN
-                                </p>
-                            </div>
-                            <div>
+                                </p>                                
                                 <p class="question">29. Wegener relied on a limited range of scientific fields to support his theory of continental drift.<br>
                                     <input type="radio" name="q29" value="YES"> YES &nbsp;
                                     <input type="radio" name="q29" value="NO"> NO &nbsp;
@@ -631,6 +636,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- Cột bên phải message3-->
+                <div id="right-message3" class="content-box hidden">
                     
                     <div class="content-box">
                         <h3>Questions 31–36</h3>
@@ -724,18 +732,26 @@
                         </div>
                         <div class="content-box">
                             <h4 style="text-align: center;">List of Phrases</h4>
-                            <ul>
-                                <li><strong>A</strong> modest fame</li>
-                                <li><strong>B</strong> vast range</li>
-                                <li><strong>C</strong> record-breaking achievement</li>
-                                <li><strong>D</strong> research methods</li>
-                                <li><strong>E</strong> select group</li>
-                                <li><strong>F</strong> professional interests</li>
-                                <li><strong>G</strong> hazardous exploration</li>
-                                <li><strong>H</strong> biographer’s perspective</li>
-                                <li><strong>I</strong> narrow investigation</li>
-                                <li><strong>J</strong> innovative ideas</li>
-                            </ul>
+                            <div class="question-container">
+                                <div>
+                                    <ul>
+                                        <li><strong>A</strong> modest fame</li>
+                                        <li><strong>B</strong> vast range</li>
+                                        <li><strong>C</strong> record-breaking achievement</li>
+                                        <li><strong>D</strong> research methods</li>
+                                        <li><strong>E</strong> select group</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li><strong>F</strong> professional interests</li>
+                                        <li><strong>G</strong> hazardous exploration</li>
+                                        <li><strong>H</strong> biographer's perspective</li>
+                                        <li><strong>I</strong> narrow investigation</li>
+                                        <li><strong>J</strong> innovative ideas</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="content-box">

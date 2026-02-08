@@ -391,6 +391,12 @@
                 <b>Write the correct letter, A, B, C or D next to Questions 15–20.</b>
             </p>
             <div style="display: flex; align-items: flex-start; gap: 30px;">
+                <div class="answer-box">
+                        <b>A</b> It is likely to be busy.<br>
+                        <b>B</b> It may be unsafe in places.<br>
+                        <b>C</b> It is currently closed to the public.<br>
+                        <b>D</b> It is divided into two sections.
+                </div>
                 <table border="1" style="width:50%; border-collapse:collapse; margin-bottom:20px;font-size: 14px;font-family: Arial, sans-serif;">
                 <tr>
                     <th>Tracks</th>
@@ -421,12 +427,6 @@
                     <td><input type="text" class="input-field" id="q20" maxlength="1" autocomplete="off"></td>
                 </tr>
                 </table>
-                <div class="answer-box">
-                    <b>A</b> It is likely to be busy.<br>
-                    <b>B</b> It may be unsafe in places.<br>
-                    <b>C</b> It is currently closed to the public.<br>
-                    <b>D</b> It is divided into two sections.
-                </div>
             </div>
         </div>
     </div>
@@ -481,6 +481,15 @@
         </p>
         <div class="question-container">
             <div style="display: flex; align-items: flex-start; gap: 30px;">
+                <div class="answer-box">
+                        <b>Impact of Artificial Intelligence (AI)</b><br>
+                        <b>A</b> It will give them a greater sense of satisfaction.<br>
+                        <b>B</b> It will encourage them to compete with one another.<br>
+                        <b>C</b> It will reduce the level of stress they have.<br>
+                        <b>D</b> It may eventually lead to their jobs disappearing.<br>
+                        <b>E</b> It could prevent them from coming to harm.<br>
+                        <b>F</b> It will enable them to do tasks they have not trained for.
+                 </div>
                 <table border="1" style="width:660px; border-collapse:collapse; margin-bottom:0px;font-size: 14px;font-family: Arial, sans-serif;">
                     <tr>
                         <th>Profession</th>
@@ -503,15 +512,6 @@
                         <td><input type="text" class="input-field" id="q30" maxlength="1" autocomplete="off"></td>
                     </tr>
                 </table>
-                    <div class="answer-box">
-                        <b>Impact of Artificial Intelligence (AI)</b><br>
-                        <b>A</b> It will give them a greater sense of satisfaction.<br>
-                        <b>B</b> It will encourage them to compete with one another.<br>
-                        <b>C</b> It will reduce the level of stress they have.<br>
-                        <b>D</b> It may eventually lead to their jobs disappearing.<br>
-                        <b>E</b> It could prevent them from coming to harm.<br>
-                        <b>F</b> It will enable them to do tasks they have not trained for.
-                 </div>
             </div>
         </div>
         </div>
@@ -756,7 +756,7 @@
                             // PART 1
                             q1: "05443CHI771",
                             q2: "Market",
-                            q3: "018699925",
+                            q3: "018669925",
                             q4: "storm",
                             q5: "glasses",
                             q6: "carpet",
@@ -895,7 +895,11 @@
                 // Hiển thị kết quả
                 //document.getElementById("results").innerHTML = `<h2><p>${name_user} in ${className_user} class has score: ${correctCount}!</p></h2>
                 //  <h3>Band Score: ${bandScore}</h3>` + resultHTML;
-
+// đảm bảo q3 được gửi dưới dạng text giữ số 0 đầu
+                if (answers.q3 !== undefined && answers.q3 !== null && String(answers.q3).trim() !== "") {
+                    // prefix bằng apostrophe để Sheets lưu là text (hiển thị không có dấu apostrophe)
+                    answers.q3 = "'" + String(answers.q3).trim();
+                }
                 // Gửi dữ liệu lên Google Sheets
                 sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
             }

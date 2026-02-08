@@ -120,6 +120,9 @@
             width: 200px;
             font-size: 12px;
         }
+        select.input-field {
+            cursor: pointer;
+        }
         .correct {
             background-color: lightgreen;
         }
@@ -394,13 +397,14 @@
                     <p><input type="checkbox" name="q25_26" value="E"> E. they played technical pieces</p>
                 </div>
             </div>
-                <div class="question-container">
                 <h3>Questions 27–30</h3>
                 <p class="subtitle">
                     What comment do the students make about the following practice?<br>
                     <i>Choose <b>FOUR</b> answers from the box and write the correct letter, <b>A–G</b>, next to Questions 27–30.</i>
                 </p>
-                <div class="question-container"> 
+                <div class="flex-container">
+                 <div class="column">
+                    <div class="question-container">
                         <b>Comments</b><br>
                                 <p>A it is beneficial</p>
                                 <p>B it is challenging but also enjoyable</p>
@@ -408,12 +412,61 @@
                                 <p>D&nbsp; it is pleasant to hear</p>
                                 <p>E&nbsp; it is time-consuming</p>
                                 <p>F&nbsp; need to work effectively with others</p>
-                                <p>G&nbsp; it happens infrequently</p>    
+                                <p>G&nbsp; it happens infrequently</p>
+                    </div>    
                 </div>
-                <p class="question">27.Play solo<input type="text" class="input-field" id="q27" autocomplete="off"></p>
-                <p class="question">28.Choose a piece to play <input type="text" class="input-field" id="q28" autocomplete="off"></p>
-                <p class="question">29.Play different musical genres<input type="text" class="input-field" id="q29" autocomplete="off"></p>
-                <p class="question">30.Play duet<input type="text" class="input-field" id="q30" autocomplete="off"></p>
+                <div class="column">
+                    <div class="question-container">
+                        <p class="question">27.Play solo
+                            <select class="input-field" id="q27">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">28.Choose a piece to play 
+                            <select class="input-field" id="q28">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">29.Play different musical genres
+                            <select class="input-field" id="q29">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">30.Play duet
+                            <select class="input-field" id="q30">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>    
 	</div>
@@ -500,23 +553,121 @@
     
     <script>
 	    <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
-					function getSelectedText() {
+                    const correctAnswers = {
+                            // PART 1
+                            q1: "125",
+                            q2: "certificate",
+                            q3: "online",
+                            q4: "1800",
+                            q5: "night",
+                            q6: "autumn",
+                            q7: "thunderstorm",
+                            q8: "helmet",
+                            q9: "age",
+                            q10: "stand",
+                            // PART 2
+                            q11: "lake",
+                            q12: "picnic",
+                            q13: "flowers",
+                            q14: "20",
+                            q15: "Motor",
+                            q16: "art gallery",
+                            q17: "concert hall",
+        					q18: ["2.30", "2:30"], // Chấp nhận cả hai định dạng
+                            q19: "C",
+                            q20: "B",
+                            // PART 3
+                            q21_22: ["C", "D"], // IN EITHER ORDER
+                            q23_24: ["C", "E"], // IN EITHER ORDER
+                            q25_26: ["A", "C"], // IN EITHER ORDER
+                            q27: "B",
+                            q28: "E",
+                            q29: "G",
+                            q30: "A",
+                            // PART 4
+                            q31: "B",
+                            q32: "B",
+                            q33: "B",
+                            q34: "C",
+                            q35: "leak",
+                            q36: "conference centre", // hoặc "conference center"
+                            q37: "balcony",
+                            q38: "car park",
+                            q39: "exercise",
+                            q40: "Transport Museum"
+                };
+                function getSelectedText() {
 						let selection = window.getSelection();
 						if (!selection.rangeCount) return null;
 						return selection.getRangeAt(0);
 					}
-                            // Function to send data to Google Sheets
+                    // ...existing code...
+
                     function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
-                            const scriptURL = "https://script.google.com/macros/s/AKfycbyWWJcQBMTZio7XHQGMT0ogXegEBlg9puJQcuORQPnCZ4ymknl6GGRygJQFul5cIol_/exec";
-                            const data = { name, className, answers, correctCount, bandScore };
+                            const scriptURL = "https://script.google.com/macros/s/AKfycbz4WrUB-4AYRqI8YD_25XUSejt9msUsOCD-EHfJJaZibVmkNfnYdQTEuaKFNdAG2z5U/exec";
+                            
+                            // Tạo object chứa thông tin chi tiết về từng câu trả lời
+                            const detailedAnswers = {};
+                            // Phân tích từng câu trả lời
+                            Object.keys(answers).forEach(questionId => {
+                                const userAnswer = answers[questionId];
+                                const correctAnswer = correctAnswers[questionId];
+                                let isCorrect = false;
+                                let status = "INCORRECT";
+
+                                if (Array.isArray(correctAnswer)) {
+                                    if (questionId.includes("_")) {
+                                        // Multiple choice questions
+                                        const userAnswersArray = userAnswer.split(", ").map(a => a.trim().toUpperCase());
+                                        const correctAnswersArray = correctAnswer.map(a => a.trim().toUpperCase());
+                                        const matchCount = userAnswersArray.filter(ans => correctAnswersArray.includes(ans)).length;
+                                        
+                                        if (matchCount === correctAnswersArray.length && userAnswersArray.length === correctAnswersArray.length) {
+                                            status = "CORRECT";
+                                            isCorrect = true;
+                                        } else if (matchCount > 0) {
+                                            status = "PARTIAL";
+                                        } else {
+                                            status = "INCORRECT";
+                                        }
+                                    } else {
+                                        // Questions with multiple acceptable answers (like q18)
+                                        isCorrect = correctAnswer.some(ans => userAnswer.toUpperCase() === ans.toUpperCase());
+                                        status = isCorrect ? "CORRECT" : "INCORRECT";
+                                    }
+                                } else {
+                                    isCorrect = userAnswer.toUpperCase() === correctAnswer?.toUpperCase();
+                                    status = isCorrect ? "CORRECT" : "INCORRECT";
+                                }
+
+                                detailedAnswers[questionId] = {
+                                    userAnswer: userAnswer,
+                                    correctAnswer: Array.isArray(correctAnswer) ? correctAnswer.join(" or ") : correctAnswer,
+                                    status: status,
+                                    isCorrect: isCorrect
+                                };
+                            });
+
+                            const data = { 
+                                name, 
+                                className, 
+                                answers, 
+                                correctCount, 
+                                bandScore,
+                                detailedAnswers: detailedAnswers,  // Thêm thông tin chi tiết
+                                timestamp: new Date().toISOString() // Thêm timestamp
+                            };
+
                             // Lưu dữ liệu vào localStorage trước khi gửi
                             localStorage.setItem("pendingSubmission", JSON.stringify(data));
+                            
                             // Đổi nút thành Waiting...
                             const submitButton = document.querySelector(".btn-submit");
-                                if (submitButton) {
-                                    submitButton.innerText = "Waiting...";
-                                    submitButton.disabled = true;
-                                }
+                            if (submitButton) {
+                                submitButton.innerText = "Waiting...";
+                                submitButton.disabled = true;
+                            }
+                            
                             fetch(scriptURL, {
                                 method: "POST",
                                 mode: 'no-cors',
@@ -542,12 +693,12 @@
                                 alert("Failed to send data to Google Sheets. Will retry automatically when online.");
                                 // Nếu gửi lỗi, cho phép thử lại  
                                 if (submitButton) {
-                                submitButton.innerText = "Submit";
-                                submitButton.disabled = false;
+                                    submitButton.innerText = "Submit";
+                                    submitButton.disabled = false;
                                 }
                             });
-                    }
-                    function resendPendingSubmission() {
+                        }
+                   function resendPendingSubmission() {
                         const pending = localStorage.getItem("pendingSubmission");
                         if (pending) {
                             alert("Đang gửi lại dữ liệu lên Google Sheets...");
@@ -694,50 +845,7 @@
             });
             document.getElementById(sectionId).classList.add('active');
         }
-                function checkAnswers() {
-                const correctAnswers = {
-                            // PART 1
-                            q1: "125",
-                            q2: "certificate",
-                            q3: "online",
-                            q4: "1800",
-                            q5: "night",
-                            q6: "autumn",
-                            q7: "thunderstorm",
-                            q8: "helmet",
-                            q9: "age",
-                            q10: "stand",
-                            // PART 2
-                            q11: "lake",
-                            q12: "picnic",
-                            q13: "flowers",
-                            q14: "20",
-                            q15: "Motor",
-                            q16: "art gallery",
-                            q17: "concert hall",
-                            q18: "2.30", // hoặc "2:30"
-                            q19: "C",
-                            q20: "B",
-                            // PART 3
-                            q21_22: ["C", "E"], // IN EITHER ORDER
-                            q23_24: ["C", "D"], // IN EITHER ORDER
-                            q25_26: ["C", "E"], // IN EITHER ORDER
-                            q27: "B",
-                            q28: "E",
-                            q29: "G",
-                            q30: "A",
-                            // PART 4
-                            q31: "B",
-                            q32: "B",
-                            q33: "B",
-                            q34: "C",
-                            q35: "leak",
-                            q36: "conference centre", // hoặc "conference center"
-                            q37: "balcony",
-                            q38: "car park",
-                            q39: "exercise",
-                            q40: "Transport Museum"
-                };
+        function checkAnswers() {
 
                 let correctCount = 0;
                 let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
@@ -745,7 +853,7 @@
                 const unansweredQuestions = []; // Danh sách câu hỏi chưa trả lời
 
                 // Lấy tất cả các câu hỏi
-                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"], select');
                 const processedQuestions = new Set(); // Đảm bảo mỗi câu hỏi chỉ được xử lý một lần
 
                 allQuestions.forEach(question => {
@@ -756,7 +864,12 @@
                     const correctAnswer = correctAnswers[questionId];
                     let userAnswer = "";
 
-                    if (question.type === "text") {
+                    if (question.tagName === "SELECT") {
+                        userAnswer = question.value.trim();
+                        if (!userAnswer) {
+                            unansweredQuestions.push(questionId.replace("q", "Question "));
+                        }
+                    } else if (question.type === "text") {
                         userAnswer = question.value.trim();
                         if (!userAnswer) {
                             unansweredQuestions.push(questionId.replace("q", "Question "));
@@ -779,46 +892,68 @@
                     if (userAnswer) {
                         answers[questionId] = userAnswer;
 
-                        if (Array.isArray(correctAnswer)) {
-                            // Nếu đáp án đúng là mảng (checkbox)
-                            const userAnswersArray = userAnswer.split(", ").map(a => a.trim().toUpperCase());
-                            const correctAnswersArray = correctAnswer.map(a => a.trim().toUpperCase());
-                                // Đếm số đáp án đúng trùng khớp
-                            if (userAnswersArray.length > correctAnswersArray.length) {
-                            resultHTML += `<tr>
-                                <td>${questionId.replace("q", "Question ")}</td>
-                                <td>${userAnswer}</td>
-                                <td>${correctAnswer.join(", ")}</td>
-                                <td>✘ (Chọn quá số đáp án)</td>
-                            </tr>`;
-                        } else{
-                            let matchCount = userAnswersArray.filter(ans => correctAnswersArray.includes(ans)).length;
-                            correctCount += matchCount; // Mỗi đáp án đúng cộng 1 điểm
-                            resultHTML += `<tr>
-                                <td>${questionId.replace("q", "Question ")}</td>
-                                <td>${userAnswer}</td>
-                                <td>${correctAnswer.join(", ")}</td>
-                                <td>${matchCount > 0 ? `+${matchCount}` : "✘"}</td>
-                            </tr>`;
-                        }
-                        } else if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
-                            correctCount++;
-                            resultHTML += `<tr>
-                                <td>${questionId.replace("q", "Question ")}</td>
-                                <td>${userAnswer}</td>
-                                <td>${correctAnswer}</td>
-                                <td>✔</td>
-                            </tr>`;
-                        } else {
-                            resultHTML += `<tr>
-                                <td>${questionId.replace("q", "Question ")}</td>
-                                <td>${userAnswer}</td>
-                                <td>${correctAnswer}</td>
-                                <td>✘</td>
-                            </tr>`;
-                        }
+            if (Array.isArray(correctAnswer)) {
+                // Kiểm tra xem có phải là câu hỏi multiple choice/checkbox không
+                if (questionId.includes("_")) {
+                    // Xử lý câu hỏi checkbox multiple choice
+                    const userAnswersArray = userAnswer.split(", ").map(a => a.trim().toUpperCase());
+                    const correctAnswersArray = correctAnswer.map(a => a.trim().toUpperCase());
+                    
+                    if (userAnswersArray.length > correctAnswersArray.length) {
+                        resultHTML += `<tr>
+                            <td>${questionId.replace("q", "Question ")}</td>
+                            <td>${userAnswer}</td>
+                            <td>${correctAnswer.join(", ")}</td>
+                            <td>✘ (Chọn quá số đáp án)</td>
+                        </tr>`;
+                    } else {
+                        let matchCount = userAnswersArray.filter(ans => correctAnswersArray.includes(ans)).length;
+                        correctCount += matchCount; // Mỗi đáp án đúng cộng 1 điểm
+                        resultHTML += `<tr>
+                            <td>${questionId.replace("q", "Question ")}</td>
+                            <td>${userAnswer}</td>
+                            <td>${correctAnswer.join(", ")}</td>
+                            <td>${matchCount > 0 ? `+${matchCount}` : "✘"}</td>
+                        </tr>`;
                     }
-                });
+                } else {
+                    // Xử lý câu hỏi có nhiều đáp án đúng (như q18: ["2.30", "2:30"])
+                    const isCorrect = correctAnswer.some(ans => userAnswer.toUpperCase() === ans.toUpperCase());
+                    if (isCorrect) {
+                        correctCount++;
+                        resultHTML += `<tr>
+                            <td>${questionId.replace("q", "Question ")}</td>
+                            <td>${userAnswer}</td>
+                            <td>${correctAnswer.join(" or ")}</td>
+                            <td>✔</td>
+                        </tr>`;
+                    } else {
+                        resultHTML += `<tr>
+                            <td>${questionId.replace("q", "Question ")}</td>
+                            <td>${userAnswer}</td>
+                            <td>${correctAnswer.join(" or ")}</td>
+                            <td>✘</td>
+                        </tr>`;
+                    }
+                }
+            } else if (userAnswer.toUpperCase() === correctAnswer?.toUpperCase()) {
+                correctCount++;
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer}</td>
+                    <td>✔</td>
+                </tr>`;
+            } else {
+                resultHTML += `<tr>
+                    <td>${questionId.replace("q", "Question ")}</td>
+                    <td>${userAnswer}</td>
+                    <td>${correctAnswer}</td>
+                    <td>✘</td>
+                </tr>`;
+            }
+        }
+    });
 
                 // Hiển thị câu hỏi chưa trả lời
                 if (unansweredQuestions.length > 0) {

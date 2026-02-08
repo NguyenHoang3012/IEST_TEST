@@ -120,6 +120,14 @@
             width: 200px;
             font-size: 12px;
         }
+        .select-field {
+            margin-left: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            font-size: 12px;
+        }
         .correct {
             background-color: lightgreen;
         }
@@ -422,31 +430,101 @@
                     <p><input type="checkbox" name="q23_24" value="E"> E. People will change jobs more frequently.</p>
                 </div>
             </div>
-            <div class="question-container">
-                <h3>Questions 25–30</h3>
+            
+            <h3>Questions 25–30</h3>
                 <p class="subtitle">What comment do the students make about each of the following jobs?</p>
                 <p class="subtitle">Choose SIX answers from the box and write the correct letter, A–G, next to Questions 25–30.</p>
-            
+            <div class="flex-container">
                 <div class="column">
-                    <h4>Comments</h4>
-                    <p>A. These jobs are likely to be at risk.</p>
-                    <p>B. Their role has become more interesting in recent years.</p>
-                    <p>C. The number of people working in this sector has fallen dramatically.</p>
-                    <p>D. This job will require more qualifications.</p>
-                    <p>E. Higher disposable income has led to a huge increase in jobs.</p>
-                    <p>F. There is likely to be a significant rise in demand for this service.</p>
-                    <p>G. Both employment and productivity have risen.</p>
+                    <div class="question-container">
+                        <h4>Comments</h4>
+                        <p>A. These jobs are likely to be at risk.</p>
+                        <p>B. Their role has become more interesting in recent years.</p>
+                        <p>C. The number of people working in this sector has fallen dramatically.</p>
+                        <p>D. This job will require more qualifications.</p>
+                        <p>E. Higher disposable income has led to a huge increase in jobs.</p>
+                        <p>F. There is likely to be a significant rise in demand for this service.</p>
+                        <p>G. Both employment and productivity have risen.</p>
+                    </div>
                 </div>
             
                 <div class="column">
-                    <h4>Jobs</h4>
-                    <p class="question">25. Accountants <input type="text" class="input-field" id="q25"autocomplete="off"></p>
-                    <p class="question">26. Hairdressers <input type="text" class="input-field" id="q26"autocomplete="off"></p>
-                    <p class="question">27. Administrative staff <input type="text" class="input-field" id="q27"autocomplete="off"></p>
-                    <p class="question">28. Agricultural workers <input type="text" class="input-field" id="q28"autocomplete="off"></p>
-                    <p class="question">29. Care workers <input type="text" class="input-field" id="q29"autocomplete="off"></p>
-                    <p class="question">30. Bank clerks <input type="text" class="input-field" id="q30"autocomplete="off"></p>
-                </div>
+                    <div class="question-container">
+                        <h4>Jobs</h4>
+                        <p class="question">25. Accountants 
+                            <select class="select-field" id="q25">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">26. Hairdressers 
+                            <select class="select-field" id="q26">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">27. Administrative staff 
+                            <select class="select-field" id="q27">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">28. Agricultural workers 
+                            <select class="select-field" id="q28">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">29. Care workers 
+                            <select class="select-field" id="q29">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        <p class="question">30. Bank clerks 
+                            <select class="select-field" id="q30">
+                                <option value="">-- Select --</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="G">G</option>
+                            </select>
+                        </p>
+                        </div>
+                    </div>
             </div>
         </div>    
 	</div>
@@ -730,7 +808,7 @@
                 const unansweredQuestions = []; // Danh sách câu hỏi chưa trả lời
 
                 // Lấy tất cả các câu hỏi
-                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                const allQuestions = document.querySelectorAll('.input-field, .select-field, input[type="radio"], input[type="checkbox"]');
                 const processedQuestions = new Set(); // Đảm bảo mỗi câu hỏi chỉ được xử lý một lần
 
                 allQuestions.forEach(question => {
@@ -741,7 +819,12 @@
                     const correctAnswer = correctAnswers[questionId];
                     let userAnswer = "";
 
-                    if (question.type === "text") {
+                    if (question.tagName === "SELECT") {
+                        userAnswer = question.value.trim();
+                        if (!userAnswer) {
+                            unansweredQuestions.push(questionId.replace("q", "Question "));
+                        }
+                    } else if (question.type === "text") {
                         userAnswer = question.value.trim();
                         if (!userAnswer) {
                             unansweredQuestions.push(questionId.replace("q", "Question "));

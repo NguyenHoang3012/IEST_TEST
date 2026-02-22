@@ -280,22 +280,33 @@ textarea {
         // Hiển thị mặc định Part 1
             document.getElementById('part1').classList.add('active');
             document.getElementById('part1').style.display = 'block'; // Hiển thị phần 1
+        function escapeForGoogleSheets(value) {
+            if (typeof value !== 'string') return value;
+            if (/^[=+\-@]/.test(value)) {
+                return `'${value}`;
+            }
+            return value;
+        }
+
         function sendDataToGoogleSheet(name, className, part1Answers, part2Answers) {
-                const part1Combined = part1Answers
-                    .map((answer, index) => `${index + 1}. ${answer || ''}`)
+                const safePart1Answers = part1Answers.map(answer => escapeForGoogleSheets(answer || ''));
+                const safePart2Answers = part2Answers.map(answer => escapeForGoogleSheets(answer || ''));
+
+                const part1Combined = safePart1Answers
+                    .map((answer, index) => `${index + 1}. ${answer}`)
                     .join('\n');
 
                 const data = {
-                    name: name,
-                    className: className,
+                    name: escapeForGoogleSheets(name),
+                    className: escapeForGoogleSheets(className),
                     Q1: part1Combined,
                     Q2: '',
                     Q3: '',
                     Q4: '',
                     Q5: '',
                     Q6: '',
-                    Q1_P2: part2Answers[0] || '',
-                    Q2_P2: part2Answers[1] || ''
+                    Q1_P2: safePart2Answers[0] || '',
+                    Q2_P2: safePart2Answers[1] || ''
                 };
                 console.log("Sending data:", data); // Kiểm tra dữ liệu
                 const scriptURL = "https://script.google.com/macros/s/AKfycbxaDB_bGbdRiEyGHNAdf1xmvUvm1RL5xRySvxkvyHpxtn8ov4KscPR-NTbXPF_rCSen/exec"; // Thay bằng URL của Google Apps Script

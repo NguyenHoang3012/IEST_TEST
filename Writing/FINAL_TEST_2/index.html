@@ -281,15 +281,19 @@ textarea {
             document.getElementById('part1').classList.add('active');
             document.getElementById('part1').style.display = 'block'; // Hiển thị phần 1
         function sendDataToGoogleSheet(name, className, part1Answers, part2Answers) {
+                const part1Combined = part1Answers
+                    .map((answer, index) => `${index + 1}. ${answer || ''}`)
+                    .join('\n');
+
                 const data = {
                     name: name,
                     className: className,
-                    Q1: part1Answers[0] || '',
-                    Q2: part1Answers[1] || '',
-                    Q3: part1Answers[2] || '',
-                    Q4: part1Answers[3] || '',
-                    Q5: part1Answers[4] || '',
-                    Q6: part1Answers[5] || '',
+                    Q1: part1Combined,
+                    Q2: '',
+                    Q3: '',
+                    Q4: '',
+                    Q5: '',
+                    Q6: '',
                     Q1_P2: part2Answers[0] || '',
                     Q2_P2: part2Answers[1] || ''
                 };

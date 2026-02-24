@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            font-size: 12px;
+        }
+        .container {
+            display: flex; /* Sử dụng Flexbox để chia bố cục */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+        .left-panel, .right-panel {
+            flex: 1; /* Mỗi cột chiếm một nửa chiều rộng */
+            padding: 20px;
+            overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+        }
+        .left-panel {
+            background-color: #fffbe6; /* Màu nền cho cột bên trái */
+        }
+        .right-panel {
+            background-color: #ffffff; /* Màu nền cho cột bên phải */
+            border-left: 2px solid #ccc; /* Đường viền giữa hai cột */
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .passage {
+            margin-top: 20px;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .content-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        }
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column; /* Thêm dòng này */
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .input-field {
+            width: 90px;
+            font-size: 12px;
+        }
+        .column {
+            width: 48%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+		}
+        .form-container, .welcome-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .form-container h2, .welcome-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-items: center; 
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        } 
+        .nav-buttons {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút */
+            gap: 20px; /* Khoảng cách giữa các nút */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .nav-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .highlight {
+    	background-color: yellow;
+		}
+		.underline {
+			text-decoration: underline;
+		}
+        .btn-submit {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.7);
+            transform: scale(1.05);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(255, 65, 108, 0.5);
+        }
+                /* ...existing styles... */
+                #unanswered-questions ul {
+            display: flex; /* Hiển thị các mục trên cùng một dòng */
+            flex-wrap: wrap; /* Cho phép xuống dòng nếu danh sách quá dài */
+            list-style: none; /* Loại bỏ dấu chấm đầu dòng */
+            padding: 0;
+            margin: 0;
+        }
+
+        #unanswered-questions ul li {
+            margin-right: 10px; /* Khoảng cách giữa các mục */
+        }
+        .btn-container {
+            text-align: center; /* Căn giữa nút Register */
+            margin-top: 20px;
+        }
+        .left-panel, .right-panel {
+        padding: 20px;
+        overflow-y: auto;
+        }
+
+        .left-panel {
+        background-color: #fffbe6;
+        flex: 1;
+        }
+
+        .right-panel {
+        background-color: #ffffff;
+        flex: 1;
+        border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+        <!-- Form đăng nhập -->
+        <div class="container form-container">
+            <h2 style="text-align: center;">Insert your information</h2>
+            <form onsubmit="handleInfoSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="class">Class:</label>
+                    <input type="text" id="class" name="class" required>
+                </div style="text-align: center; margin-top: 20px;">
+                <div class="btn-container">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+            </form>
+        </div>
+    <div class="container welcome-container hidden">
+        <div class="container">
+            <!-- Cột bên trái -->
+            <div class="left-panel">  
+                 <!-- Nội dung Message 1 -->
+                <div id="message1">
+                    <h2 id="welcome-message" style="text-align: center;"></h2>
+                    <div class="subtitle">READING PASSAGE 1</div>
+                        <p>You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1.</p>
+
+                        <h3 style="text-align:center;">Packaging-free shops may tackle plastic but risk increasing food waste</h3>
+
+                        <p><strong>A.</strong> Supermarkets are full of food, but they are also full of packaging: cereal bagged in plastic sits inside a cardboard box, cucumbers are shrink-wrapped with care. Now trendy packaging-free shops are popping up in Europe and North America where you bring your own containers and buy exactly as much as you need. While the trend started with small, local shops, even retail giants are getting in on the action. Waitrose, one of the UK’s biggest grocery store chains, is trialling a packaging-free section in one of its Oxford stores. The switch is driven largely by a desire to make shopping more environmentally friendly. “We have made good progress in reducing our use of unnecessary plastics and packaging and this test is designed to help us identify ways for us to build on that,” says a Waitrose spokesperson.</p>
+
+                        <p><strong>B.</strong> Consumers are increasingly aware of the environmental impact of packaging, particularly plastic waste that can end up in the ocean, hurt wildlife and even work its way back up the food chain and onto your plate. According to data from the US Environmental Protection Agency (EPA), almost 30 million tonnes of containers and packaging were sent to landfill in the US in 2015. Back then, more than 10 million tonnes of that amount was plastic, which can take hundreds of years to break down.</p>
+
+                        <p><strong>C.</strong> “People want to know what they can do,” says Rachelle Strauss, the founder of UK waste-reduction consultancy Zero Waste Week. Packaging-free stores help us feel like we have the ability to make at least a small change, she says. But it isn’t clear whether, as a whole, they will actually have a positive environmental impact, or if they are just aspirational marketing. “If we could do without packaging, it wouldn’t be here,” says Susan Selke, director of Michigan State University’s School of Packaging. Companies would gladly rid themselves of the expense if they could, she says.</p>
+
+                        <p><strong>D.</strong> Perhaps the most obvious use of food packaging is branding and information about the product, but you could do that with less packaging than is used now. A far more crucial purpose of packaging is to keep food safe from contamination and lengthen its shelf life – those shrink-wrapped cucumbers will wrinkle and squish in a few days if left out. EPA data shows that more than 30 million tonnes of food waste was sent to US landfills in 2015. “The carbon footprint of food is so much bigger than the carbon footprint of the package,” says Nina Goodrich, director of the Sustainable Packaging Coalition. That means that any increase in food waste will quickly wipe out any gains from cutting out packaging. The consumer might not be aware because the package waste is more visible.</p>
+
+                        <p><strong>E.</strong> It is also important to remember that the packaging you see isn’t the whole story. “People tend to think of packaging as what they take stuff home in, but that’s not all,” says Selke. “If you truly had a no-packaging grocery store, then you would never be able to get the products to it, and the consumers would never be able to get them home.” That is why paying attention to the supply chain is crucial: even nominally packaging-free stores receive their goods in some sort of packaging, and eliminating that is probably impossible. Selling in bulk may help reduce that waste, though, as one enormous sack of beans emptied into a steel bin is less wasteful than lots of smaller bags taken home with each customer.</p>
+
+                        <p><strong>F.</strong> “Our supply chain is almost completely different from a standard grocery store,” says Brianne Miller, founder of packaging-free store Nada in Vancouver, Canada. If regular grocery stores were to attempt to transition to package-free items, they would struggle, as a vast majority of their business models aren’t set up for that, she says.</p>
+
+                        <p><strong>G.</strong> One supply-chain issue is simple demand. “A lot of what’s got us into this situation is our demand for convenience and our privilege of having strawberries all year round,” says Strauss. “We’ve become accustomed to all of this convenience, and it’s having a cost now on the environment.” Shops wanting to reduce their environmental impact will need customers who are happy to buy what is in season. They would also need to keep less stock to reduce food waste, says Miller, so consumers would have to get used to a store sometimes being out of an ingredient they are looking for. The cost of changing the supply chain so dramatically can be high, especially when a store takes into account factors beyond environmental impact, like the labour practices of food producers. “A very socially and environmentally responsibly sourced low-carbon-footprint rice is going to be more expensive,” says Miller. That means package-free stores are often too expensive for some people. There can also be other accessibility issues, says Susan Berry, CEO of consultancy firm Disability Smart Solutions. Immunocompromised people and those with severe food allergies face issues in a world without packaging, as food safety becomes more difficult. Self-serving can also challenge those with limited mobility, dexterity and upper body strength. “I think it’s a big issue for people with disabilities to reach into the bin and get their own food,” says Berry. “There’s a huge population that will have difficulty.”</p>
+
+                        <p><strong>H.</strong> The solution, says Berry, is probably hiring more staff so that someone is always available to help. Despite being smaller than most chain supermarkets, Nada has about the same number of staff members, says Miller. That includes staff to deal with the multiple daily deliveries from local food producers, to make sure customers have the help they need and are using clean containers, and even a chef to turn food that would otherwise be wasted into prepared meals and condiments.</p>
+                </div>
+                  <!-- Nội dung Message 2 -->
+                <div id="message2">
+                
+                    <div class="subtitle">READING PASSAGE 2</div>
+                    <p>You should spend about 20 minutes on <strong>Questions 14–26</strong>, which are based on Reading Passage 2.</p>
+                    <h3 style="text-align:center;">CRANBERRIES</h3>
+
+                    <p><strong>A.</strong> Cranberries are not always people’s list when it comes to antioxidant-rich health-supportive berries. When thinking about nutritious fruits, berries like blackberries, raspberries, or strawberries are more likely to come to mind. But as soon as you start to think about the shape and size of cranberries, it is not difficult to recognize their similarities with berries like blueberries, and to understand why these berries are so renowned for their antioxidant richness. Recent studies have identified over two dozen antioxidant phytonutrients in cranberries. In addition, these studies have shown the ability of cranberry phytonutrients to raise the overall antioxidant capacity in our bloodstream and to help reduce risk of oxidative stress. For these reasons and others, cranberries deserve full recognition as a health-supportive fruit that can bring health benefits to a meal plan.</p>
+
+                    <p><strong>B.</strong> Cranberries are native to North America and have never become widely naturalized to other parts of the world. In fact, over 80% of all cranberries grown worldwide are grown in the U.S. and Canada. (And roughly twice as many cranberries are grown in the U.S. compared to Canada.) For U.S. consumers, cranberries are an indigenous food that has unique ties to this region of the world. Among our WHFoods, cranberries are most closely related to blueberries. Both of these berries belong to the Ericaceae family of plants, as well as to the Vaccinium genus. When you compare the phytonutrient richness of these two berries, you will also find a good bit of overlap. But we think it is safe to say that cranberries are unique in many ways, and one of these ways involves the manner in which they grow.</p>
+
+                    <p><strong>C.</strong> While cranberries have gotten less attention than other family members in the Ericaceae plant family (for example, blueberries), they more than earn their credentials as phytonutrient-rich foods. Over two dozen health-supportive phytonutrients have been identified in cranberries, with proanthocyanidins and anthocyanins leading the way. These two groups of phytonutrients are interrelated. Proanthocyanidins are larger molecules from which anthocyanins can be made. But they also have health-supportive properties of their own. It is not uncommon to find 150–350 milligrams of proanthocyanidins per fresh cup of cranberries and 15–170 milligrams of anthocyanins. The presence of these phytonutrient groups in cranberries makes itself known to our senses, because both groups help to provide cranberries with their vibrant red color.</p>
+
+                    <p><strong>D.</strong> Two unwanted conditions in our cardiovascular system—the presence of oxidative stress and the presence of chronic inflammation—are risk factors for a variety of chronic cardiovascular diseases. In this context, it should not be surprising to find cranberries providing us with cardiovascular benefits since these berries are a concentrated source of both antioxidant and anti-inflammatory phytonutrients. (It’s also worth noting that cranberries are a very good source of vitamin C and a good source of vitamin E, two pivotal antioxidant nutrients.) And in addition, they are a very good source of the mineral manganese, which is needed for proper function of some forms of the enzyme superoxide dismutase.</p>
+
+                    <p><strong>E.</strong> As a food native to North America, cranberries have traditionally been enjoyed by many native peoples throughout what is now the United States and Canada. Cranberries were originally given different names in various tribal languages, including the name “ibimi”—which meant bitter/sour berries—in Wampanoag and Lenni Lenape. The name “cranberry” came from much later observations by European colonizers of North America that the flowers of cranberry plants were shaped like the head and neck of sandhill cranes, which led to the term “craneberry.” The word “cranberry” was eventually shortened to “cranberry.”</p>
+
+                    <p><strong>F.</strong> As the world’s largest single producer of cranberries, the United States has a well-documented history of cranberry production. The key cranberry-producing states of Wisconsin (by far the largest producer) and Massachusetts (easily landing in second place) combined in 2016 to produce over 8 million barrels of cranberries. Approximately 1 million additional barrels were produced by the states of New Jersey, Oregon, and Washington. Cranberry production in the U.S. has a rich family history and a high degree of continuity in comparison to many other areas of agricultural production. For example, cranberry marshes developed in the late 1800s and early 1900s around Manitowish Waters and Eagle River in Wisconsin remain productive to this day. In addition, some of the cranberry vines that currently produce cranberries are more than 200 years in age. On a worldwide basis, no country comes so close to producing the number of cranberries as the United States, with the possible exception of Canada. In 2014, about 840 million pounds of cranberries were produced in the U.S., and about 388 million pounds were produced in Canada. Chile produced about 180 million pounds and a handful of other countries produced 10% or less of this Chilean amount. These additional countries included Belarus, Azerbaijan, Latvia, and Romania.</p>
+                
+                </div>
+                    <!-- Nội dung Message 3 -->
+                <div id="message3">
+                    <div class="subtitle">READING PASSAGE 3</div>
+                    <h3>Sibling rivalry: How birth order affects your personality</h3>
+
+                    <p><strong>A.</strong> For centuries, psychologists, philosophers and pretty much anyone with a family has argued that birth order shapes personality. It goes something like this: firstborns are reliable and hard-working. Middle children are rebellious but friendly. Last-borns are more outgoing and doted on. Only-children are wiser than their years, perfectionists and spoiled. Psychologists have long sought insights into the way birth order shapes us, but recent research has shown the studies to be so flawed that they are almost meaningless.</p>
+
+                    <p><strong>B.</strong> Meanwhile, there is an urgent reason to turn our attention to birth order: we are starting to appreciate how it may influence physical and mental health – not least because some cells in our bodies harbour our older siblings’ DNA rather than our own. Regardless of the stereotypes, birth order has profound effects. So how much of our personality, success and health can we blame on being an oldest, youngest, middle or only child?</p>
+
+                    <p><strong>C.</strong> It was 19th-century polymath Francis Galton, the youngest of nine siblings, who first suggested that birth order might matter. He theorised that oldest sons get more parental attention and thrive on it. Fifty years later, Austrian psychotherapist Alfred Adler, the second of six children, suggested that older siblings were more privileged, but also “power-hungry conservatives” prone to feelings of excessive responsibility and anxiety. He also suggested that middle children were expert negotiators and considered youngest children to be pampered, irresponsible and lazy, due to being overindulged by their parents.</p>
+
+                    <p><strong>D.</strong> In 1995, Frank Sulloway, now at the University of California, Berkeley, revitalised the debate by proposing his “family niche” theory for birth order effects: this says that siblings’ personalities vary because they take on a different role within the family dynamic, which reduces competition and facilitates cooperation. For example, in childhood, simply by being older, the firstborn tends to be physically bigger, so might become more aggressive or use their size to their advantage. They are also able to please adults by acting as a surrogate parent to their siblings, which increases their conscientiousness. Later-born children can’t, or have no need to, fill the same niches, so look for alternatives. This may require them to develop greater imagination than older siblings, but makes them more self-conscious as a result. In this way, says Sulloway, birth order isn’t a direct cause of personality, but a proxy for the family dynamics that mould your personality.</p>
+
+                    <p><strong>E.</strong> There was only one problem with his proposal: nobody could prove it was right. Over the next two decades, many studies tried to elucidate exactly which personality traits were driven by birth order and found contradictory results. “The literature was a huge mess,” says Julia Rohrer at the University of Leipzig, Germany. “So many of the associations that were found were cherry-picked.”</p>
+
+                    <p><strong>F.</strong> The studies didn’t account for the huge number of confounding factors, like the fact that an older child is likely to be more conscientious purely because this trait increases with age. Besides, many studies didn’t account for socioeconomic factors, the age gap between children or how old the parents were when they had them. And when associations were found, they would hold only within very specific circumstances – for older brothers, or for three-child families or people with younger sisters exactly two years apart. “Basically, if you analyse data in enough ways, you’ll find something,” says Rohrer, “but these are just false positives they bring from chance.”</p>
+
+                    <p><strong>G.</strong> In 2015 Rohrer and her colleagues analysed data from 20,000 children across the UK, US and Germany – the biggest data set used up until then. After taking into account all of the confounding factors that had plagued previous studies, they found that birth order had almost no influence on personality whatsoever. The only genuine effect they could find was an association with birth order and intellect – and even that was tiny, equating to a drop in IQ of about 1 to 2.5 points between the oldest and youngest child. That is nothing, says Rohrer. It is about the same difference that you would expect to get if you took an identical IQ test on different days. “It’s interesting that we reliably see this association, but it’s not something that you can detect in everyday life,” she says.</p>
+
+                    <p><strong>H.</strong> This would have been the final nail in the coffin for the birth order effect, had Sulloway not spent the best part of the past two decades trying to take the field one step further. To address the doubts swirling around earlier research, he created three new personality surveys that would allow him to better control for confounding factors. He saw four major issues to address. First, people’s perception of their own personality differs depending on who they think about themselves in relation to. You may see yourself as deferential to your parents, but domineering compared with your siblings, for instance. Second and third: people don’t always answer honestly on quizzes, and also tend to acquiesce to questions – so they might say they are both talkative and quiet, for instance, when answering different questions. Research shows that people give more realistic answers if they have previously had to think about moral conundrums. Finally, you need a lot of data. “And that’s why it took 18 years to complete,” says Sulloway.</p>
+
+                    <p><strong>I.</strong> Like Rohrer, Sulloway’s team found a consistent, if small, increase in intelligence in firstborns compared with younger siblings. But unlike her work, his latest analysis suggests that there are real, identifiable effects of birth order on personality. Previous research has confirmed that genetics explain up to 50 per cent of the variation between our personalities. Sulloway and his colleagues found that age and gender contribute 5.5 and 10 per cent, respectively. Birth order, on the other hand, was more modest, accounting for 4.1 per cent of the variation between personalities. “This is still a pretty impressive effect,” says Sulloway. “Especially where the importance of birth order has long been doubted.”</p>
+
+                </div>
+            </div>
+            <!-- Cột bên phải -->
+            <div class="right-panel">
+                <div id="timer" style="text-align: center; font-size: 20px; font-weight: bold; margin-top: 20px; color: red;"></div>
+                <div class="nav-buttons">
+                    <button onclick="showMessage(1)">READING PASSAGE 1</button>
+                    <button onclick="showMessage(2)">READING PASSAGE 2</button>
+                    <button onclick="showMessage(3)">READING PASSAGE 3</button>
+                </div>
+                 <!-- Cột bên phải message1-->
+                <div id="right-message1">
+                    <div class="content-box">
+
+                    <h3>Questions 1–5</h3>
+
+                    <p><strong>Do the following statements agree with the information given in Reading Passage 1?</strong></p>
+                    <p>In boxes 1–5 on your answer sheet, write</p>
+
+                    <p><strong>TRUE</strong> &nbsp;&nbsp; if the statement agrees with the information</p>
+                    <p><strong>FALSE</strong> &nbsp;&nbsp; if the statement contradicts the information</p>
+                    <p><strong>NOT GIVEN</strong> &nbsp;&nbsp; if there is no information on this</p>
+
+                    <div class="question">
+                    1. Packaging-free stores have become popular in Europe and North America for a very long time.
+                    <br>
+                    <label><input type="radio" name="q1" value="TRUE"> TRUE</label>
+                    <label><input type="radio" name="q1" value="FALSE"> FALSE</label>
+                    <label><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    2. Consumers still have low awareness of harmful effects that plastic packaging has on the environment.
+                    <br>
+                    <label><input type="radio" name="q2" value="TRUE"> TRUE</label>
+                    <label><input type="radio" name="q2" value="FALSE"> FALSE</label>
+                    <label><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    3. Nowadays, plastics account for roughly one third of the total amount of waste in landfill.
+                    <br>
+                    <label><input type="radio" name="q3" value="TRUE"> TRUE</label>
+                    <label><input type="radio" name="q3" value="FALSE"> FALSE</label>
+                    <label><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    4. It is unsure whether packaging-free shops will indeed help to protect the environment or not.
+                    <br>
+                    <label><input type="radio" name="q4" value="TRUE"> TRUE</label>
+                    <label><input type="radio" name="q4" value="FALSE"> FALSE</label>
+                    <label><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    5. The most recognizable role of packaging is to advertise and provide customers with details about the product.
+                    <br>
+                    <label><input type="radio" name="q5" value="TRUE"> TRUE</label>
+                    <label><input type="radio" name="q5" value="FALSE"> FALSE</label>
+                    <label><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    </div>
+
+
+                    <div class="content-box">
+
+                    <h3>Questions 6–10</h3>
+
+                    <p>Look at the following statements (Questions 6–10) and the list of people's names below.</p>
+                    <p>Match each statement with the correct person, <strong>A–E</strong>.</p>
+                    <p>Write the correct letter, <strong>A–E</strong>, in boxes 6–10 on your answer sheet.</p>
+
+                    <div class="question">
+                    6. There will be challenges for handicapped people to access the food in free-packaging stores.
+                    <br>
+                    <select class="input-field" id="q6">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    7. Packaging plays an indispensable role in the delivery of products from and to shops.
+                    <br>
+                    <select class="input-field" id="q7">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    8. Packaging-free shops give people the feeling that they can partly contribute to environmental preservation.
+                    <br>
+                    <select class="input-field" id="q8">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    9. It would be really difficult for ordinary grocery stores to change into packaging-free ones.
+                    <br>
+                    <select class="input-field" id="q9">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    10. The amounts of carbon emissions from food waste exceed those from package.
+                    <br>
+                    <select class="input-field" id="q10">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                    </div>
+
+                    <br>
+
+                    <div style="border:1px solid #000; padding:10px; width:250px;">
+                    <strong>List of names</strong><br><br>
+                    A. Rachelle Strauss<br>
+                    B. Susan Selke<br>
+                    C. Nina Goodrich<br>
+                    D. Brianne Miller<br>
+                    E. Susan Berry
+                    </div>
+
+                    </div>
+
+
+                    <div class="content-box">
+
+                    <h3>Questions 11–13</h3>
+
+                    <p><strong>Complete the sentences below.</strong></p>
+                    <p>Choose <strong>NO MORE THAN ONE WORD</strong> from the passage for each answer.</p>
+                    <p>Write your answers in boxes 11–13 on your answer sheet.</p>
+
+                    <div class="question">
+                    11. According to Strauss, people have been familiar with <input type="text" class="input-field" id="q11" style="width: 110px;" autocomplete="off"> which now has a negative impact on the environment.
+                    </div>
+
+                    <div class="question">
+                    12. Making a considerable change in the supply chain can be costly due to some factors beyond <input type="text" class="input-field" id="q12" style="width: 110px;" autocomplete="off"> effect.
+                    </div>
+
+                    <div class="question">
+                    13. According to Berry, one way to enhance the accessibility of free-packaging stores is to find additional <input type="text" class="input-field" id="q13" style="width: 110px;" autocomplete="off">.
+                    </div>
+
+                    </div>
+                </div>
+                <!-- Cột bên phải message2-->
+                <div id="right-message2">
+                    <div class="content-box">
+
+                    <h3>Questions 14–18</h3>
+
+                    <p><strong>Do the following statements agree with the information given in Reading Passage 2?</strong></p>
+                    <p>In boxes 14–18 on your answer sheet, write</p>
+
+                    <p><strong>YES</strong> &nbsp;&nbsp; if the statement agrees with the claims of the writer</p>
+                    <p><strong>NO</strong> &nbsp;&nbsp; if the statement contradicts the claims of the writer</p>
+                    <p><strong>NOT GIVEN</strong> &nbsp;&nbsp; if it is impossible to say what the writer thinks about this</p>
+
+                    <div class="question">
+                    14. Cranberries are of little use when it comes to their health benefits for consumers.<br>
+                    <label><input type="radio" name="q14" value="YES"> YES</label>
+                    <label><input type="radio" name="q14" value="NO"> NO</label>
+                    <label><input type="radio" name="q14" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    15. North and South America are the two places that cranberries grow widely in the wild.<br>
+                    <label><input type="radio" name="q15" value="YES"> YES</label>
+                    <label><input type="radio" name="q15" value="NO"> NO</label>
+                    <label><input type="radio" name="q15" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    16. Despite resembling cranberries in a number of aspects, blueberries do not have some features that cranberries have.<br>
+                    <label><input type="radio" name="q16" value="YES"> YES</label>
+                    <label><input type="radio" name="q16" value="NO"> NO</label>
+                    <label><input type="radio" name="q16" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    17. One substance that causes cranberries recognizably red is Anthocyanins.<br>
+                    <label><input type="radio" name="q17" value="YES"> YES</label>
+                    <label><input type="radio" name="q17" value="NO"> NO</label>
+                    <label><input type="radio" name="q17" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    <div class="question">
+                    18. The number of cranberries produced in Belarus is slightly less than that of Latvia and Romania.<br>
+                    <label><input type="radio" name="q18" value="YES"> YES</label>
+                    <label><input type="radio" name="q18" value="NO"> NO</label>
+                    <label><input type="radio" name="q18" value="NOT GIVEN"> NOT GIVEN</label>
+                    </div>
+
+                    </div>
+
+                        <h3>Questions 19–21</h3>
+
+                        <p>Choose the correct letter, <strong>A, B, C or D</strong>.</p>
+                        <p>Write the correct letter in boxes 19–21 on your answer sheet.</p>
+
+                        <div class="question">
+                        19. Cranberries and blueberries are similar because<br>
+                        <label><input type="radio" name="q19" value="A"> A. They have vibrant red color due to presence of anthocyanins and proanthocyanidins</label><br>
+                        <label><input type="radio" name="q19" value="B"> B. Their richness in phytonutrients is similar to each other</label><br>
+                        <label><input type="radio" name="q19" value="C"> C. They are similarly popular as plants in Ericaceae family</label><br>
+                        <label><input type="radio" name="q19" value="D"> D. They both have over two dozen health-supportive phytonutrients</label>
+                        </div>
+
+                        <div class="question">
+                        20. The meaning of the word cranberry can most likely stem from:<br>
+                        <label><input type="radio" name="q20" value="A"> A. A word in tribal languages meaning bitterness or sourness</label><br>
+                        <label><input type="radio" name="q20" value="B"> B. The shape of its flower that is similar to body parts of a particular species of cranes</label><br>
+                        <label><input type="radio" name="q20" value="C"> C. The similar shape between the neck of sandhill cranes and the cranberry fruits</label><br>
+                        <label><input type="radio" name="q20" value="D"> D. The colonizers from North America that found this fruit in their colony in Europe</label>
+                        </div>
+
+                        <div class="question">
+                        21. What is true about the cranberry production in the US?<br>
+                        <label><input type="radio" name="q21" value="A"> A. Massachusetts produced most cranberries, followed by other states such as Wisconsin or New Jersey.</label><br>
+                        <label><input type="radio" name="q21" value="B"> B. New Jersey, Oregon, and Washington combined were able to produce 1 million barrels of cranberries and more than Wisconsin and Massachusetts.</label><br>
+                        <label><input type="radio" name="q21" value="C"> C. Many centuries-old cranberry trees in the US are said to be still able to produce fruits.</label><br>
+                        <label><input type="radio" name="q21" value="D"> D. The productivity of cranberries developed around Manitowish Waters and Eagle River in Wisconsin is growing over the period of 200 years.</label>
+                        </div>
+
+                    <div class="content-box">
+
+                        <h3>Questions 22–26</h3>
+
+                        <p><strong>Complete the summary below.</strong></p>
+                        <p>Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage for each answer.</p>
+                        <p>Write your answers in boxes 22–26 on your answer sheet.</p>
+
+                        <p>
+                        Unlike blackberries or raspberries, cranberries are not widely well-known for containing 
+                        22.<input type="text" class="input-field" id="q22"> 
+                        which helps relieve oxidative stress. Cranberries and their closest relative,<p></p>
+                        23.<input type="text" class="input-field" id="q23"> 
+                        , are both rich in phytonutrient; they resemble to some extent but cranberries still differs in many ways.
+                        </p>
+
+                        <p>
+                        There are two kinds of phytonutrient included in cranberries which are Proanthocyanidins and anthocyanins. The 
+                        24.<input type="text" class="input-field" id="q24"> 
+                        of the former are bigger and they can be used to make the latter. Other phytonutrients in this fruit are antioxidant and anti-inflammatory, which benefits our 
+                        25.<input type="text" class="input-field" id="q25"> 
+                        by relieving oxidative stress and inflammation.
+                        </p>
+
+                        <p>
+                        Cranberries are produced the most in the US and in this country, 
+                        26.<input type="text" class="input-field" id="q26"> 
+                        is the state that constituted the majority.
+                        </p>
+                    </div>
+                </div>
+                <!-- Cột bên phải message3-->
+                <div id="right-message3" class="content-box hidden">
+                    <!-- QUESTIONS 27–31 -->
+                    <h3>Questions 27–31</h3>
+
+                    <p><strong>Reading Passage 3 has nine sections A–I.</strong></p>
+                    <p><strong>Which section contains the following information?</strong></p>
+                    <p>Write the correct letter <strong>A–I</strong> in boxes 27–31 on your answer sheet.</p>
+
+                    <div class="question">
+                    27. Suggestions on the fact that firstborns receive more privileges from parents. <br>
+                    <select class="input-field" id="q27" name="q27">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    28. Contrasting results of efforts to explain which features of personality were shaped by birth order. <br>
+                    <select class="input-field" id="q28" name="q28">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    29. A theory about the impact of birth order on forming a close-knit family. <br>
+                    <select class="input-field" id="q29" name="q29">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    30. Our body parts carry genetic information of our elder brothers and sisters. <br>
+                    <select class="input-field" id="q30" name="q30">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    31. Tricky questions about morality usually make people aware of answering realistically later. <br>
+                    <select class="input-field" id="q31" name="q31">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                    </select>
+                    </div>
+
+
+                    <!-- QUESTIONS 32–34 -->
+                    <h3>Questions 32–34</h3>
+
+                    <p><strong>Answer the questions below.</strong></p>
+                    <p>Choose <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong> from the passage for each answer.</p>
+
+                    <div class="question">
+                    32. Besides aggressiveness, what negative personality trait are older siblings believed to have as a result of being born earlier than other children?<br>
+                    <input type="text" name="q32">
+                    </div>
+
+                    <div class="question">
+                    33. How many children did Francis Galton’s parents probably have?<br>
+                    <input type="text" name="q33">
+                    </div>
+
+                    <div class="question">
+                    34. What did Sulloway believe as a measure to mould people’s personalities, instead of a direct contributing factor?<br>
+                    <input type="text" name="q34">
+                    </div>
+
+
+                    <!-- QUESTIONS 35–40 -->
+                    <h3>Questions 35–40</h3>
+
+                    <p><strong>Looking at the following statements (Questions 35–40) and the list of people’s names below.</strong></p>
+                    <p><strong>Match each statement with the correct person, A–D.</strong></p>
+                    <p>Write the correct letter <strong>A–D</strong> in boxes 35–40 on your answer sheet.</p>
+
+                    <div class="question">
+                    35. Lastborns’ negative qualities result from parents’ overindulgence.<br>
+                    <select class="input-field" id="q35" name="q35">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    36. Test results of analyzing data adequately are randomly false.<br>
+                    <select class="input-field" id="q36" name="q36">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    37. One’s personality is indirectly shaped by his or her position in family.<br>
+                    <select class="input-field" id="q37" name="q37">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    38. There should not be doubt about the significance of birth rate.<br>
+                    <select class="input-field" id="q38" name="q38">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    39. The association between intellect and birth order are hard to pick out.<br>
+                    <select class="input-field" id="q39" name="q39">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+
+                    <div class="question">
+                    40. Surveys about controlling confounding factors require a long period of time to conduct.<br>
+                    <select class="input-field" id="q40" name="q40">
+                        <option value=""></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    </div>
+                    <!-- LIST OF NAMES -->
+                    <div style="margin-top:30px; border:1px solid #333; padding:15px;">
+                        <h4 style="text-align:center;">List of names</h4>
+
+                        <table style="width:100%; border-collapse: collapse; text-align:center;">
+                        <tr>
+                        <td style="border:1px solid #333; padding:8px;"><strong>A.</strong> Francis Galton</td>
+                        <td style="border:1px solid #333; padding:8px;"><strong>B.</strong> Alfred Adler</td>
+                        </tr>
+                        <tr>
+                        <td style="border:1px solid #333; padding:8px;"><strong>C.</strong> Frank Sulloway</td>
+                        <td style="border:1px solid #333; padding:8px;"><strong>D.</strong> Julia Rohrer</td>
+                        </tr>
+                        </table>
+
+                    </div>
+
+                    <div class="btn-container">
+                        <button onclick="checkAnswers()" class="btn-submit">Submit</button>
+                    </div>
+                    <div id="results"></div>
+                    <div id="unanswered-questions" style="display: none; color: red; margin-top: 20px;"></div>
+                  <!-- continue -->  
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+                // Khai báo biến toàn cục
+        let name_user = "";
+        let className_user = "";
+        function handleInfoSubmit(event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            // Lấy giá trị từ các trường nhập liệu
+            const name = document.getElementById("name").value;
+            const className = document.getElementById("class").value;
+            name_user=name;
+            className_user=className;
+            // Kiểm tra nếu các trường nhập liệu không rỗng
+            if (!name || !className) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Ẩn form đăng nhập
+            document.querySelector(".form-container").classList.add("hidden");
+
+            // Hiển thị bài test
+            const welcomeContainer = document.querySelector(".welcome-container");
+            welcomeContainer.classList.remove("hidden");
+
+            // Hiển thị thông báo chào mừng
+            document.getElementById("welcome-message").innerText = `READING 6( ZIM_2 -T1 )`;
+        }
+        //Handle button 
+        function showMessage(messageNumber) {
+            // Ẩn tất cả các message trong left-panel
+            document.getElementById("message1").classList.add("hidden");
+            document.getElementById("message2").classList.add("hidden");
+            document.getElementById("message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong left-panel
+            document.getElementById(`message${messageNumber}`).classList.remove("hidden");
+
+            // Ẩn tất cả các message trong right-panel
+            document.getElementById("right-message1").classList.add("hidden");
+            document.getElementById("right-message2").classList.add("hidden");
+            document.getElementById("right-message3").classList.add("hidden");
+
+            // Hiển thị message được chọn trong right-panel
+            document.getElementById(`right-message${messageNumber}`).classList.remove("hidden");
+
+            // Cuộn về đầu trang
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth" // Cuộn mượt
+            });
+        }
+        <!-- JavaScript để hỗ trợ highlight, underline, xóa định dạng -->
+		function getSelectedText() {
+						let selection = window.getSelection();
+						if (!selection.rangeCount) return null;
+						return selection.getRangeAt(0);
+					}
+					
+					function wrapSelection(className) {
+                            let range = getSelectedText();
+                            if (range) {
+                                // Kiểm tra nếu vùng chọn nằm trong cùng một node cha
+                                let startParent = range.startContainer.parentNode;
+                                let endParent = range.endContainer.parentNode;
+                                if (startParent === endParent) {
+                                    let span = document.createElement("span");
+                                    span.className = className;
+                                    span.appendChild(range.extractContents());
+                                    range.insertNode(span);
+                                } else {
+                                    alert("Chỉ có thể bôi đen trong cùng một dòng hoặc đoạn!");
+                                }
+                            }
+                    }
+					
+					function highlightText() {
+						wrapSelection("highlight");
+					}
+					
+					function underlineText() {
+						wrapSelection("underline");
+					}
+
+					function removeFormattingFromSelection() {
+				let selection = window.getSelection();
+				if (!selection.rangeCount) return;
+
+				let range = selection.getRangeAt(0);
+				let elementsToRemove = [];
+
+				function findStyledNodes(node) {
+					if (node.nodeType === 1 && (node.classList.contains("highlight") || node.classList.contains("underline"))) {
+						elementsToRemove.push(node);
+					}
+					node.childNodes.forEach(findStyledNodes);
+				}
+
+				findStyledNodes(range.commonAncestorContainer);
+
+				elementsToRemove.forEach(element => {
+					let parent = element.parentNode;
+					while (element.firstChild) {
+						parent.insertBefore(element.firstChild, element);
+					}
+					parent.removeChild(element);
+				});
+
+				selection.removeAllRanges();
+			}
+			document.addEventListener("mouseup", function() {
+                const selection = window.getSelection();
+                if (selection.rangeCount && !selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    // Không highlight nếu vùng chọn nằm trong input, textarea
+                    let startNode = range.startContainer.parentNode;
+                    let endNode = range.endContainer.parentNode;
+                    if (
+                        !["INPUT", "TEXTAREA"].includes(startNode.nodeName) &&
+                        !["INPUT", "TEXTAREA"].includes(endNode.nodeName)
+                    ) {
+                        wrapSelection("highlight");
+                        selection.removeAllRanges();
+                    }
+                }
+            });
+            document.addEventListener("keydown", function(e) {
+                // Nếu nhấn Ctrl+R (hoặc Cmd+R trên Mac)
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r") {
+                    e.preventDefault(); // Ngăn reload trang
+                    removeFormattingFromSelection();
+                }
+            });
+            document.addEventListener("click", function(e) {
+                // Chỉ xóa highlight nếu click vào vùng đã bôi vàng và KHÔNG có vùng chọn nào đang active
+                const selection = window.getSelection();
+                if (
+                    e.target.classList &&
+                    e.target.classList.contains("highlight") &&
+                    selection.isCollapsed // Không có vùng chọn nào đang active
+                ) {
+                    let parent = e.target.parentNode;
+                    while (e.target.firstChild) {
+                        parent.insertBefore(e.target.firstChild, e.target);
+                    }
+                    parent.removeChild(e.target);
+                }
+            });
+			
+                // Function to send data to Google Sheets
+        function sendDataToGoogleSheet(name, className, answers, correctCount, bandScore) {
+            console.log("Sending data:", { name, className, answers, correctCount, bandScore }); // Kiểm tra dữ liệu
+            const scriptURL = "https://script.google.com/macros/s/AKfycbx0HkA188lX6NMDD3fhgDA-k_SjAdjzxhaTqbiJ5djx784oTXQFwjVs0kTVgZEPOiHQ/exec"; // Thay bằng URL của Google Apps Script
+            // Chuyển các đáp án là mảng thành chuỗi trước khi gửi
+            const answersToSend = {};
+            for (let key in answers) {
+                if (Array.isArray(answers[key])) {
+                    answersToSend[key] = answers[key].join(", ");
+                } else {
+                    answersToSend[key] = answers[key];
+                }
+            }
+
+            const data = {
+                name: name,
+                className: className,
+                answers: answersToSend,
+                correctCount: correctCount,
+                bandScore: bandScore
+            };
+            // Lưu dữ liệu vào localStorage trước khi gửi
+            localStorage.setItem("pendingSubmission", JSON.stringify(data));
+            // Đổi nút thành Waiting...
+            const submitButton = document.querySelector(".btn-submit");
+                if (submitButton) {
+                        submitButton.innerText = "Waiting...";
+                        submitButton.disabled = true;
+                    }
+            fetch(scriptURL, {
+                method: "POST",
+                mode: 'no-cors',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(result => {
+                console.log("Success:", result);
+                    if (submitButton) {
+                    // Thay đổi nút Submit thành Done
+                    const submitButton = document.querySelector(".btn-submit");
+                    submitButton.innerText = "Done";
+                    submitButton.disabled = true;
+                    }
+                alert("Data sent to Google Sheets successfully!");
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Failed to send data to Google Sheets.");
+                // Nếu gửi lỗi, cho phép thử lại  
+                if (submitButton) {
+                    submitButton.innerText = "Submit";
+                    submitButton.disabled = false;
+                    }
+            });
+        }
+        function checkAnswers() {
+            const correctAnswers = {
+
+                // PASSAGE 1
+                q1: "NOT GIVEN",
+                q2: "FALSE",
+                q3: "NOT GIVEN",
+                q4: "TRUE",
+                q5: "TRUE",
+                q6: "E",
+                q7: "B",
+                q8: "A",
+                q9: "D",
+                q10: "C",
+                q11: "Convenience",
+                q12: "Environmental",
+                q13: "Staff",
+
+                // PASSAGE 2
+                q14: "NO",
+                q15: "NO",
+                q16: "YES",
+                q17: "YES",
+                q18: "NOT GIVEN",
+                q19: "B",
+                q20: "B",
+                q21: "C",
+                q22: ["antioxidant phytonutrients", "phytonutrients"],
+                q23: "Blueberries",
+                q24: "Molecules",
+                q25: "Cardiovascular system",
+                q26: "Wisconsin",
+
+                // PASSAGE 3
+                q27: "C",
+                q28: "E",
+                q29: "D",
+                q30: "B",
+                q31: "H",
+                q32: "Conscientiousness",
+                q33: "9",
+                q34: "Birth order",
+                q35: "B",
+                q36: "D",
+                q37: "D",
+                q38: "C",
+                q39: "D",
+                q40: "C"
+
+                };
+                            
+            let correctCount = 0;
+            let resultHTML = `<table><tr><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Result</th></tr>`;
+            const answers = {};
+            const unansweredQuestions = [];
+
+            // Lấy tất cả các câu hỏi dạng text
+            const textQuestions = Array.from(document.querySelectorAll('.input-field')).sort((a, b) => {
+                const idA = parseInt(a.id.replace("q", ""), 10);
+                const idB = parseInt(b.id.replace("q", ""), 10);
+                return idA - idB;
+            });
+
+            // Lấy tất cả các câu hỏi dạng radio
+            const radioQuestions = Array.from(document.querySelectorAll('input[type="radio"]')).reduce((acc, radio) => {
+                if (!acc.includes(radio.name)) acc.push(radio.name);
+                return acc;
+            }, []);
+
+			// Lấy tất cả các nhóm checkbox (tên duy nhất)
+			const checkboxGroups = Array.from(new Set(
+				Array.from(document.querySelectorAll('input[type="checkbox"]')).map(cb => cb.name)
+			));
+
+			let allFieldsFilled = true;
+            // Xử lý câu hỏi dạng text
+			textQuestions.forEach(question => {
+							const questionId = question.id;
+							const correctAnswer = correctAnswers[questionId];
+
+							let userAnswer = question.value.trim();
+							if (!userAnswer) {
+								allFieldsFilled = false;
+								question.classList.add("incorrect");
+								unansweredQuestions.push(questionId.replace("q", "Question "));
+							} else {
+								question.classList.remove("incorrect");
+								answers[questionId] = userAnswer;
+
+								// Nếu đáp án đúng là mảng, kiểm tra từng phần tử
+								if (Array.isArray(correctAnswer)) {
+									const isCorrect = correctAnswer.some(ans => userAnswer.toLowerCase() === ans.toLowerCase());
+									if (isCorrect) {
+										correctCount++;
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer.join(" / ")}</td>
+											<td>✔</td>
+										</tr>`;
+									} else {
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer.join(" / ")}</td>
+											<td>✘</td>
+										</tr>`;
+									}
+								} else {
+									// So sánh không phân biệt hoa thường và loại bỏ khoảng trắng thừa
+									if (userAnswer.toLowerCase() === (correctAnswer || "").toLowerCase()) {
+										correctCount++;
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer}</td>
+											<td>✔</td>
+										</tr>`;
+									} else {
+										resultHTML += `<tr>
+											<td>${questionId.replace("q", "Question ")}</td>
+											<td>${userAnswer}</td>
+											<td>${correctAnswer}</td>
+											<td>✘</td>
+										</tr>`;
+									}
+								}
+							}
+						});
+                        // Xử lý câu hỏi dạng radio
+                        radioQuestions.forEach(name => {
+                            const radios = document.getElementsByName(name);
+                            const questionId = name;
+                            const correctAnswer = correctAnswers[questionId];
+
+                            let userAnswer = "";
+                            const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                            if (selectedRadio) {
+                                userAnswer = selectedRadio.value;
+                                answers[questionId] = userAnswer;
+
+                                if ((userAnswer || "").toUpperCase() === (correctAnswer || "").toUpperCase()) {
+                                    correctCount++;
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✔</td>
+                                    </tr>`;
+                                } else {
+                                    resultHTML += `<tr>
+                                        <td>${questionId.replace("q", "Question ")}</td>
+                                        <td>${userAnswer}</td>
+                                        <td>${correctAnswer}</td>
+                                        <td>✘</td>
+                                    </tr>`;
+                                }
+                            } else {
+                                allFieldsFilled = false;
+                                unansweredQuestions.push(questionId.replace("q", "Question "));
+                            }
+                        });
+                        // Xử lý tất cả các nhóm checkbox tự động
+                        checkboxGroups.forEach(name => {
+                            const checkboxes = document.getElementsByName(name);
+                            const checked = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+                            answers[name] = checked;
+
+                            // Nếu không có đáp án đúng trong correctAnswers thì bỏ qua
+                            if (!correctAnswers[name]) return;
+
+                            if (checked.length === 0) {
+                                allFieldsFilled = false;
+                                unansweredQuestions.push(name.replace("q", "Question "));
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td></td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>✘</td>
+                                </tr>`;
+                            } else if (checked.length > correctAnswers[name].length) {
+                                // Chọn quá số đáp án đúng, không cộng điểm
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td>${checked.join(", ")}</td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>✘</td>
+                                </tr>`;
+                            } else {
+                                // Cộng điểm cho từng đáp án đúng được chọn
+                                const correctSet = new Set(correctAnswers[name].map(x => x.toUpperCase()));
+                                const checkedSet = new Set(checked.map(x => x.toUpperCase()));
+                                let point = 0;
+                                checkedSet.forEach(val => {
+                                    if (correctSet.has(val)) point++;
+                                });
+                                correctCount += point;
+
+                                // Hiển thị kết quả
+                                let resultIcon = point > 0 ? "✔" : "✘";
+                                resultHTML += `<tr>
+                                    <td>${name.replace("q", "Question ")}</td>
+                                    <td>${checked.join(", ")}</td>
+                                    <td>${correctAnswers[name].join(", ")}</td>
+                                    <td>${resultIcon} (+${point})</td>
+                                </tr>`;
+                            }
+                        }); 
+                        // Tính bandScore dựa trên correctCount
+						let bandScore = calculateBandScore(correctCount);
+
+						// Nếu tất cả các câu hỏi đã được trả lời
+						const unansweredContainer = document.getElementById("unanswered-questions");
+						unansweredContainer.innerHTML = `<h3>Unanswered Questions:</h3><p>None</p>`;
+						unansweredContainer.style.display = "block";
+
+						// Hiển thị kết quả
+						//resultHTML += `</table>`;
+						//document.getElementById("results").innerHTML = `<h2>You got ${correctCount} correct answers!</h2>` + resultHTML;
+
+						// Gửi dữ liệu đã sắp xếp lên Google Sheets
+						sendDataToGoogleSheet(name_user, className_user, answers, correctCount, bandScore);
+					}
+				
+    
+                // Hàm tính bandScore
+                function calculateBandScore(correctCount) {
+                    if (correctCount >= 39) return 9.0;
+                    if (correctCount >= 37) return 8.5;
+                    if (correctCount >= 35) return 8.0;
+                    if (correctCount >= 33) return 7.5;
+                    if (correctCount >= 30) return 7.0;
+                    if (correctCount >= 27) return 6.5;
+                    if (correctCount >= 23) return 6.0;
+                    if (correctCount >= 20) return 5.5;
+                    if (correctCount >= 16) return 5.0;
+                    if (correctCount >= 13) return 4.5;
+                    if (correctCount >= 10) return 4.0;
+                    if (correctCount >= 7) return 3.5;
+                    if (correctCount >= 5) return 3.0;
+                    if (correctCount >= 3) return 2.5;
+                    return 0.0;
+                }
+                let timer; // Biến lưu bộ đếm thời gian
+
+                function startTimer(duration) {
+                    const timerElement = document.getElementById("timer");
+                    let timeRemaining = duration;
+
+                    function updateTimer() {
+                        const minutes = Math.floor(timeRemaining / 60);
+                        const seconds = timeRemaining % 60;
+                        timerElement.textContent = `Time Remaining: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+                        if (timeRemaining <= 0) {
+                            clearInterval(timer); // Dừng bộ đếm thời gian
+                            timerElement.textContent = "Time's up!";
+                            autoSubmit(); // Tự động nộp bài khi hết thời gian
+                        }
+
+                        timeRemaining--;
+                    }
+
+                    updateTimer(); // Hiển thị thời gian ban đầu
+                    timer = setInterval(updateTimer, 1000); // Cập nhật mỗi giây
+                }
+
+                function autoSubmit() {
+                const allQuestions = document.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+                allQuestions.forEach(question => {
+                    const questionId = question.id || question.name;
+
+                    if (question.type === "text" && !question.value.trim()) {
+                        question.value = "NONE"; // Điền "NONE" cho câu hỏi dạng text chưa trả lời
+                    } else if (question.tagName === "SELECT" && !question.value) {
+                        const noneOption = document.createElement("option");
+                        noneOption.value = "NONE";
+                        noneOption.textContent = "NONE";
+                        question.appendChild(noneOption);
+                        question.value = "NONE";
+                    } else if (question.type === "radio") {
+                        const radios = document.getElementsByName(question.name);
+                        const selectedRadio = Array.from(radios).find(radio => radio.checked);
+                        if (!selectedRadio) {
+                            // Tạo một radio ảo để lưu giá trị "NONE"
+                            const noneRadio = document.createElement("input");
+                            noneRadio.type = "radio";
+                            noneRadio.name = question.name;
+                            noneRadio.value = "NONE";
+                            noneRadio.checked = true;
+                            document.body.appendChild(noneRadio); // Thêm vào DOM tạm thời
+                        }
+                    } else if (question.type === "checkbox") {
+                        const checkboxes = document.getElementsByName(question.name);
+                        const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                        if (selectedCheckboxes.length === 0) {
+                            // Tạo một checkbox ảo để lưu giá trị "NONE"
+                            const noneCheckbox = document.createElement("input");
+                            noneCheckbox.type = "checkbox";
+                            noneCheckbox.name = question.name;
+                            noneCheckbox.value = "NONE";
+                            noneCheckbox.checked = true;
+                            document.body.appendChild(noneCheckbox); // Thêm vào DOM tạm thời
+                        }
+                    }
+                });
+
+                checkAnswers(); // Gọi hàm nộp bài
+                }
+
+                // Bắt đầu bộ đếm thời gian khi người dùng bắt đầu bài kiểm tra
+                document.addEventListener("DOMContentLoaded", () => {
+                const duration = 60 * 60; // 60 phút
+                startTimer(duration);
+                });
+    
+    </script>
+</body>
+</html>
